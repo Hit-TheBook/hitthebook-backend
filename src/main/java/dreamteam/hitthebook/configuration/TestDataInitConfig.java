@@ -1,5 +1,6 @@
 //package dreamteam.hitthebook.configuration;
 //
+//
 //import appmakingteam.studymate.domain.member.MemberEntity;
 //import appmakingteam.studymate.domain.member.MemberRepository;
 //import jakarta.annotation.PostConstruct;
