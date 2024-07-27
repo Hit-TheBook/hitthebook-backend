@@ -1,4 +1,29 @@
 package dreamteam.hitthebook.domain.emblem.entity;
 
-public class Emblem {
+import dreamteam.hitthebook.common.BaseEntity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE emblem SET is_deleted = true WHERE emblem_id = ?")
+@Getter @Setter
+public class Emblem extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "emblem_id")
+    private Long emblemId;
+
+//    @Column(name = "emblem_name", length = 20)
+    private String emblemName;
+
+//    @Column(name = "emblem_content", length = 200)
+    private String emblemContent;
 }

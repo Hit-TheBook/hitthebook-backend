@@ -1,9 +1,13 @@
 package dreamteam.hitthebook.domain.member.entity;
 
 import dreamteam.hitthebook.common.BaseEntity;
+import dreamteam.hitthebook.domain.emblem.entity.Emblem;
+import dreamteam.hitthebook.domain.level.entity.Level;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -14,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE Member SET is_deleted = true WHERE member_id = ?")
+@Getter @Setter
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,5 +47,4 @@ public class Member extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "level_id")
     private Level level;
-
 }
