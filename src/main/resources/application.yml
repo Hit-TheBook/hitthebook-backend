@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: hitthebook
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/studymate?serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+
+    jpa:
+      hibernate:
+        ddl-auto: validate
+      show-sql: true
+      properties:
+        hibernate:
+
+    devtools:
+      livereload:
+        enabled: true
+      restart:
+        enabled: true
+
+  server:
+    #  port: 80
+    port: 8383
+    servlet:
+      encoding:
+        charset: UTF-8
+        force: true
+
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+
+  jwt:
+    secret: 0ABQnNRZxVUH3k9I+imvzzBoYXSfIW924COr1X7t2gaUmbsn8bxPMoWf/RqReGttlDjpysDEEjlvW1tl8we6+w==
+    accessExpiration: 3600000  # 1 hour (in milliseconds)
+    refreshExpiration: 604800000  # 1 week (in milliseconds)
