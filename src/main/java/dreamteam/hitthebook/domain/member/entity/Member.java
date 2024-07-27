@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.member.entity;
 
-import dreamteam.hitthebook.common.BaseEntity;
+import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.emblem.entity.Emblem;
 import dreamteam.hitthebook.domain.level.entity.Level;
 import jakarta.persistence.*;

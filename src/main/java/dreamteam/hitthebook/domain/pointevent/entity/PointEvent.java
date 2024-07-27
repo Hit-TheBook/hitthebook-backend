@@ -1,7 +1,9 @@
-package dreamteam.hitthebook.domain.alarm.entity;
+package dreamteam.hitthebook.domain.pointevent.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.pointevent.enumulation.PointActionEnum;
+import dreamteam.hitthebook.domain.pointevent.enumulation.PointReasonEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,24 +16,21 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE alarm SET is_deleted = true WHERE alarm_id = ?")
+@SQLDelete(sql = "UPDATE inventory SET is_deleted = true WHERE inventory_id = ?")
 @Getter @Setter
-public class Alarm extends BaseEntity {
+public class PointEvent extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "alarm_id")
-    private Long alarmId;
-
-//    @Column(name = "alarm_uri", length = 500)
-    private String alarmUri;
-
-//    @Column(name = "alarm_content", length = 200)
-    private String alarmContent;
-
-    private boolean isChecked;
+    @Column(name = "point_id", nullable = false)
+    private Long pointId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private Integer pointDelta;
+
+    private PointActionEnum pointAction;
+
+    private PointReasonEnum pointReason;
 }

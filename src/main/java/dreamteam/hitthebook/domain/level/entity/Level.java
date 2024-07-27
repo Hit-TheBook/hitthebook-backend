@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.level.entity;
 
-import dreamteam.hitthebook.common.BaseEntity;
+import dreamteam.hitthebook.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
