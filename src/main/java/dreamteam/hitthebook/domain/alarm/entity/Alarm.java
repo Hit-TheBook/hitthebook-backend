@@ -28,7 +28,7 @@ public class Alarm extends BaseEntity {
 //    @Column(name = "alarm_content", length = 200)
     private String alarmContent;
 
-    private boolean isChecked;
+    private boolean isChecked = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
