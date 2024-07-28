@@ -1,7 +1,7 @@
 package dreamteam.hitthebook.configuration;
 
-import dreamteam.hitthebook.domain.jwt.filter.JwtAuthenticationFilter;
-import dreamteam.hitthebook.domain.jwt.filter.JwtTokenProvider;
+import dreamteam.hitthebook.domain.jwt.JwtAuthenticationFilter;
+import dreamteam.hitthebook.domain.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

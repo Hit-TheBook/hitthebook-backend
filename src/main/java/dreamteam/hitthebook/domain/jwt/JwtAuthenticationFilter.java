@@ -1,4 +1,4 @@
-package dreamteam.hitthebook.domain.jwt.filter;
+package dreamteam.hitthebook.domain.jwt;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

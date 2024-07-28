@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.login.service;
 
-import dreamteam.hitthebook.domain.jwt.filter.JwtTokenProvider;
+import dreamteam.hitthebook.domain.jwt.JwtTokenProvider;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
