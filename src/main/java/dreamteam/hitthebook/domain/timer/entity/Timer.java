@@ -27,10 +27,8 @@ public class Timer extends BaseEntity {
 //    @Column(name = "subject_name", length = 20)
     private String subjectName;
 
-    @Column(name = "study_finish_time")
     private LocalDateTime studyFinishTime;
 
-    @Column(name = "study_time_length")
     private Integer studyTimeLength;
 
     @ManyToOne(fetch = FetchType.LAZY)

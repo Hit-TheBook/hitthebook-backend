@@ -30,7 +30,9 @@ public class Point extends BaseEntity {
 
     private Integer pointDelta;
 
+    @Enumerated(EnumType.STRING)
     private PointActionEnum pointAction;
 
+    @Enumerated(EnumType.STRING)
     private PointReasonEnum pointReason;
 }

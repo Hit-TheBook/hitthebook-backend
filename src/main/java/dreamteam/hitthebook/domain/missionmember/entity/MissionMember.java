@@ -25,7 +25,8 @@ public class MissionMember extends BaseEntity {
     @Column(name = "mission_member_id")
     private Long missionMemberId;
 
-    private MemberRoleEnum memberRole;
+    @Enumerated(EnumType.STRING)
+    private MemberRoleEnum missionMemberRole;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

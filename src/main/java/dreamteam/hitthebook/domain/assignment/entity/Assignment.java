@@ -25,6 +25,7 @@ public class Assignment extends BaseEntity {
     @Column(name = "assignment_id")
     private Long assignmentId;
 
+    @Enumerated(EnumType.STRING)
     private AssignmentContentEnum assignmentContent;
 
     private Integer assignmentPoint;

@@ -48,12 +48,15 @@ public class Report extends BaseEntity {
     @JoinColumn(name = "target_post_id")
     private MissionPost targetPost;
 
+    @Enumerated(EnumType.STRING)
     private ReportTypeEnum reportType;
 
+    @Enumerated(EnumType.STRING)
     private ReportReasonEnum reportReason;
 
 //    @Column(name = "report_content", nullable = false, length = 1000)
     private String reportContent;
 
+    @Enumerated(EnumType.STRING)
     private ReportStatusEnum reportStatus;
 }

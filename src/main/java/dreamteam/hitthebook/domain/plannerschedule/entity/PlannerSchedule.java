@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE planner_schedule SET is_deleted = true WHERE schedule_id = ?")
+@SQLDelete(sql = "UPDATE planner_schedule SET is_deleted = true WHERE planner_schedule_id = ?")
 @Getter @Setter
 @Table(name = "planner_schedule")
 public class PlannerSchedule extends BaseEntity {
@@ -36,6 +36,7 @@ public class PlannerSchedule extends BaseEntity {
 //    @Column(name = "schedule_content", length = 300)
     private String scheduleContent;
 
+    @Enumerated(EnumType.STRING)
     private ScheduleTypeEnum scheduleType;
 
     private Boolean alarmRequired; // ~분전 알림을 주는 기획으로 추가
