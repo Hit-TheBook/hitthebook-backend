@@ -1,9 +1,8 @@
-package dreamteam.hitthebook.domain.pointevent.entity;
+package dreamteam.hitthebook.domain.assignmentevent.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.domain.assignment.entity.Assignment;
 import dreamteam.hitthebook.domain.member.entity.Member;
-import dreamteam.hitthebook.domain.pointevent.enumulation.PointActionEnum;
-import dreamteam.hitthebook.domain.pointevent.enumulation.PointReasonEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,25 +11,29 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE inventory SET is_deleted = true WHERE inventory_id = ?")
+@SQLDelete(sql = "UPDATE assignment_event SET is_deleted = true WHERE assignment_event_id = ?")
 @Getter @Setter
-public class PointEvent extends BaseEntity {
+public class AssginmentEvent extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "point_id", nullable = false)
-    private Long pointId;
+    @Column(name = "assignment_event_id")
+    private Long assignmentEventId;
+
+    private LocalDateTime assignmentExpiredAt;
+
+    private LocalDateTime assignmentAcheivedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private Integer pointDelta;
-
-    private PointActionEnum pointAction;
-
-    private PointReasonEnum pointReason;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assignment_id")
+    private Assignment assignment;
 }

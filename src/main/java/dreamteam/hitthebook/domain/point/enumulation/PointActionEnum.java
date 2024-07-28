@@ -1,4 +1,4 @@
-package dreamteam.hitthebook.domain.pointevent.enumulation;
+package dreamteam.hitthebook.domain.point.enumulation;
 
 public enum PointActionEnum {
     ACCUMULATION,
