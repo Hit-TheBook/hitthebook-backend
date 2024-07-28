@@ -32,7 +32,7 @@ public class Member extends BaseEntity {
     @Column(name = "nickname", nullable = false, unique = true) //length = 20
     private String nickname;
 
-    @Column(name = "kakao_id", nullable = false, unique = true)
+    @Column(name = "kakao_id", unique = true)
     private String kakaoId;
 
     private LocalDateTime lastLoginedAt;

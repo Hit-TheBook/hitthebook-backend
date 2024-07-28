@@ -17,6 +17,13 @@ public class PathsConfig {
             "/temp/token"
     };
 
+    public static final String[] CORS_WHITELIST = {
+            "http://localhost:3000",
+            "https://localhost:3000",
+            "http://localhost:8080",
+            "https://localhost:8080"
+    };
+
     public static final String[] ALL_WHITELIST = mergePaths(SWAGGER_WHITELIST, PUBLIC_WHITELIST);
 
     private static String[] mergePaths(String[]... paths) {
