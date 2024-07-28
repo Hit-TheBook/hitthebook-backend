@@ -1,4 +1,4 @@
-package dreamteam.hitthebook.domain.missionpost.entity;
+package dreamteam.hitthebook.domain.missionchat.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.member.entity.Member;
@@ -15,14 +15,17 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE mission_post SET is_deleted = true WHERE mission_post_id = ?")
+@SQLDelete(sql = "UPDATE mission_chat SET is_deleted = true WHERE chat_id = ?")
 @Getter @Setter
-@Table(name = "mission_post")
-public class MissionPost extends BaseEntity {
+@Table(name = "mission_chat")
+public class MissionChat extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mission_post_id")
-    private Long missionPostId;
+    @Column(name = "chat_id")
+    private Long chatId;
+
+    //    @Column(name = "chat_content", nullable = false, length = 300)
+    private String chatContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -31,14 +34,4 @@ public class MissionPost extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_id")
     private Mission mission;
-
-//    @Column(name = "post_title", nullable = false, length = 20)
-    private String postTitle;
-
-//    @Column(name = "post_content", nullable = false, length = 1000)
-    private String postContent;
-
-    private Integer postLike = 0; // 임시로 들어간 필드, 기획에 따라서 없어질 수 있음
-
-    private Integer postUnlike = 0; // 임시로 들어간 필드, 기획에 따라서 없어질 수 있음
 }

@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE assignment_event SET is_deleted = true WHERE assignment_event_id = ?")
 @Getter @Setter
+@Table(name = "assignment_event")
 public class AssginmentEvent extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.domain.mission.entity;
 
+import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.emblem.entity.Emblem;
 import dreamteam.hitthebook.domain.mission.enumulation.MissionTypeEnum;
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ import org.hibernate.annotations.Where;
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE mission SET is_deleted = true WHERE mission_id = ?")
 @Getter @Setter
-public class Mission {
+public class Mission extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mission_id")
