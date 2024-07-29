@@ -17,6 +17,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 public class JwtAuthenticationFilter implements Filter {
     private JwtTokenProvider jwtTokenProvider;
+    private JwtTokenHelper jwtTokenHelper;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -26,7 +27,7 @@ public class JwtAuthenticationFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
         log.info("URI : {}", requestURI);
 
-        String jwt = getJwtFromRequest(httpRequest);
+        String jwt = jwtTokenHelper.getJwtFromRequest(httpRequest);
 
         if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
             String emailId = jwtTokenProvider.getEmailIdFromJWT(jwt);
@@ -36,17 +37,6 @@ public class JwtAuthenticationFilter implements Filter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
         filterChain.doFilter(servletRequest, servletResponse);
-
     }
-
-    private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
-
 }

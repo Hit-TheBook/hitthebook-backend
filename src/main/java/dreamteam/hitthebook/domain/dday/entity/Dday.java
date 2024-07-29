@@ -1,6 +1,7 @@
 package dreamteam.hitthebook.domain.dday.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.domain.dday.dto.DdayDto;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,11 +28,25 @@ public class Dday extends BaseEntity {
 //    @Column(name = "dday_name", nullable = false, length = 20)
     private String ddayName;
 
-    private LocalDateTime ddayAt;
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
 
     private boolean isMain = false; // 디폴트는 false
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+
+    public Dday(String ddayName, LocalDateTime startDate, LocalDateTime endDate, Member member) {
+        this.ddayName = ddayName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.member = member;
+    }
+
+    public static Dday createByRequestDto(DdayDto.DdayRequestDto ddayRequestDto, Member member) {
+        return new Dday(ddayRequestDto.getDdayName(), ddayRequestDto.getStartDate(), ddayRequestDto.getEndDate(), member);
+    }
 }

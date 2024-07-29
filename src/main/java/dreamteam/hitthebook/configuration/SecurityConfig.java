@@ -1,6 +1,7 @@
 package dreamteam.hitthebook.configuration;
 
 import dreamteam.hitthebook.common.jwt.JwtAuthenticationFilter;
+import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Arrays;
 
@@ -20,7 +23,11 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private JwtTokenHelper jwtTokenHelper;
 
     @Autowired
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
@@ -37,7 +44,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers(PathsConfig.ALL_WHITELIST).permitAll()  // 설정된 경로들은 인증 없이 접근 가능
                                 .anyRequest().authenticated())  // 그 외의 모든 요청은 인증 필요
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);  // JWT 필터 추가
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, jwtTokenHelper), UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가
 
         return http.build();
     }
