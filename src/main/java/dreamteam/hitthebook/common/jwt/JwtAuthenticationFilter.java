@@ -1,4 +1,4 @@
-package dreamteam.hitthebook.domain.jwt;
+package dreamteam.hitthebook.common.jwt;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

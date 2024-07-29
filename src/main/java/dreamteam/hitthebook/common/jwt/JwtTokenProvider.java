@@ -1,4 +1,4 @@
-package dreamteam.hitthebook.domain.jwt;
+package dreamteam.hitthebook.common.jwt;
 
 import dreamteam.hitthebook.domain.member.entity.Member;
 import io.jsonwebtoken.Claims;
