@@ -26,6 +26,7 @@ public class DdayController {
 
     @PostMapping("")
     @SwaggerToken
+    @DdayRegisterDetail
     public CommonResponseDto ddayCreate(HttpServletRequest request, DdayRequestDto ddayRequestDto){
         String EmailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         ddayService.createDday(ddayRequestDto, EmailId);
@@ -33,6 +34,5 @@ public class DdayController {
                 .message("successful")
                 .build();
     }
-
 
 }

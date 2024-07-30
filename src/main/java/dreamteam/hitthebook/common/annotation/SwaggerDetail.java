@@ -13,4 +13,17 @@ public class SwaggerDetail {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface LoginDetail {
     }
+
+
+    //DdayController
+    @Operation(summary = "dday 추가", description = "dday를 추가한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface DdayRegisterDetail {
+    }
+
+
+
+
+
 }

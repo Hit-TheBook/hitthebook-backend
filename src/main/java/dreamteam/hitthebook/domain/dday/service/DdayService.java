@@ -24,4 +24,6 @@ public class DdayService {
         Dday dday = Dday.createByRequestDto(ddayRequestDto, member);
         ddayRepository.save(dday);
     }
+
+
 }
