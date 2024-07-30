@@ -16,10 +16,16 @@ public class SwaggerDetail {
 
 
     //DdayController
-    @Operation(summary = "dday 추가", description = "dday를 추가한다.")
+    @Operation(summary = "dday 추가", description = "dday를 추가한다, startdate와 enddate는 localdatetime의 형식에 맞게 입력")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface DdayRegisterDetail {
+    }
+
+    @Operation(summary = "dday 수정", description = "dday를 수정한다, startdate와 enddate는 localdatetime의 형식에 맞게 입력, 본인만 수정가능")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface DdayUpdateDetail {
     }
 
 

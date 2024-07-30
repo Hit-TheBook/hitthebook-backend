@@ -25,5 +25,13 @@ public class DdayService {
         ddayRepository.save(dday);
     }
 
+    @Transactional
+    public void modifyDday(DdayRequestDto ddayRequestDto, String emailId, Long ddayId){
+        Member member = ddayHelper.findMemberByEmailId(emailId);
+        Dday originDday = ddayHelper.findDdayByDdayId(ddayId);
+        ddayHelper.checkDdayEditPermission(originDday, member); // 수정자가 작성자 본인인지 확인후 다르면 예외처리
+        ddayHelper.updateDdayEntity(originDday, ddayRequestDto); // dday업데이트 처리
+    }
+
 
 }
