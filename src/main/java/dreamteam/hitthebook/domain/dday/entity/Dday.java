@@ -12,6 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @NoArgsConstructor
@@ -32,7 +33,7 @@ public class Dday extends BaseEntity {
 
     private LocalDateTime endDate;
 
-    private boolean isMain = false; // 디폴트는 false
+    private boolean isPrimary = false; // 디폴트는 false
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -48,5 +49,9 @@ public class Dday extends BaseEntity {
 
     public static Dday createByRequestDto(DdayDto.DdayRequestDto ddayRequestDto, Member member) {
         return new Dday(ddayRequestDto.getDdayName(), ddayRequestDto.getStartDate(), ddayRequestDto.getEndDate(), member);
+    }
+
+    public Integer getRemainingDays() {
+        return (int) ChronoUnit.DAYS.between(LocalDateTime.now(), this.endDate);
     }
 }

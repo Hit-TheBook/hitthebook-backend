@@ -45,4 +45,34 @@ public class DdayController {
                 .build();
     }
 
+    @DeleteMapping("/{ddayId}")
+    @SwaggerToken
+    @DdayDeleteDetail
+    public CommonResponseDto ddayDelete(@PathVariable(name = "ddayId") Long ddayId, HttpServletRequest request){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        ddayService.deleteDday(emailId, ddayId);
+        return CommonResponseDto.builder()
+                .message("successful")
+                .build();
+    }
+
+    @PostMapping("primary/{ddayId}")
+    @SwaggerToken
+    @DdayMakePrimaryDetail
+    public CommonResponseDto primaryDdaySet(@PathVariable(name = "ddayId") Long ddayId, HttpServletRequest request){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        ddayService.setPrimaryDday(emailId, ddayId);
+        return CommonResponseDto.builder()
+                .message("successful")
+                .build();
+    }
+
+    @GetMapping("/primary")
+    @SwaggerToken
+    @DdayGetPrimaryDetail
+    public PrimaryDdayDto primaryDdayFind(HttpServletRequest request){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        return ddayService.findPrimaryDday(emailId);
+    }
+
 }

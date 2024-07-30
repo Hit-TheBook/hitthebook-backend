@@ -28,7 +28,23 @@ public class SwaggerDetail {
     public @interface DdayUpdateDetail {
     }
 
+    @Operation(summary = "dday 삭제", description = "dday를 삭제한다 본인만 삭제가능")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface DdayDeleteDetail {
+    }
 
+    @Operation(summary = "대표dday 등록", description = "대표 dday를 지정한다")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface DdayMakePrimaryDetail {
+    }
+
+    @Operation(summary = "대표dday 가져오기", description = "대표 dday를 불러온다")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface DdayGetPrimaryDetail {
+    }
 
 
 
