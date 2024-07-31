@@ -19,12 +19,14 @@ public class DdayService {
     private final DdayHelper ddayHelper;
     private final DdayRepository ddayRepository;
 
+    // 디데이 생성
     public void createDday(DdayRequestDto ddayRequestDto, String emailId){
         Member member = ddayHelper.findMemberByEmailId(emailId);
         Dday dday = Dday.createByRequestDto(ddayRequestDto, member);
         ddayRepository.save(dday);
     }
 
+    // 디데이 수정
     public void modifyDday(DdayRequestDto ddayRequestDto, String emailId, Long ddayId){
         Member member = ddayHelper.findMemberByEmailId(emailId);
         Dday originDday = ddayHelper.findDdayByDdayId(ddayId);
@@ -32,6 +34,7 @@ public class DdayService {
         ddayHelper.updateDdayEntity(originDday, ddayRequestDto); // dday업데이트 처리
     }
 
+    // 디데이 삭제
     public void deleteDday(String emailId, Long ddayId){
         Member member = ddayHelper.findMemberByEmailId(emailId);
         Dday originDday = ddayHelper.findDdayByDdayId(ddayId);
@@ -39,6 +42,7 @@ public class DdayService {
         ddayHelper.deleteDdayEntity(originDday);
     }
 
+    // 메인 디데이 설정
     public void setPrimaryDday(String emailId, Long ddayId){
         Member member = ddayHelper.findMemberByEmailId(emailId);
         Dday originDday = ddayHelper.findDdayByDdayId(ddayId);
@@ -46,9 +50,16 @@ public class DdayService {
         ddayHelper.updatePrimaryDdayEntity(member, originDday);
     }
 
+    // 메인 디데이 검색
     public PrimaryDdayDto findPrimaryDday(String emailId){
         Member member = ddayHelper.findMemberByEmailId(emailId);
         Dday primaryDday = ddayHelper.findPrimaryDday(member);
         return ddayHelper.toPrimaryDdayDto(primaryDday);
+    }
+
+    // 디데이 목록 검색
+    public DdayListDto findDdayList(String emailId){
+        Member member = ddayHelper.findMemberByEmailId(emailId);
+        return ddayHelper.toDdayListDto(member);
     }
 }

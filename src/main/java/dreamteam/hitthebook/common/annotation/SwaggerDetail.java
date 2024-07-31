@@ -46,6 +46,12 @@ public class SwaggerDetail {
     public @interface DdayGetPrimaryDetail {
     }
 
+    @Operation(summary = "전체 dday 목록 가져오기", description = "대표 dday, 현재 활성화중인 dday, 이미 종료된 dday의 목록을 불러온다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface DdayGetListDetail {
+    }
+
 
 
 }

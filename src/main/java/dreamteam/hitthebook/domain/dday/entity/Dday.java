@@ -8,12 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+@Slf4j
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,11 +50,11 @@ public class Dday extends BaseEntity {
         this.member = member;
     }
 
-    public static Dday createByRequestDto(DdayDto.DdayRequestDto ddayRequestDto, Member member) {
+    public static Dday createByRequestDto(DdayDto.DdayRequestDto ddayRequestDto, Member member) { // 팩토리 메소드
         return new Dday(ddayRequestDto.getDdayName(), ddayRequestDto.getStartDate(), ddayRequestDto.getEndDate(), member);
     }
 
-    public Integer getRemainingDays() {
-        return (int) ChronoUnit.DAYS.between(LocalDateTime.now(), this.endDate);
+    public Integer getRemainingDays() { //오늘로부터 디데이 종료날짜의 남은날짜 계산
+        return (int) ChronoUnit.DAYS.between(LocalDate.now(), this.endDate.toLocalDate());
     }
 }

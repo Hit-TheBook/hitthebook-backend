@@ -75,4 +75,12 @@ public class DdayController {
         return ddayService.findPrimaryDday(emailId);
     }
 
+    @GetMapping("/list")
+    @SwaggerToken
+    @DdayGetListDetail
+    public DdayListDto ddayListFind(HttpServletRequest request){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        return ddayService.findDdayList(emailId);
+    }
+
 }
