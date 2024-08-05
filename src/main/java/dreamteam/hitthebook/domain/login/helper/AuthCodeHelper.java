@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthCodeHelper {
     private static final String CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final int CODE_LENGTH = 6;
-    private static final long EXPIRATION_TIME = 5; // 3 minutes
+    private static final long EXPIRATION_TIME = 5;
 
     private final StringRedisTemplate redisTemplate;
 
@@ -28,7 +28,6 @@ public class AuthCodeHelper {
 
         String authCode = code.toString();
 
-        // Store the auth code in Redis with an expiration time of 3 minutes
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, authCode, EXPIRATION_TIME, TimeUnit.MINUTES);
 
@@ -40,7 +39,7 @@ public class AuthCodeHelper {
         String storedCode = ops.get(key);
 
         if (authCode.equals(storedCode)) {
-            redisTemplate.delete(key); // Invalidate the auth code after successful validation
+            redisTemplate.delete(key);
             return true;
         }
         return false;
