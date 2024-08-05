@@ -23,4 +23,8 @@ public class LoginDto {
             this.refreshToken = refreshToken;
         }
     }
+
+    public static class EmailRequestDto{
+        public String emailId;
+    }
 }

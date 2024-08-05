@@ -25,15 +25,13 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long memberId;
 
+    @Column(name = "email_id", unique = true)
     private String emailId;
 
     private String password;
 
     @Column(name = "nickname", nullable = false, unique = true) //length = 20
     private String nickname;
-
-    @Column(name = "kakao_id", unique = true)
-    private String kakaoId;
 
     private LocalDateTime lastLoginedAt;
 
