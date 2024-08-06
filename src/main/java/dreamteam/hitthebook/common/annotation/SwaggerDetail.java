@@ -52,6 +52,29 @@ public class SwaggerDetail {
     public @interface DdayGetListDetail {
     }
 
+    //TimerController
+    @Operation(summary = "타이머 추가(시작)", description = "과목명에 따른 타이머를 추가한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerStartDetail {
+    }
 
+    @Operation(summary = "타이머 종료", description = "타이머 종료시 공부 시간을 저장한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerEndDetail {
+    }
+
+    @Operation(summary = "타이머 삭제", description = "타이머를 삭제한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerDeleteDetail {
+    }
+
+    @Operation(summary = "타이머의 과목명 수정", description = "해당 타이머의 과목명을 수정한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerNameModifyDetail {
+    }
 
 }
