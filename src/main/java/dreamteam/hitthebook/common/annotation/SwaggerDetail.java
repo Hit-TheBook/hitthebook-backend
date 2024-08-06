@@ -52,6 +52,20 @@ public class SwaggerDetail {
     public @interface DdayGetListDetail {
     }
 
+    //LoginController
+    @Operation(summary = "임시토큰 발급", description = "테스트를 위한 임시토큰을 발급한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TempTokenDetail {
+    }
+
+    @Operation(summary = "이메일로 인증번호 전송", description = "인증번호의 유효기간은 5분이다, 이미 존재하는 아이디라거나 이메일 발송 오류시 오류 발생")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AuthenticateEmailDetail {
+    }
+
+
 
 
 }

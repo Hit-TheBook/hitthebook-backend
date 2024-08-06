@@ -31,7 +31,7 @@ public class LoginService {
         return new LoginTokenDto("successful login", accessToken, refreshToken);
     }
 
-    public CommonResponseDto emailAuthenticate(String emailId){
+    public CommonResponseDto authenticateEmail(String emailId){
         loginHelper.verifyEmailAvailability(emailId);
         loginHelper.sendAuthCodeMail(loginHelper.makeAuthCodeMail(emailId));
 
@@ -39,4 +39,13 @@ public class LoginService {
                 .message("successful")
                 .build();
     }
+
+    public CommonResponseDto verifyAuthenticationCode(String emailId, String authCode){
+        loginHelper.checkValidateCode(emailId, authCode);
+        return CommonResponseDto.builder()
+                .message("successful")
+                .build();
+    }
+
+
 }

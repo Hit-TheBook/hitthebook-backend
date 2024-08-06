@@ -27,7 +27,6 @@ public class AuthCodeHelper {
         }
 
         String authCode = code.toString();
-
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(key, authCode, EXPIRATION_TIME, TimeUnit.MINUTES);
 
@@ -43,9 +42,5 @@ public class AuthCodeHelper {
             return true;
         }
         return false;
-    }
-
-    private String generateKey(String email) {
-        return "authCode:" + email;
     }
 }

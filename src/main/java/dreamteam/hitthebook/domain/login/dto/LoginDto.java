@@ -27,4 +27,9 @@ public class LoginDto {
     public static class EmailRequestDto{
         public String emailId;
     }
+
+    public static class AuthCodeRequestDto{
+        public String emailId;
+        public String code;
+    }
 }

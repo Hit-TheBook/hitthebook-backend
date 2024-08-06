@@ -24,18 +24,6 @@ public class LoginHelper {
         if(memberRepository.findByEmailId(emailId).isPresent()){throw new RuntimeException();} // 나중에 예외 수정 예정}
     }
 
-//    public String createAuthCode(){ // 인증번호 생성 로직
-//        String CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-//        int CODE_LENGTH = 6;
-//        SecureRandom random = new SecureRandom();
-//        StringBuilder code = new StringBuilder(CODE_LENGTH);
-//
-//        for (int i = 0; i < CODE_LENGTH; i++) {
-//            code.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
-//        }
-//        return code.toString();
-//    }
-
     public SimpleMailMessage makeAuthCodeMail(String toEmail) { // 이메일 객체 생성
         String authCode = authCodeHelper.createAuthCode(toEmail); // 암호생성
         SimpleMailMessage message = new SimpleMailMessage();
@@ -52,6 +40,12 @@ public class LoginHelper {
         }
         catch (MailException e){
             throw new RuntimeException(e); // 이메일 오류 예외처리 추가 예정
+        }
+    }
+
+    public void checkValidateCode(String emailId, String authCode){
+        if(!authCodeHelper.validateAuthCode(emailId, authCode)){
+            throw new RuntimeException(); // 이메일 인증 오류 예외처리 추가
         }
     }
 
