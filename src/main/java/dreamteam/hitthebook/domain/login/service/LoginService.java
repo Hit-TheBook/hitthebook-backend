@@ -21,27 +21,28 @@ public class LoginService {
     private final JwtTokenProvider jwtTokenProvider;
     private final LoginHelper loginHelper;
 
-    public LoginTokenDto makeTokenService(LoginRequsetDto loginRequsetDto) {
-        Member member = memberRepository.findByEmailIdAndPassword(loginRequsetDto.emailId, loginRequsetDto.password);
-        if(member == null) {
-            throw new RuntimeException();
-        }
-        String accessToken = jwtTokenProvider.generateAccessToken(member);
-        String refreshToken = jwtTokenProvider.generateAccessToken(member);
-        return new LoginTokenDto("successful login", accessToken, refreshToken);
+    public LoginTokenDto makeTokenService(LoginRequestDto loginRequestDto) {
+        Member member = loginHelper.findMemberByEmailAndPassword(loginRequestDto.emailId, loginRequestDto.password);
+        return new LoginTokenDto("successful login", jwtTokenProvider.generateAccessToken(member), jwtTokenProvider.generateRefreshToken(member));
     }
 
-    public CommonResponseDto authenticateEmail(String emailId){
-        loginHelper.verifyEmailAvailability(emailId);
-        loginHelper.sendAuthCodeMail(loginHelper.makeAuthCodeMail(emailId));
-
+    public CommonResponseDto joinMember(JoinRequestDto joinRequestDto){
+        //회원가입 로직
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
     }
 
-    public CommonResponseDto verifyAuthenticationCode(String emailId, String authCode){
-        loginHelper.checkValidateCode(emailId, authCode);
+    public CommonResponseDto authenticateEmail(EmailRequestDto emailRequestDto){
+        loginHelper.verifyEmailAvailability(emailRequestDto.emailId);
+        loginHelper.sendAuthCodeMail(loginHelper.makeAuthCodeMail(emailRequestDto.emailId));
+        return CommonResponseDto.builder()
+                .message("successful")
+                .build();
+    }
+
+    public CommonResponseDto verifyAuthenticationCode(AuthCodeRequestDto authCodeRequestDto){
+        loginHelper.checkValidateCode(authCodeRequestDto.emailId, authCodeRequestDto.authCode);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();

@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.domain.login.helper;
 
+import dreamteam.hitthebook.domain.login.dto.LoginDto;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,10 @@ public class LoginHelper {
     private final MemberRepository memberRepository;
     private final JavaMailSender mailSender;
     private final AuthCodeHelper authCodeHelper;
+
+    public Member findMemberByEmailAndPassword(String emailId, String password) {
+        return memberRepository.findByEmailIdAndPassword(emailId, password).orElseThrow(RuntimeException::new);
+    }
     
     public void verifyEmailAvailability(String emailId){ // 이메일이 존재한다면 예외처리
         if(memberRepository.findByEmailId(emailId).isPresent()){throw new RuntimeException();} // 나중에 예외 수정 예정}
