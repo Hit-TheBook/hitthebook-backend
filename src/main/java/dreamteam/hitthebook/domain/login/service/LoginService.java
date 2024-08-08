@@ -27,7 +27,9 @@ public class LoginService {
     }
 
     public CommonResponseDto joinMember(JoinRequestDto joinRequestDto){
-        //회원가입 로직
+        loginHelper.checkValidPassword(joinRequestDto.password);
+        Member member = Member.createByRequestDto(joinRequestDto);
+        memberRepository.save(member);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();

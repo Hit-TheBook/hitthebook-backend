@@ -20,6 +20,7 @@ import org.thymeleaf.context.Context;
 
 import java.security.SecureRandom;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -37,6 +38,24 @@ public class LoginHelper {
     
     public void verifyEmailAvailability(String emailId){ // 이메일이 존재한다면 예외처리
         if(memberRepository.findByEmailId(emailId).isPresent()){throw new RuntimeException();} // 나중에 예외 수정 예정}
+    }
+
+    public void checkValidPassword(String password){ // 비밀번호 예외처리 구현예정, 비밀번호 기획 필요함
+        Pattern DIGIT_PATTERN = Pattern.compile("\\d");
+        Pattern LETTER_PATTERN = Pattern.compile("[a-zA-Z]");
+        Pattern SPECIAL_CHAR_PATTERN = Pattern.compile("[^a-zA-Z0-9]");
+        if (password == null || password.length() < 10 || password.length() > 20) {
+            throw new RuntimeException();
+        }
+        if (!DIGIT_PATTERN.matcher(password).find()) {
+            throw new RuntimeException();
+        }
+        if (!LETTER_PATTERN.matcher(password).find()) {
+            throw new RuntimeException();
+        }
+        if (!SPECIAL_CHAR_PATTERN.matcher(password).find()) {
+            throw new RuntimeException();
+        }
     }
 
     public SimpleMailMessage makeAuthCodeMail(String toEmail) { // 이메일 객체 생성
