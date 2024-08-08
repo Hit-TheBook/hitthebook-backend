@@ -35,7 +35,8 @@ public class LoginService {
 
     public CommonResponseDto authenticateEmail(EmailRequestDto emailRequestDto){
         loginHelper.verifyEmailAvailability(emailRequestDto.emailId);
-        loginHelper.sendAuthCodeMail(loginHelper.makeAuthCodeMail(emailRequestDto.emailId));
+//        loginHelper.sendAuthCodeMail(loginHelper.makeAuthCodeMail(emailRequestDto.emailId)); 기존에 메세지만 보내던 헬퍼코드
+        loginHelper.makeAuthCodeTemplateMail(emailRequestDto.emailId);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();

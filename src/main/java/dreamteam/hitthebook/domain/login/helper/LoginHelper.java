@@ -3,12 +3,20 @@ package dreamteam.hitthebook.domain.login.helper;
 import dreamteam.hitthebook.domain.login.dto.LoginDto;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
+
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+
+import org.thymeleaf.spring6.SpringTemplateEngine;
+
+import org.thymeleaf.context.Context;
 
 import java.security.SecureRandom;
 import java.util.Optional;
@@ -20,6 +28,8 @@ public class LoginHelper {
     private final MemberRepository memberRepository;
     private final JavaMailSender mailSender;
     private final AuthCodeHelper authCodeHelper;
+
+    private final SpringTemplateEngine templateEngine;
 
     public Member findMemberByEmailAndPassword(String emailId, String password) {
         return memberRepository.findByEmailIdAndPassword(emailId, password).orElseThrow(RuntimeException::new);
@@ -37,6 +47,28 @@ public class LoginHelper {
         message.setSubject("[힛더북] 회원가입 인증번호입니다.");
         message.setText("이메일 인증 코드 : " + authCode);
         return message;
+    }
+
+    public void makeAuthCodeTemplateMail(String toEmail) {
+        try {
+            String authCode = authCodeHelper.createAuthCode(toEmail);
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(toEmail);
+            helper.setFrom("mailsystem9983@naver.com");
+            helper.setSubject("[힛더북] 회원가입 인증번호입니다.");
+
+            Context context = new Context();
+            context.setVariable("authCode", authCode);
+
+            String html = templateEngine.process("emailTemplate", context);
+            helper.setText(html, true);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            log.info("HTML TEMPLATE AUTH CODE ERROR!!");
+        }
     }
 
     public void sendAuthCodeMail(SimpleMailMessage message) { // 이메일 전송
