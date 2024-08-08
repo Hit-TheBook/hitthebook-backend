@@ -1,15 +1,19 @@
 package dreamteam.hitthebook.domain.timer.helper;
 
-import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
-import dreamteam.hitthebook.domain.timer.dto.TimerDto;
 import dreamteam.hitthebook.domain.timer.entity.Timer;
 import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+
+import java.util.List;
+
+
 import static dreamteam.hitthebook.domain.timer.dto.TimerDto.*;
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TimerHelper {
@@ -32,13 +36,19 @@ public class TimerHelper {
     public void deleteTimerEntity(Timer timer){timerRepository.delete(timer);
     }
 
-    public void updateTimerTime(Timer timer, TimerRequestDto timerRequestDto){
-        timer.setStudyTimeLength(timerRequestDto.getStudyTimeLength());
+    public void updateTimerTime(Timer timer, TimerEndRequestDto timerEndRequestDto){
+        timer.setStudyTimeLength(timerEndRequestDto.getStudyTimeLength());
         timerRepository.save(timer);
     }
 
-    public void updateTimerName(Timer timer, TimerRequestDto timerRequestDto){
+    public void updateTimerName(Timer timer, TimerStartRequestDto timerRequestDto){
         timer.setSubjectName(timerRequestDto.getSubjectName());
         timerRepository.save(timer);
     }
+
+    public TimerListDto toTimerListDto(Member member, TimerDateDto timerDateDto) {
+        List<Timer> timerList = timerRepository.findByMemberAndUpdatedAt(member, timerDateDto.getStudyDate());
+        return new TimerListDto(timerList);
+    }
+
 }

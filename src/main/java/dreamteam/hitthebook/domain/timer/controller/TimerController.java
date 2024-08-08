@@ -1,15 +1,11 @@
 package dreamteam.hitthebook.domain.timer.controller;
 
-import dreamteam.hitthebook.common.annotation.SwaggerDetail;
+
 import dreamteam.hitthebook.common.annotation.SwaggerToken;
 import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
-import dreamteam.hitthebook.domain.dday.dto.DdayDto;
-import dreamteam.hitthebook.domain.timer.dto.TimerDto;
-import dreamteam.hitthebook.domain.timer.entity.Timer;
 import dreamteam.hitthebook.domain.timer.service.TimerService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -28,20 +24,20 @@ public class TimerController {
     @PostMapping("")
     @SwaggerToken
     @TimerStartDetail
-    public CommonResponseDto timerCreate(HttpServletRequest request, TimerRequestDto timerRequestDto){
+    public CommonResponseDto timerCreate(HttpServletRequest request, TimerStartRequestDto timerStartRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        timerService.createTimer(timerRequestDto, emailId);
+        timerService.createTimer(timerStartRequestDto, emailId);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
     }
 
-    @PostMapping("/{timerId}")
+    @PutMapping("/{timerId}")
     @SwaggerToken
     @TimerEndDetail
-    public CommonResponseDto timerSet(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, TimerRequestDto timerRequestDto){
+    public CommonResponseDto timerSet(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, TimerEndRequestDto timerEndRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        timerService.setTimer(timerRequestDto,timerId,emailId);
+        timerService.setTimer(timerEndRequestDto,timerId,emailId);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
@@ -58,14 +54,22 @@ public class TimerController {
                 .build();
     }
 
-    @PutMapping("/{timerId}")
+    @PatchMapping("/{timerId}")
     @SwaggerToken
     @TimerNameModifyDetail
-    public CommonResponseDto timerModify(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, TimerRequestDto timerRequestDto){
+    public CommonResponseDto timerModify(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, TimerStartRequestDto timerStartRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        timerService.modifyTimerName(timerRequestDto,timerId,emailId);
+        timerService.modifyTimerName(timerStartRequestDto,timerId,emailId);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
+    }
+
+    @GetMapping("/list")
+    @SwaggerToken
+    @TimerListWithDateDetail
+    public TimerListDto timerListFind(HttpServletRequest request, TimerDateDto timerDateDto){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        return timerService.findTimerList(emailId,timerDateDto);
     }
 }

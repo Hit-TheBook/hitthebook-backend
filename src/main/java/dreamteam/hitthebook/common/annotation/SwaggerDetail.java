@@ -77,4 +77,10 @@ public class SwaggerDetail {
     public @interface TimerNameModifyDetail {
     }
 
+    @Operation(summary = "날짜에 따른 타이머 기록 가져오기", description = "입력 받은 날짜에 따른 타이머 기록을 가져온다. 기준은 데이터가 마지막으로 업데이트 된 날짜.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerListWithDateDetail {
+    }
+
 }

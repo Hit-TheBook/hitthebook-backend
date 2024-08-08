@@ -1,8 +1,6 @@
 package dreamteam.hitthebook.domain.timer.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.dday.dto.DdayDto;
-import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.timer.dto.TimerDto;
 import jakarta.persistence.*;
@@ -14,8 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 
 @Entity
 @NoArgsConstructor
@@ -32,8 +29,6 @@ public class Timer extends BaseEntity {
 //    @Column(name = "subject_name", length = 20)
     private String subjectName;
 
-    //private LocalDateTime studyStartTime;
-
     private Duration studyTimeLength;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,7 +41,7 @@ public class Timer extends BaseEntity {
         this.member = member;
     }
 
-    public static Timer createByRequestDto(TimerDto.TimerRequestDto timerRequestDto, Member member) {
-        return new Timer(timerRequestDto.getSubjectName(),Duration.ZERO, member);
+    public static Timer createByRequestDto(TimerDto.TimerStartRequestDto timerStartRequestDto, Member member) {
+        return new Timer(timerStartRequestDto.getSubjectName(),Duration.ZERO, member);
     }
 }
