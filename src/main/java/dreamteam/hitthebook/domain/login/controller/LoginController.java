@@ -28,10 +28,8 @@ public class LoginController {
     }
 
     @PostMapping("/join")
-    public CommonResponseDto memberJoin(){
-        return CommonResponseDto.builder()
-                .message("successful")
-                .build();
+    public CommonResponseDto memberJoin(@RequestBody JoinRequestDto joinRequestDto){
+        return loginService.joinMember(joinRequestDto);
     }
 
     @PostMapping("/join/mail/authorization")

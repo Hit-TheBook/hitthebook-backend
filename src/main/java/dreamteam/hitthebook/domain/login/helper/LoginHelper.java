@@ -18,6 +18,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import org.thymeleaf.context.Context;
 
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -54,6 +55,27 @@ public class LoginHelper {
             throw new RuntimeException();
         }
         if (!SPECIAL_CHAR_PATTERN.matcher(password).find()) {
+            throw new RuntimeException();
+        }
+    }
+
+    public void checkValidNickname(String nickname){ // 닉네임 예외처리 구현예정, 닉네임 기획 필요함
+        Pattern VALID_CHAR_PATTERN = Pattern.compile("^[가-힣a-zA-Z0-9]+$");
+        if (nickname == null) {
+            throw new RuntimeException();
+        }
+
+        if (nickname.contains(" ")) {
+            throw new RuntimeException();
+        }
+
+        byte[] nicknameBytes = nickname.getBytes(StandardCharsets.UTF_8);
+        int length = nicknameBytes.length;
+        if (length < 6 || length > 30) { // 한글 2자(6바이트) ~ 10자(30바이트) 기준
+            throw new RuntimeException();
+        }
+
+        if (!VALID_CHAR_PATTERN.matcher(nickname).matches()) {
             throw new RuntimeException();
         }
     }
