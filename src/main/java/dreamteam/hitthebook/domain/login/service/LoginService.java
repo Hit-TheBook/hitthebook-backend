@@ -2,7 +2,9 @@ package dreamteam.hitthebook.domain.login.service;
 
 import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
+import dreamteam.hitthebook.domain.login.entity.Token;
 import dreamteam.hitthebook.domain.login.helper.LoginHelper;
+import dreamteam.hitthebook.domain.login.repository.TokenRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +21,18 @@ import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
 public class LoginService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenRepository tokenRepository;
     private final LoginHelper loginHelper;
 
     public LoginTokenDto makeTokenService(LoginRequestDto loginRequestDto) {
         Member member = loginHelper.findMemberByEmailAndPassword(loginRequestDto.emailId, loginRequestDto.password);
         return new LoginTokenDto("successful login", jwtTokenProvider.generateAccessToken(member), jwtTokenProvider.generateRefreshToken(member));
+    }
+
+    public LoginTokenDto issueTokenService(String refreshToken) {
+        Token storedRefreshToken = loginHelper.findRefreshTokenAtDB(refreshToken);
+        Member member = storedRefreshToken.getMember();
+        return new LoginTokenDto("success", jwtTokenProvider.generateAccessToken(member), jwtTokenProvider.generateRefreshToken(member));
     }
 
     public CommonResponseDto joinMember(JoinRequestDto joinRequestDto){

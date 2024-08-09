@@ -24,6 +24,10 @@ public class LoginDto {
         }
     }
 
+    public static class ReissueTokenDto{
+        public String refreshToken;
+    }
+
     public static class JoinRequestDto{
         public String emailId;
         public String password;

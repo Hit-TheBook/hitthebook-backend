@@ -1,6 +1,8 @@
 package dreamteam.hitthebook.domain.login.helper;
 
 import dreamteam.hitthebook.domain.login.dto.LoginDto;
+import dreamteam.hitthebook.domain.login.entity.Token;
+import dreamteam.hitthebook.domain.login.repository.TokenRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import jakarta.mail.MessagingException;
@@ -28,6 +30,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class LoginHelper {
     private final MemberRepository memberRepository;
+    private final TokenRepository tokenRepository;
     private final JavaMailSender mailSender;
     private final AuthCodeHelper authCodeHelper;
 
@@ -80,14 +83,23 @@ public class LoginHelper {
         }
     }
 
-    public SimpleMailMessage makeAuthCodeMail(String toEmail) { // 이메일 객체 생성
+    public Token findRefreshTokenAtDB(String refreshToken){
+        return tokenRepository.findByRefreshToken(refreshToken).orElseThrow(RuntimeException::new);
+    }
+
+    public void makeAuthCodeMail(String toEmail) { // 이메일 단순 객체 생성 후 전송
         String authCode = authCodeHelper.createAuthCode(toEmail); // 암호생성
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
         message.setFrom("mailsystem9983@naver.com");
         message.setSubject("[힛더북] 회원가입 인증번호입니다.");
         message.setText("이메일 인증 코드 : " + authCode);
-        return message;
+        try{
+            mailSender.send(message);
+        }
+        catch (MailException e){
+            throw new RuntimeException(e); // 이메일 오류 예외처리 추가 예정
+        }
     }
 
     public void makeAuthCodeTemplateMail(String toEmail) {
@@ -112,21 +124,10 @@ public class LoginHelper {
         }
     }
 
-    public void sendAuthCodeMail(SimpleMailMessage message) { // 이메일 전송
-        try{
-            mailSender.send(message);
-        }
-        catch (MailException e){
-            throw new RuntimeException(e); // 이메일 오류 예외처리 추가 예정
-        }
-    }
-
     public void checkValidateCode(String emailId, String authCode){
         if(!authCodeHelper.validateAuthCode(emailId, authCode)){
             throw new RuntimeException(); // 이메일 인증 오류 예외처리 추가
         }
     }
 
-
-    
 }
