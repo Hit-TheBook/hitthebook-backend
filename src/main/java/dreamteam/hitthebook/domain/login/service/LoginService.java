@@ -4,7 +4,7 @@ import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
 import dreamteam.hitthebook.domain.login.entity.ApiToken;
 import dreamteam.hitthebook.domain.login.helper.LoginHelper;
-import dreamteam.hitthebook.domain.login.repository.TokenRepository;
+import dreamteam.hitthebook.domain.login.repository.ApiTokenRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
 public class LoginService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final TokenRepository tokenRepository;
+    private final ApiTokenRepository tokenRepository;
     private final LoginHelper loginHelper;
 
     public LoginTokenDto makeTokenService(LoginRequestDto loginRequestDto) {
@@ -38,8 +38,8 @@ public class LoginService {
 
     public LoginTokenDto issueTokenService(String refreshToken) {
         ApiToken storedRefreshToken = loginHelper.findRefreshTokenAtDBByToken(refreshToken);
-        Member member = storedRefreshToken.getMember();
         loginHelper.deleteRefreshToken(storedRefreshToken);
+        Member member = storedRefreshToken.getMember();
         return loginHelper.toLoginTokenDto(member);
     }
 
