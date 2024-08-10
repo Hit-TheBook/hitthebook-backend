@@ -1,8 +1,7 @@
 package dreamteam.hitthebook.domain.login.entity;
 
 
-import dreamteam.hitthebook.domain.emblem.entity.Emblem;
-import dreamteam.hitthebook.domain.level.entity.Level;
+import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,8 +11,6 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.time.LocalDateTime;
-
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +18,7 @@ import java.time.LocalDateTime;
 @SQLDelete(sql = "UPDATE Token SET is_deleted = true WHERE token_id = ?")
 @Getter
 @Setter
-public class Token {
+public class ApiToken extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "token_id")
@@ -33,4 +30,9 @@ public class Token {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public ApiToken(String refreshToken, Member member) {
+        this.refreshToken = refreshToken;
+        this.member = member;
+    }
 }

@@ -53,8 +53,8 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
     }
 
-    public static Member createByRequestDto(LoginDto.JoinRequestDto joinRequestDto){
-        return new Member(joinRequestDto.emailId, joinRequestDto.password, joinRequestDto.nickname);
-    }
+//    public static Member createByRequestDto(LoginDto.JoinRequestDto joinRequestDto){
+//        return new Member(joinRequestDto.emailId, joinRequestDto.password, joinRequestDto.nickname);
+//    }
 
 }

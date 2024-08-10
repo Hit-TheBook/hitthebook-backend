@@ -17,7 +17,7 @@ public class LoginController {
     @PostMapping("/login")
     @LoginDetail
     public LoginTokenDto Login(@RequestBody LoginRequestDto loginRequestDto){
-        return loginService.makeTokenService(loginRequestDto);
+        return loginService.loginService(loginRequestDto);
     }
 
     @GetMapping("/temp/token")
@@ -28,6 +28,7 @@ public class LoginController {
     }
 
     @PostMapping("/join")
+    @JoinDetail
     public CommonResponseDto memberJoin(@RequestBody JoinRequestDto joinRequestDto){
         return loginService.joinMember(joinRequestDto);
     }
@@ -39,22 +40,15 @@ public class LoginController {
     }
 
     @PostMapping("/login/token/issue")
+    @ReissueDetail
     public LoginTokenDto tokenValidationIssue(@RequestBody ReissueTokenDto reissueTokenDto){
         return loginService.issueTokenService(reissueTokenDto.refreshToken); // jwt DB에 저장 및 갱신하는 과정 수정 필요함
     }
 
     @PostMapping("/join/mail/authorization/verify")
+    @AuthenticateEmailCodeDetail
     public CommonResponseDto authenticationCodeVerify(@RequestBody AuthCodeRequestDto authCodeRequestDto){
         return loginService.verifyAuthenticationCode(authCodeRequestDto); // dto를 넘겨주는게 맞는듯
     }
-
-    // 해야할 일 정리
-    // 1. 레디스를 통해 인증번호 기능 구현 : OK
-    // 2. 지금 메세지로 보내고 있는데, 이것을 HTML 템플릿을 전송하는 방식으로 수정 : 아직 미완료
-    // 3. JWT기능 구현
-    // 3-1. 로그인 메소드 수정
-    // 3-2. 리프레시 토큰 검증 API구현
-    // 3-3. 리프레시토큰 데이터베이스에 저장하고, 새로 갱신하는 로직 구현(이부분은 나중에 AOP로 수정해도 좋을 것으로 보임)
-    // 4. 비밀번호 암호화 구현 ... 하 이거를 해야해? 개귀찮다...
 
 }

@@ -14,7 +14,9 @@ public class PathsConfig {
     public static final String[] PUBLIC_WHITELIST = {
             "/",
             "/login",
+            "/login/**",
             "/temp/token",
+            "/join/**",
             "/join/mail/authorization/**"
     };
 
