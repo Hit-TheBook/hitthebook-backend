@@ -3,6 +3,7 @@ package dreamteam.hitthebook.domain.member.entity;
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.emblem.entity.Emblem;
 import dreamteam.hitthebook.domain.level.entity.Level;
+import dreamteam.hitthebook.domain.login.dto.LoginDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,15 +26,13 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long memberId;
 
+    @Column(name = "email_id", unique = true)
     private String emailId;
 
     private String password;
 
     @Column(name = "nickname", nullable = false, unique = true) //length = 20
     private String nickname;
-
-    @Column(name = "kakao_id", unique = true)
-    private String kakaoId;
 
     private LocalDateTime lastLoginedAt;
 
@@ -47,4 +46,15 @@ public class Member extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "level_id")
     private Level level;
+
+    public Member (String emailId, String paassword, String nickname){
+        this.emailId = emailId;
+        this.password = paassword;
+        this.nickname = nickname;
+    }
+
+//    public static Member createByRequestDto(LoginDto.JoinRequestDto joinRequestDto){
+//        return new Member(joinRequestDto.emailId, joinRequestDto.password, joinRequestDto.nickname);
+//    }
+
 }

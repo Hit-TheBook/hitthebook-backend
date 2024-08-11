@@ -8,10 +8,43 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 public class SwaggerDetail {
-    @Operation(summary = "로그인", description = "유저 조회 후 토큰발급")
+    //LoginController
+    @Operation(summary = "로그인", description = "유저 조회 후 토큰발급, 현재는 보안수준이 낮다. 평문으로 비밀번호를 POST하는 것은 문제가 있다." +
+            "이부분을 수정해야하는데, 추후에 공부 후에 진행해봐야한다.")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface LoginDetail {
+    }
+
+    @Operation(summary = "임시토큰 발급", description = "테스트를 위한 임시토큰을 발급한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TempTokenDetail {
+    }
+
+    @Operation(summary = "이메일로 인증번호 전송", description = "인증번호의 유효기간은 5분이다, 이미 존재하는 아이디라거나 이메일 발송 오류시 오류 발생")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AuthenticateEmailDetail {
+    }
+
+    @Operation(summary = "인증번호 확인", description = "인증번호의 유효기간은 5분이다, 인증번호를 보내고 유효한 인증번호라면 인증시켜준다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AuthenticateEmailCodeDetail {
+    }
+
+    @Operation(summary = "회원가입", description = "회원가입 API이다, 닉네임과 패스워드에 대한 검사는 양쪽(프론트엔드와 백엔드 모두)에서 진행된다." +
+            "검사양식은 기획에 따라 수정의 여지가 있다. password는 bcrypt의 암호화방식에 따라서 암호화하여 저장된다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface JoinDetail {
+    }
+
+    @Operation(summary = "토큰 재발급", description = "리프레시토큰이 유효하다면 새로운 토큰 재발급 및 리프레시토큰 갱신")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ReissueDetail {
     }
 
 
@@ -52,6 +85,36 @@ public class SwaggerDetail {
     public @interface DdayGetListDetail {
     }
 
+    //TimerController
+    @Operation(summary = "타이머 추가(시작)", description = "과목명에 따른 타이머를 추가한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerStartDetail {
+    }
+
+    @Operation(summary = "타이머 종료", description = "타이머 종료시 공부 시간을 저장한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerEndDetail {
+    }
+
+    @Operation(summary = "타이머 삭제", description = "타이머를 삭제한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerDeleteDetail {
+    }
+
+    @Operation(summary = "타이머의 과목명 수정", description = "해당 타이머의 과목명을 수정한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerNameModifyDetail {
+    }
+
+    @Operation(summary = "날짜에 따른 타이머 기록 가져오기", description = "입력 받은 날짜에 따른 타이머 기록을 가져온다. 기준은 데이터가 마지막으로 업데이트 된 날짜.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerListWithDateDetail {
+    }
 
 
 }

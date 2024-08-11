@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LoginDto {
-    public static class LoginRequsetDto{
+    public static class LoginRequestDto {
         public String emailId;
         public String password;
-        public LoginRequsetDto(String emailId, String password) {
+        public LoginRequestDto(String emailId, String password) {
             this.emailId = emailId;
             this.password = password;
         }
@@ -22,5 +22,25 @@ public class LoginDto {
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
         }
+    }
+
+    public static class ReissueTokenDto{
+        public String refreshToken;
+    }
+
+    public static class JoinRequestDto{
+        public String emailId;
+        public String password;
+        public String nickname;
+    }
+    // 현재 HTTP로 통신을 하게될 가능성이 높은데, HTTPS로 바로 진행을 안할 수 있으므로 암호화에 대한 고민이 필요
+
+    public static class EmailRequestDto{
+        public String emailId;
+    }
+
+    public static class AuthCodeRequestDto{
+        public String emailId;
+        public String authCode;
     }
 }

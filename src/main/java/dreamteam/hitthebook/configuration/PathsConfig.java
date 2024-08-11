@@ -14,7 +14,10 @@ public class PathsConfig {
     public static final String[] PUBLIC_WHITELIST = {
             "/",
             "/login",
-            "/temp/token"
+            "/login/**",
+            "/temp/token",
+            "/join/**",
+            "/join/mail/authorization/**"
     };
 
     public static final String[] CORS_WHITELIST = {

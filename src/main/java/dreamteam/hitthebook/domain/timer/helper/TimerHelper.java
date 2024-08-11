@@ -1,0 +1,54 @@
+package dreamteam.hitthebook.domain.timer.helper;
+
+import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.member.repository.MemberRepository;
+import dreamteam.hitthebook.domain.timer.entity.Timer;
+import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+
+import java.util.List;
+
+
+import static dreamteam.hitthebook.domain.timer.dto.TimerDto.*;
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class TimerHelper {
+
+    private final MemberRepository memberRepository;
+    private final TimerRepository timerRepository;
+
+    public Member findMemberByEmailId(String emailId){
+        return memberRepository.findByEmailId(emailId).orElseThrow(RuntimeException::new); //익셉션 추가예정
+    }
+
+    public Timer findTimerByTimerId(Long timerId){
+        return timerRepository.findById(timerId).orElseThrow(RuntimeException::new); //익셉션 추가예정
+    }
+
+    public void checkTimerEditPermission(Timer timer, Member member){
+        if(!(timer.getMember().equals(member))){throw new RuntimeException();}
+    }
+
+    public void deleteTimerEntity(Timer timer){timerRepository.delete(timer);
+    }
+
+    public void updateTimerTime(Timer timer, TimerEndRequestDto timerEndRequestDto){
+        timer.setStudyTimeLength(timerEndRequestDto.getStudyTimeLength());
+        timerRepository.save(timer);
+    }
+
+    public void updateTimerName(Timer timer, TimerStartRequestDto timerRequestDto){
+        timer.setSubjectName(timerRequestDto.getSubjectName());
+        timerRepository.save(timer);
+    }
+
+    public TimerListDto toTimerListDto(Member member, TimerDateDto timerDateDto) {
+        List<Timer> timerList = timerRepository.findByMemberAndUpdatedAt(member, timerDateDto.getStudyDate());
+        return new TimerListDto(timerList);
+    }
+
+}

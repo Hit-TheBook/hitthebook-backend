@@ -1,12 +1,10 @@
 package dreamteam.hitthebook.domain.login.controller;
 
+import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.domain.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static dreamteam.hitthebook.common.annotation.SwaggerDetail.*;
 import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
@@ -18,14 +16,39 @@ public class LoginController {
     private final LoginService loginService;
     @PostMapping("/login")
     @LoginDetail
-    public LoginTokenDto Login(@RequestBody LoginRequsetDto loginRequsetDto){
-        log.info("***********************************************{}", loginRequsetDto);
-        return loginService.makeTokenService(loginRequsetDto);
+    public LoginTokenDto Login(@RequestBody LoginRequestDto loginRequestDto){
+        return loginService.loginService(loginRequestDto);
     }
 
     @GetMapping("/temp/token")
-    public LoginTokenDto getTempToken(){
-        LoginRequsetDto loginRequsetDto = new LoginRequsetDto("test3@example.com","password3");
+    @TempTokenDetail
+    public LoginTokenDto tempTokenMake(){
+        LoginRequestDto loginRequsetDto = new LoginRequestDto("test3@example.com","password3");
         return loginService.makeTokenService(loginRequsetDto);
     }
+
+    @PostMapping("/join")
+    @JoinDetail
+    public CommonResponseDto memberJoin(@RequestBody JoinRequestDto joinRequestDto){
+        return loginService.joinMember(joinRequestDto);
+    }
+
+    @PostMapping("/join/mail/authorization")
+    @AuthenticateEmailDetail
+    public CommonResponseDto emailAuthenticate(@RequestBody EmailRequestDto emailRequestDto){
+        return loginService.authenticateEmail(emailRequestDto);
+    }
+
+    @PostMapping("/login/token/issue")
+    @ReissueDetail
+    public LoginTokenDto tokenValidationIssue(@RequestBody ReissueTokenDto reissueTokenDto){
+        return loginService.issueTokenService(reissueTokenDto.refreshToken); // jwt DB에 저장 및 갱신하는 과정 수정 필요함
+    }
+
+    @PostMapping("/join/mail/authorization/verify")
+    @AuthenticateEmailCodeDetail
+    public CommonResponseDto authenticationCodeVerify(@RequestBody AuthCodeRequestDto authCodeRequestDto){
+        return loginService.verifyAuthenticationCode(authCodeRequestDto); // dto를 넘겨주는게 맞는듯
+    }
+
 }
