@@ -57,11 +57,13 @@ public class DdayDto {
     @Data
     @NoArgsConstructor
     public static class DdayContents{
+        private Long ddayId;
         private String ddayName;
         private Integer remainingDays;
         private LocalDateTime startDate;
         private LocalDateTime endDate;
         public DdayContents(Dday dday) {
+            this.ddayId = dday.getDdayId();
             this.ddayName = dday.getDdayName();
             this.remainingDays = dday.getRemainingDays();
             this.startDate = dday.getStartDate();
