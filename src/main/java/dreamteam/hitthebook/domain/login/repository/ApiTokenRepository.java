@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
-public interface TokenRepository extends JpaRepository<ApiToken, Long> {
+public interface ApiTokenRepository extends JpaRepository<ApiToken, Long> {
 
     Optional<ApiToken> findByRefreshToken(String refreshToken);
 

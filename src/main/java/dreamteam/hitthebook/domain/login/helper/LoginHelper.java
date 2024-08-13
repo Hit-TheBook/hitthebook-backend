@@ -2,14 +2,14 @@ package dreamteam.hitthebook.domain.login.helper;
 
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
 import dreamteam.hitthebook.domain.login.entity.ApiToken;
-import dreamteam.hitthebook.domain.login.repository.TokenRepository;
+import dreamteam.hitthebook.domain.login.repository.ApiTokenRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 
@@ -33,16 +33,19 @@ import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
 @RequiredArgsConstructor
 public class LoginHelper {
     private final MemberRepository memberRepository;
-    private final TokenRepository tokenRepository;
+    private final ApiTokenRepository apiTokenRepository;
     private final JavaMailSender mailSender;
     private final AuthCodeHelper authCodeHelper;
     private final JwtTokenProvider jwtTokenProvider;
 
     private final SpringTemplateEngine templateEngine;
 
-    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Value("${jwt.refreshExpirationDay}")
+    private Long refreshExpiration;
 
-    public Member findMemberByEmailAndPassword(String emailId, String password){
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // 정적 객체 생성 후 사용 비효율 적인 방법이지만 다른 방법을 모르겠음
+
+    public Member findMemberByEmailAndPassword(String emailId, String password){ // id와 비밀번호로 멤버 검색 bcrypt의 특징때문에 해당 로직 사용
         Member member = memberRepository.findByEmailId(emailId).orElseThrow(RuntimeException::new);
         if(!authenticatePassword(password, member.getPassword())){
             throw new RuntimeException();
@@ -93,35 +96,35 @@ public class LoginHelper {
         }
     }
 
-    public ApiToken findRefreshTokenAtDBByToken(String refreshToken){
-        return tokenRepository.findByRefreshTokenAndCreatedAtAfter(refreshToken, LocalDateTime.now().minusDays(90)).orElseThrow(RuntimeException::new);
+    public ApiToken findRefreshTokenAtDBByToken(String refreshToken){ // 리프레시토큰을 이용하여 DB에서 유효기간 내의 리프레시토큰 검색, 만료 기한 데이터는 일단 임시
+        return apiTokenRepository.findByRefreshTokenAndCreatedAtAfter(refreshToken, LocalDateTime.now().minusDays(refreshExpiration)).orElseThrow(RuntimeException::new);
     }
 
-    public void ifExistRefreshTokenDelete(Member member){
-        ApiToken originToken = tokenRepository.findByMemberAndCreatedAtAfter(member,LocalDateTime.now().minusDays(90));
+    public void ifExistRefreshTokenDelete(Member member){ //리프레시 토큰이 존재한다면, 제거해서 갱신을 대비
+        ApiToken originToken = apiTokenRepository.findByMemberAndCreatedAtAfter(member,LocalDateTime.now().minusDays(refreshExpiration));
         if(originToken != null){
             deleteRefreshToken(originToken);
         }
     }
 
-    public void deleteRefreshToken(ApiToken token){
-        tokenRepository.delete(token);
+    public void deleteRefreshToken(ApiToken token){ // 리프레시토큰을 제거
+        apiTokenRepository.delete(token);
     }
 
-    public void saveRefreshToken(String refreshToken, Member member){
+    public void saveRefreshToken(String refreshToken, Member member){ // 리프레시토큰을 저장
         ApiToken token = new ApiToken(refreshToken, member);
-        tokenRepository.save(token);
+        apiTokenRepository.save(token);
     }
 
 
-    public LoginTokenDto toLoginTokenDto(Member member){
+    public LoginTokenDto toLoginTokenDto(Member member){ // 해당 멤버의 토큰을 발급해줌
         String accessToken = jwtTokenProvider.generateAccessToken(member);
         String refreshToken = jwtTokenProvider.generateRefreshToken(member);
         saveRefreshToken(refreshToken, member);
         return new LoginTokenDto("success", accessToken, refreshToken);
     }
 
-    public void createNewMember(JoinRequestDto joinRequestDto){
+    public void createNewMember(JoinRequestDto joinRequestDto){ // 새로운 멤버 생성
         String emailId = joinRequestDto.emailId;
         String nickname = joinRequestDto.nickname;
         String password = joinRequestDto.password;
@@ -134,7 +137,7 @@ public class LoginHelper {
         return passwordEncoder.matches(rawPassword, encryptedPassword);
     }
 
-    public String createNewSecurePassword(String password){
+    public String createNewSecurePassword(String password){ // bcrypt방법으로 암호화하여 비밀번호 생성
         return passwordEncoder.encode(password);
     }
 
@@ -153,7 +156,7 @@ public class LoginHelper {
         }
     }
 
-    public void makeAuthCodeTemplateMail(String toEmail) {
+    public void makeAuthCodeTemplateMail(String toEmail) { // 이메일 HTML 객체 생성 후 전송
         try {
             String authCode = authCodeHelper.createAuthCode(toEmail);
             MimeMessage message = mailSender.createMimeMessage();
@@ -175,7 +178,7 @@ public class LoginHelper {
         }
     }
 
-    public void checkValidateCode(String emailId, String authCode){
+    public void checkValidateCode(String emailId, String authCode){ // 레디스에 저장된 인증번호와 일치한다면, 인증완료
         if(!authCodeHelper.validateAuthCode(emailId, authCode)){
             throw new RuntimeException(); // 이메일 인증 오류 예외처리 추가
         }
