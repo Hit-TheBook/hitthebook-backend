@@ -51,4 +51,12 @@ public class LoginController {
         return loginService.verifyAuthenticationCode(authCodeRequestDto); // dto를 넘겨주는게 맞는듯
     }
 
+    // 생각보다 로직이 복잡할 것으로 보여서 나중에 구현
+    @PostMapping("/login/password/forgot")
+    public CommonResponseDto temporaryPasswordIssue(){
+        return CommonResponseDto.builder()
+                .message("successful")
+                .build();
+    }
+
 }
