@@ -36,7 +36,12 @@ public class TimerHelper {
     public void deleteTimerEntity(Timer timer){timerRepository.delete(timer);
     }
 
-    public void updateTimerTime(Timer timer, TimerEndRequestDto timerEndRequestDto){
+    public void updateTimerStart(Timer timer, TimerPlayRequestDto timerPlayRequestDto){
+        timer.setStudyStartTime(timerPlayRequestDto.getTimerStartTime());
+        timerRepository.save(timer);
+    }
+
+    public void updateTimerEnd(Timer timer, TimerEndRequestDto timerEndRequestDto){
         timer.setStudyTimeLength(timerEndRequestDto.getStudyTimeLength());
         timerRepository.save(timer);
     }
@@ -47,7 +52,7 @@ public class TimerHelper {
     }
 
     public TimerListDto toTimerListDto(Member member, TimerDateDto timerDateDto) {
-        List<Timer> timerList = timerRepository.findByMemberAndUpdatedAt(member, timerDateDto.getStudyDate());
+        List<Timer> timerList = timerRepository.findByMemberAndStudyStartTime(member, timerDateDto.getStudyDate());
         return new TimerListDto(timerList);
     }
 

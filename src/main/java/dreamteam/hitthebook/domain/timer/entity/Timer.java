@@ -12,6 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -26,10 +27,11 @@ public class Timer extends BaseEntity {
     @Column(name = "timer_id", nullable = false)
     private Long timerId;
 
-//    @Column(name = "subject_name", length = 20)
     private String subjectName;
 
     private Duration studyTimeLength;
+
+    private LocalDateTime studyStartTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
