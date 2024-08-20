@@ -12,6 +12,8 @@ import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

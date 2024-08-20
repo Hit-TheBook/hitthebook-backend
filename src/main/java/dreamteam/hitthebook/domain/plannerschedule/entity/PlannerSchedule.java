@@ -1,7 +1,10 @@
 package dreamteam.hitthebook.domain.plannerschedule.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.domain.dday.dto.DdayDto;
+import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.plannerschedule.dto.PlannerDto;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
 import jakarta.persistence.*;
@@ -27,9 +30,7 @@ public class PlannerSchedule extends BaseEntity {
     @Column(name = "planner_schedule_id")
     private Long plannerScheduleId;
 
-    private LocalDateTime startedAt;
-
-    private LocalDateTime finishedAt;
+    private LocalDateTime scheduleAt;
 
 //    @Column(name = "schedule_title", nullable = false, length = 50)
     private String scheduleTitle;
@@ -46,4 +47,22 @@ public class PlannerSchedule extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "before_schedule_id")
+    private PlannerSchedule beforeSchedule;
+
+    public PlannerSchedule(LocalDateTime scheduleAt, String scheduleTitle, String scheduleContent, ScheduleTypeEnum scheduleType, Member member) {
+        this.scheduleAt = scheduleAt;
+        this.scheduleTitle = scheduleTitle;
+        this.scheduleContent = scheduleContent;
+        this.scheduleType = scheduleType;
+        this.member = member;
+    }
+
+    public static PlannerSchedule createByRequestDto(PlannerDto.ScheduleRequestDto scheduleRequestDto, ScheduleTypeEnum scheduleType, Member member){
+        return new PlannerSchedule(scheduleRequestDto.getScheduleDate(), scheduleRequestDto.getScheduleTitle(),
+                scheduleRequestDto.getContent(), scheduleType, member);
+    }
+
 }
