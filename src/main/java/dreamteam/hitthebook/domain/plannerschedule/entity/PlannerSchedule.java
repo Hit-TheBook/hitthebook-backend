@@ -2,6 +2,7 @@ package dreamteam.hitthebook.domain.plannerschedule.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,8 @@ public class PlannerSchedule extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ScheduleTypeEnum scheduleType;
 
-    private Boolean alarmRequired; // ~분전 알림을 주는 기획으로 추가
+    @Enumerated(EnumType.STRING)
+    private FeedbackTypeEnum scheduleFeedback;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
