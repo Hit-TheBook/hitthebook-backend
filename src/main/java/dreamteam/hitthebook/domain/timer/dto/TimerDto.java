@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,16 @@ public class TimerDto {
 
         @Schema(description = "과목명", example = "수학", type = "string")
         private String subjectName; //과목명
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class TimerPlayRequestDto{
+
+        @Schema(description = "현재 시간 = 타이머 시작 시간")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+        private LocalDateTime timerStartTime;
 
     }
 
@@ -58,12 +69,14 @@ public class TimerDto {
     @NoArgsConstructor
     public static class TimerContents{
 
+        private Long timerId;
         private String subjectName;
         private Duration studyTimeLength;
 
         public TimerContents(Timer timer){
-            this.subjectName=timer.getSubjectName();
-            this.studyTimeLength=timer.getStudyTimeLength();
+            this.timerId = timer.getTimerId();
+            this.subjectName = timer.getSubjectName();
+            this.studyTimeLength = timer.getStudyTimeLength();
         }
     }
 }

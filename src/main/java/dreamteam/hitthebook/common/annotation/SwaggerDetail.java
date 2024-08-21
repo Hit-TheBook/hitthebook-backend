@@ -84,13 +84,19 @@ public class SwaggerDetail {
     }
 
     //TimerController
-    @Operation(summary = "타이머 추가(시작)", description = "과목명에 따른 타이머를 추가한다.")
+    @Operation(summary = "과목 추가", description = "과목명에 따른 타이머를 추가한다.")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface TimerStartDetail {
     }
 
-    @Operation(summary = "타이머 종료", description = "타이머 종료시 공부 시간을 저장한다.")
+    @Operation(summary = "타이머 시작", description = "타이머의 재생 버튼을 누른 시각이 공부한 날짜가 된다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface TimerPlayDetail {
+    }
+
+    @Operation(summary = "타이머 종료", description = "타이머 종료 버튼을 누를시 공부 시간을 저장한다.")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface TimerEndDetail {
@@ -114,4 +120,16 @@ public class SwaggerDetail {
     public @interface TimerListWithDateDetail {
     }
 
+    //AssignmentController
+    @Operation(summary = "개인 미션 추가", description = "시작 ~ 종료 날짜와 지정 요일, 개인 미션 내용을 받아 미션을 추가한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AssignmentRegisterDetail {
+    }
+
+    @Operation(summary = "개인 미션 완료", description = "내가 완료한 날짜를 체크한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AssignmentCompleteDetail {
+    }
 }

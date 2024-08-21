@@ -21,18 +21,27 @@ public class TimerService {
     private final TimerRepository timerRepository;
     private final TimerHelper timerHelper;
 
-    public void createTimer(TimerStartRequestDto timerStartRequestDto, String emailId){
+    public TimerContents createTimer(TimerStartRequestDto timerStartRequestDto, String emailId){
         Member member = timerHelper.findMemberByEmailId(emailId);
         Timer timer = Timer.createByRequestDto(timerStartRequestDto,member);
-        timerRepository.save(timer);
+        Timer savedTimer = timerRepository.save(timer);
+        return new TimerContents(savedTimer);
     }
 
-    public void setTimer(TimerEndRequestDto timerEndRequestDto, Long timerId, String emailId)
+    public void setStartTimer(TimerPlayRequestDto timerPlayRequestDto, Long timerId, String emailId)
     {
         Member member = timerHelper.findMemberByEmailId(emailId);
-        Timer startTimer = timerHelper.findTimerByTimerId(timerId);
-        timerHelper.checkTimerEditPermission(startTimer,member);
-        timerHelper.updateTimerTime(startTimer,timerEndRequestDto);
+        Timer originTimer = timerHelper.findTimerByTimerId(timerId);
+        timerHelper.checkTimerEditPermission(originTimer,member);
+        timerHelper.updateTimerStart(originTimer,timerPlayRequestDto);
+    }
+
+    public void setEndTimer(TimerEndRequestDto timerEndRequestDto, Long timerId, String emailId)
+    {
+        Member member = timerHelper.findMemberByEmailId(emailId);
+        Timer originTimer = timerHelper.findTimerByTimerId(timerId);
+        timerHelper.checkTimerEditPermission(originTimer,member);
+        timerHelper.updateTimerEnd(originTimer,timerEndRequestDto);
     }
 
     public void deleteTimer(Long timerId, String emailId)
@@ -46,9 +55,9 @@ public class TimerService {
     public void modifyTimerName(TimerStartRequestDto timerStartRequestDto, Long timerId, String emailId)
     {
         Member member = timerHelper.findMemberByEmailId(emailId);
-        Timer startTimer = timerHelper.findTimerByTimerId(timerId);
-        timerHelper.checkTimerEditPermission(startTimer,member);
-        timerHelper.updateTimerName(startTimer,timerStartRequestDto);
+        Timer originTimer = timerHelper.findTimerByTimerId(timerId);
+        timerHelper.checkTimerEditPermission(originTimer,member);
+        timerHelper.updateTimerName(originTimer,timerStartRequestDto);
     }
 
     public TimerListDto findTimerList(String emailId, TimerDateDto timerDateDto){

@@ -2,7 +2,6 @@ package dreamteam.hitthebook.domain.assignmentevent.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.assignment.entity.Assignment;
-import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -20,19 +19,15 @@ import java.time.LocalDateTime;
 @SQLDelete(sql = "UPDATE assignment_event SET is_deleted = true WHERE assignment_event_id = ?")
 @Getter @Setter
 @Table(name = "assignment_event")
-public class AssginmentEvent extends BaseEntity {
+public class AssignmentEvent extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "assignment_event_id")
     private Long assignmentEventId;
 
-    private LocalDateTime assignmentExpiredAt;
+    private LocalDate assignmentDate;
 
-    private LocalDateTime assignmentAcheivedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private boolean assignmentIsComplete = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id")
