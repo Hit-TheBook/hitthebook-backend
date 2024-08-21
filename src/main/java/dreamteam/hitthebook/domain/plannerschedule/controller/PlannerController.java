@@ -45,7 +45,7 @@ public class PlannerController {
 //                .build();
 //    }
 
-    @GetMapping("schdule/{scheduleType}")
+    @GetMapping("/schdule/{scheduleType}")
     @SwaggerToken
     public ScheduleListDto scheduleFind(HttpServletRequest request,
                                           @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType, DateDto dateDto){
@@ -53,7 +53,7 @@ public class PlannerController {
         return plannerService.findSchedule(emailId, scheduleType, dateDto.getScheduleDate());
     }
 
-    @PatchMapping("schedule/{scheduleType}/{plannerScheduleId}/{result}")
+    @PatchMapping("/schedule/{scheduleType}/{plannerScheduleId}/{result}")
     @SwaggerToken
     public CommonResponseDto scheduleFeedback(HttpServletRequest request,
                                               @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType,
@@ -61,6 +61,15 @@ public class PlannerController {
                                               @PathVariable(name = "result")FeedbackTypeEnum feedbackType){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         plannerService.feedbackSchedule(emailId, scheduleType, plannerScheduleId, feedbackType);
+        return CommonResponseDto.builder()
+                .message("successful")
+                .build();
+    }
+
+    @PostMapping("/today/review")
+    @SwaggerToken
+    public CommonResponseDto todayReviewCreate(HttpServletRequest request){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
