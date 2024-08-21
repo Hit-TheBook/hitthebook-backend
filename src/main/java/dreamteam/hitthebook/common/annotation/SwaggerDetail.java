@@ -120,4 +120,16 @@ public class SwaggerDetail {
     public @interface TimerListWithDateDetail {
     }
 
+    //AssignmentController
+    @Operation(summary = "개인 미션 추가", description = "시작 ~ 종료 날짜와 지정 요일, 개인 미션 내용을 받아 미션을 추가한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AssignmentRegisterDetail {
+    }
+
+    @Operation(summary = "개인 미션 완료", description = "내가 완료한 날짜를 체크한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AssignmentCompleteDetail {
+    }
 }
