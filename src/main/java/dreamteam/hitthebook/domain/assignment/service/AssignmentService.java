@@ -38,6 +38,19 @@ public class AssignmentService {
 
         AssignmentEvent originAssignmentEvent = assignmentHelper.findAssignmentEventByAssignmentIdAndDate(assignmentCompleteDto,assignmentId);
         assignmentHelper.updateAssignmentComplete(originAssignmentEvent);
+        assignmentHelper.updateAssignmentCompletionRate(originAssignment);
+    }
+
+    public void deleteAssignment(Long assignmentId, String emailId){
+        Member member = assignmentHelper.findMemberByEmailId(emailId);
+        Assignment originAssignment = assignmentHelper.findAssignmentByAssignmentId(assignmentId);
+        assignmentHelper.checkAssignmentEditPermission(originAssignment,member);
+        assignmentHelper.deleteAssignmentEntity(originAssignment);
+    }
+
+    public AssignmentListDto findAssignmentList(String emailId, AssignmentDateDto assignmentDateDto){
+        Member member = assignmentHelper.findMemberByEmailId(emailId);
+        return assignmentHelper.toAssignmentListDto(member,assignmentDateDto);
     }
 
 }

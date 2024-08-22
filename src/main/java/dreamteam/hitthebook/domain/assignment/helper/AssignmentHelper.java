@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static dreamteam.hitthebook.domain.assignment.dto.AssignmentDto.*;
 
@@ -46,8 +47,40 @@ public class AssignmentHelper {
         assignmentEventRepository.save(assignmentEvent);
     }
 
+    public void updateAssignmentCompletionRate(Assignment assignment){
+        List<AssignmentEvent> assignmentEvents = assignmentEventRepository.findByAssignment(assignment);
+
+        int totalEvents = assignmentEvents.size();
+
+        long completedEvents = assignmentEvents.stream()
+                .filter(AssignmentEvent::isAssignmentIsComplete)
+                .count();
+
+        int completionRate = (int) ((double) completedEvents / totalEvents * 100);
+
+        assignment.setAssignmentCompletionRate(completionRate);
+        assignmentRepository.save(assignment);
+    }
+
     public void checkAssignmentEditPermission(Assignment assignment, Member member){
         if(!(assignment.getMember().equals(member))){throw new RuntimeException();}
+    }
+
+    public void deleteAssignmentEntity(Assignment assignment){
+        assignmentRepository.delete(assignment);
+    }
+
+    public AssignmentListDto toAssignmentListDto(Member member, AssignmentDateDto assignmentDateDto){
+        LocalDate date = assignmentDateDto.getAssignmentDate();
+
+        List<AssignmentEvent> assignmentEvents = assignmentEventRepository.findByAssignment_MemberAndAssignmentDate(member, date);
+
+        List<Assignment> assignments = assignmentEvents.stream()
+                .map(AssignmentEvent::getAssignment)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return new AssignmentListDto(assignments);
     }
 
     @Async
