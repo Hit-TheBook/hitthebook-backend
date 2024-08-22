@@ -3,6 +3,7 @@ package dreamteam.hitthebook.domain.assignment.entity;
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.assignment.dto.AssignmentDto;
 import dreamteam.hitthebook.domain.assignment.enumulation.AssignmentDayOfWeekEnum;
+import dreamteam.hitthebook.domain.assignmentevent.entity.AssignmentEvent;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,11 +33,16 @@ public class Assignment extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private List<AssignmentDayOfWeekEnum> dayOfWeekEnum;
 
+    private Integer assignmentCompletionRate = 0;
+
     private String assignmentContent;
 
     private LocalDate assignmentStartAt;
 
     private LocalDate assignmentEndAt;
+
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AssignmentEvent> assignmentEvents;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

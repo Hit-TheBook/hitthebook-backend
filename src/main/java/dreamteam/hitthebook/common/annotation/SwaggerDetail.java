@@ -132,4 +132,17 @@ public class SwaggerDetail {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface AssignmentCompleteDetail {
     }
+
+    @Operation(summary = "개인 미션 삭제", description = "해당 미션에 대한 엔티티와 그에 따른 이벤트 엡티티 모두를 삭제한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AssignmentDeleteDetail {
+    }
+
+    @Operation(summary = "날짜에 따른 미션 목록 불러오기", description = "날짜에 따른 미션 목록을 불러온다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AssignmentListWithDateDetail {
+    }
+
 }

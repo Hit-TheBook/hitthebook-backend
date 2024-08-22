@@ -40,4 +40,23 @@ public class AssignmentController {
                 .message("successful")
                 .build();
     }
+
+    @DeleteMapping("/{assignmentId}")
+    @SwaggerToken
+    @AssignmentDeleteDetail
+    public CommonResponseDto assignmentDelete(@PathVariable(name = "assignmentId")Long assignmentId, HttpServletRequest request){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        assignmentService.deleteAssignment(assignmentId,emailId);
+        return CommonResponseDto.builder()
+                .message("successful")
+                .build();
+    }
+
+    @GetMapping("/list")
+    @SwaggerToken
+    @AssignmentListWithDateDetail
+    public AssignmentListDto assignmentListFind(HttpServletRequest request, AssignmentDateDto assignmentDateDto){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        return assignmentService.findAssignmentList(emailId,assignmentDateDto);
+    }
 }
