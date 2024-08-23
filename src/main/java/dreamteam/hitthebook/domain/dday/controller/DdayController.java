@@ -82,5 +82,4 @@ public class DdayController {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return ddayService.findDdayList(emailId);
     }
-
 }

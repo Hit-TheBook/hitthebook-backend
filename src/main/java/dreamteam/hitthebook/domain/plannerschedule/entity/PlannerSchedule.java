@@ -32,6 +32,9 @@ public class PlannerSchedule extends BaseEntity {
 
     private LocalDateTime scheduleAt;
 
+    private LocalDateTime startAt;
+    private LocalDateTime endAt;
+
 //    @Column(name = "schedule_title", nullable = false, length = 50)
     private String scheduleTitle;
 
@@ -52,7 +55,8 @@ public class PlannerSchedule extends BaseEntity {
     @JoinColumn(name = "before_schedule_id")
     private PlannerSchedule beforeSchedule;
 
-    public PlannerSchedule(LocalDateTime scheduleAt, String scheduleTitle, String scheduleContent, ScheduleTypeEnum scheduleType, Member member) {
+    public PlannerSchedule(LocalDateTime scheduleAt, String scheduleTitle, String scheduleContent, ScheduleTypeEnum scheduleType, Member member,
+                           LocalDateTime startAt, LocalDateTime endAt) {
         this.scheduleAt = scheduleAt;
         this.scheduleTitle = scheduleTitle;
         this.scheduleContent = scheduleContent;
@@ -60,9 +64,25 @@ public class PlannerSchedule extends BaseEntity {
         this.member = member;
     }
 
+    public PlannerSchedule(LocalDateTime scheduleAt, String scheduleTitle, String scheduleContent, ScheduleTypeEnum scheduleType, Member member,
+                           LocalDateTime startAt, LocalDateTime endAt, PlannerSchedule beforeSchedule) {
+        this.scheduleAt = scheduleAt;
+        this.scheduleTitle = scheduleTitle;
+        this.scheduleContent = scheduleContent;
+        this.scheduleType = scheduleType;
+        this.member = member;
+        this.beforeSchedule = beforeSchedule;
+    }
+
     public static PlannerSchedule createByRequestDto(PlannerDto.ScheduleRequestDto scheduleRequestDto, ScheduleTypeEnum scheduleType, Member member){
         return new PlannerSchedule(scheduleRequestDto.getScheduleDate(), scheduleRequestDto.getScheduleTitle(),
-                scheduleRequestDto.getContent(), scheduleType, member);
+                scheduleRequestDto.getContent(), scheduleType, member, scheduleRequestDto.getStartDate(), scheduleRequestDto.getEndDate());
+    }
+
+    public static PlannerSchedule createNewPostponeEntity(PlannerDto.PostPoneDto postPoneDto, PlannerSchedule originalPlannerSchedule){
+        return new PlannerSchedule(postPoneDto.getScheduleDate(), originalPlannerSchedule.scheduleTitle, originalPlannerSchedule.scheduleContent,
+                originalPlannerSchedule.scheduleType, originalPlannerSchedule.member, postPoneDto.getStartDate(),
+                postPoneDto.getEndDate(), originalPlannerSchedule.beforeSchedule);
     }
 
 }

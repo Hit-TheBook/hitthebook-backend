@@ -28,6 +28,18 @@ public class PlannerHelper {
         return memberRepository.findByEmailId(emailId).orElseThrow(RuntimeException::new); //익셉션 추가예정
     }
 
+    public void checkSameDateOfScheduleTime(LocalDateTime startDate, LocalDateTime endDate){
+        if(startDate.getYear() != endDate.getYear() ||
+        startDate.getMonthValue() != endDate.getMonthValue() ||
+        startDate.getDayOfMonth() != endDate.getDayOfMonth()){
+            throw new RuntimeException();
+        }
+    }
+
+    public void checkInvalidStartTime(LocalDateTime startDate, LocalDateTime endDate){
+        if (startDate.isAfter(endDate)) {throw new RuntimeException();}
+    }
+
     public PlannerSchedule findPlannerScheduleBySchedulePlannerId(Long plannerScheduleId){
         return plannerScheduleRepository.findById(plannerScheduleId).orElseThrow(RuntimeException::new); // 예외처리 필요
     }

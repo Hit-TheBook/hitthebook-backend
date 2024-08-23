@@ -28,6 +28,8 @@ public class PlannerService {
 
     public void createSchedule(ScheduleRequestDto scheduleRequestDto, ScheduleTypeEnum scheduleType, String emailId){
         Member member = plannerHelper.findMemberByEmailId(emailId);
+        plannerHelper.checkInvalidStartTime(scheduleRequestDto.getStartDate(), scheduleRequestDto.getEndDate());
+        plannerHelper.checkSameDateOfScheduleTime(scheduleRequestDto.getStartDate(), scheduleRequestDto.getEndDate());
         PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, scheduleType, member);
         // 스케쥴타입에 따라서 일정이라면 알람을 만들어주는 aop와 스케쥴러 구현 필요
         plannerScheduleRepository.save(plannerSchedule);
@@ -38,11 +40,20 @@ public class PlannerService {
         return plannerHelper.toScheduleListDto(member, scheduleType, scheduleAt);
     }
 
-    public void feedbackSchedule(String emailId, ScheduleTypeEnum scheduleType, Long plannerScheduleId, FeedbackTypeEnum feedbackType){
+    public void feedbackSchedule(String emailId, Long plannerScheduleId, FeedbackTypeEnum feedbackType){
         Member member = plannerHelper.findMemberByEmailId(emailId);
         PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerId(plannerScheduleId);
         plannerHelper.checkScheduleEditPermission(plannerSchedule, member);
         plannerHelper.updateFeedbackStatus(plannerSchedule, feedbackType);
+    }
+
+    public void createPostponeSchedule(String emailId, Long plannerScheduleId, PostPoneDto postPoneDto){
+        Member member = plannerHelper.findMemberByEmailId(emailId);
+        PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerId(plannerScheduleId);
+        plannerHelper.checkInvalidStartTime(postPoneDto.getStartDate(), postPoneDto.getEndDate());
+        plannerHelper.checkSameDateOfScheduleTime(postPoneDto.getStartDate(), postPoneDto.getEndDate());
+        PlannerSchedule newPlannerSchedule = PlannerSchedule.createNewPostponeEntity(postPoneDto, plannerSchedule);
+        plannerScheduleRepository.save(newPlannerSchedule);
     }
 
     public void createDayReview(String emailId, ReviewRequestDto reviewRequestDto){
@@ -64,6 +75,8 @@ public class PlannerService {
         PlannerReview plannerReview = plannerHelper.findReviewByMemberAndDate(member, reviewRequestDto.getReviewDate());
         return plannerHelper.toReviewDto(plannerReview);
     }
+
+
 
 
 }

@@ -36,7 +36,7 @@ public class PlannerController {
     @GetMapping("/schdule/{scheduleType}")
     @SwaggerToken
     public ScheduleListDto scheduleFind(HttpServletRequest request,
-                                          @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType, DateDto dateDto){
+                                          @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType, @RequestBody DateDto dateDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return plannerService.findSchedule(emailId, scheduleType, dateDto.getScheduleDate());
     }
@@ -48,11 +48,25 @@ public class PlannerController {
                                               @PathVariable(name = "plannerScheduleId") Long plannerScheduleId,
                                               @PathVariable(name = "result")FeedbackTypeEnum feedbackType){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        plannerService.feedbackSchedule(emailId, scheduleType, plannerScheduleId, feedbackType);
+        plannerService.feedbackSchedule(emailId, plannerScheduleId, feedbackType);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
     }
+
+    @PostMapping("/schedule/{scheduleType}/{plannerScheduleId}/postpone")
+    @SwaggerToken
+    public CommonResponseDto postponeSchedule(HttpServletRequest request,
+                                              @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType,
+                                              @PathVariable(name = "plannerScheduleId") Long plannerScheduleId,
+                                              @RequestBody PostPoneDto postPoneDto){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        plannerService.createPostponeSchedule(emailId, plannerScheduleId, postPoneDto);
+        return CommonResponseDto.builder()
+                .message("successful")
+                .build();
+    }
+
 
     // 오늘의 총평시나리오
     // 일반적인 경우
