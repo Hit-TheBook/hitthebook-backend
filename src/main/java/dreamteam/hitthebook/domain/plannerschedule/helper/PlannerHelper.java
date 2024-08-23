@@ -2,6 +2,7 @@ package dreamteam.hitthebook.domain.plannerschedule.helper;
 
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
+import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerReview;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
@@ -47,6 +48,30 @@ public class PlannerHelper {
     public void checkScheduleEditPermission(PlannerSchedule plannerSchedule, Member member){
         if(!(plannerSchedule.getMember().equals(member))){throw new RuntimeException();} // 예외처리 필요
     }
+
+    public PlannerReview findReviewByMemberAndDate(Member member, LocalDateTime reviewDate){
+//        int year = reviewDate.getYear();
+//        int month = reviewDate.getMonthValue();
+//        int day = reviewDate.getDayOfMonth();
+//        return plannerReviewRepository.findByMemberAndReviewAtYearAndReviewAtMonthAndReviewAtDay(member, year, month, day);
+        return plannerReviewRepository.findByMemberAndReviewAt(member, reviewDate);
+    }
+
+    public void checkReviewPresentAtDate(Member member, LocalDateTime reviewDate){
+        PlannerReview plannerReview = findReviewByMemberAndDate(member,reviewDate);
+        if(plannerReview != null){throw new RuntimeException();}
+    }
+
+    public void reviewAutoSaveChange(PlannerReview plannerReview, ReviewUpdateRequestDto reviewUpdateRequestDto){
+        plannerReview.setReviewContent(reviewUpdateRequestDto.getContent());
+        plannerReviewRepository.save(plannerReview);
+    }
+
+    public ReviewDto toReviewDto(PlannerReview plannerReview){
+        return new ReviewDto(plannerReview.getReviewContent());
+    }
+
+
 
 
 }

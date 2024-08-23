@@ -13,17 +13,36 @@ import java.util.List;
 public class PlannerDto {
     @Data
     @NoArgsConstructor
+    public static class ReviewRequestDto{
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+        private LocalDateTime reviewDate;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class ReviewUpdateRequestDto{
+        private String content;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+        private LocalDateTime reviewDate;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class ReviewDto{
+        private String content = null;
+        public ReviewDto(String content) {
+            this.content = content;
+        }
+    }
+
+
+    @Data
+    @NoArgsConstructor
     public static class ScheduleRequestDto{
         private String scheduleTitle;
         private String content;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime scheduleDate;
-
-        public ScheduleRequestDto(String scheduleTitle, String content, LocalDateTime scheduleDate) {
-            this.scheduleTitle = scheduleTitle;
-            this.content = content;
-            this.scheduleDate = scheduleDate;
-        }
     }
 
     @Data
