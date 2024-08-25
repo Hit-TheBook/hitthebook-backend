@@ -28,16 +28,16 @@ public class PlannerHelper {
         return memberRepository.findByEmailId(emailId).orElseThrow(RuntimeException::new); //익셉션 추가예정
     }
 
-    public void checkSameDateOfScheduleTime(LocalDateTime startDate, LocalDateTime endDate){
-        if(startDate.getYear() != endDate.getYear() ||
-        startDate.getMonthValue() != endDate.getMonthValue() ||
-        startDate.getDayOfMonth() != endDate.getDayOfMonth()){
+    public void checkSameDateOfScheduleTime(LocalDateTime startAt, LocalDateTime endAt){
+        if(startAt.getYear() != endAt.getYear() ||
+        startAt.getMonthValue() != endAt.getMonthValue() ||
+        startAt.getDayOfMonth() != endAt.getDayOfMonth()){
             throw new RuntimeException();
         }
     }
 
-    public void checkInvalidStartTime(LocalDateTime startDate, LocalDateTime endDate){
-        if (startDate.isAfter(endDate)) {throw new RuntimeException();}
+    public void checkInvalidStartTime(LocalDateTime startAt, LocalDateTime endAt){
+        if (startAt.isAfter(endAt)) {throw new RuntimeException();}
     }
 
     public PlannerSchedule findPlannerScheduleBySchedulePlannerId(Long plannerScheduleId){
@@ -61,16 +61,16 @@ public class PlannerHelper {
         if(!(plannerSchedule.getMember().equals(member))){throw new RuntimeException();} // 예외처리 필요
     }
 
-    public PlannerReview findReviewByMemberAndDate(Member member, LocalDateTime reviewDate){
+    public PlannerReview findReviewByMemberAndDate(Member member, LocalDateTime reviewAt){
 //        int year = reviewDate.getYear();
 //        int month = reviewDate.getMonthValue();
 //        int day = reviewDate.getDayOfMonth();
 //        return plannerReviewRepository.findByMemberAndReviewAtYearAndReviewAtMonthAndReviewAtDay(member, year, month, day);
-        return plannerReviewRepository.findByMemberAndReviewAt(member, reviewDate);
+        return plannerReviewRepository.findByMemberAndReviewAt(member, reviewAt);
     }
 
-    public void checkReviewPresentAtDate(Member member, LocalDateTime reviewDate){
-        PlannerReview plannerReview = findReviewByMemberAndDate(member,reviewDate);
+    public void checkReviewPresentAtDate(Member member, LocalDateTime reviewAt){
+        PlannerReview plannerReview = findReviewByMemberAndDate(member,reviewAt);
         if(plannerReview != null){throw new RuntimeException();}
     }
 

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 import static dreamteam.hitthebook.domain.plannerschedule.dto.PlannerDto.*;
 
 @Slf4j
@@ -33,12 +35,13 @@ public class PlannerController {
                 .build();
     }
 
-    @GetMapping("/schdule/{scheduleType}")
+    @GetMapping("/schdule/{scheduleType}/{scheduleDate}")
     @SwaggerToken
     public ScheduleListDto scheduleFind(HttpServletRequest request,
-                                          @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType, @RequestBody DateDto dateDto){
+                                        @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType,
+                                        @PathVariable(name = "scheduleDate") LocalDateTime scheduleDate){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        return plannerService.findSchedule(emailId, scheduleType, dateDto.getScheduleDate());
+        return plannerService.findSchedule(emailId, scheduleType, scheduleDate);
     }
 
     @PatchMapping("/schedule/{scheduleType}/{plannerScheduleId}/{result}")
@@ -72,44 +75,31 @@ public class PlannerController {
     // 일반적인 경우
     // 겟으로 가져왔을 때 null 이라면, Post로 생성 -> 근데 예외케이스가 있을 수 있는 로직 같은데 나중에 클라이언트와 테스트 과정에서 다시 생각해보면 좋을 것 같음
     // 키입력시마다 0.3초마다 PUT
-    @PostMapping("/today/review")
+    @PostMapping("/daily/review/{reviewAt}")
     @SwaggerToken
-    public CommonResponseDto dayReviewCreate(HttpServletRequest request, @RequestBody ReviewRequestDto reviewRequestDto){
+    public CommonResponseDto dailyReviewCreate(HttpServletRequest request, @PathVariable(name = "reviewAt") LocalDateTime reviewAt){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        plannerService.createDayReview(emailId, reviewRequestDto);
+        plannerService.createDayReview(emailId, reviewAt);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
     }
 
-    @PutMapping("/today/review")
+    @PutMapping("/daily/review/{reviewAt}")
     @SwaggerToken
-    public CommonResponseDto dayReviewModify(HttpServletRequest request, @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto){
+    public CommonResponseDto dailyReviewModify(HttpServletRequest request, @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto,
+                                             @PathVariable(name = "reviewAt") LocalDateTime reviewAt){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        plannerService.modifyDayReview(emailId, reviewUpdateRequestDto);
+        plannerService.modifyDayReview(emailId, reviewUpdateRequestDto, reviewAt);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
     }
 
-    @GetMapping("/today/review")
+    @GetMapping("/daily/review/{reviewAt}")
     @SwaggerToken
-    public ReviewDto dayReviewGet(HttpServletRequest request, @RequestBody ReviewRequestDto reviewRequestDto){
+    public ReviewDto dailyReviewGet(HttpServletRequest request, @PathVariable(name = "reviewAt") LocalDateTime reviewAt){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        return plannerService.getDayReview(emailId, reviewRequestDto);
+        return plannerService.getDayReview(emailId, reviewAt);
     }
-
 }
-
-
-//1. 오늘의 총평 추가 api -> ㅇㅋ
-//2. 오늘의 총평 수정 api -> ㅇㅋ
-//3. 오늘의 총평 조회 api -> ㅇㅋ
-//ㅇㅇㅇ. 오늘의 총평 삭제는 없음 굳이 만들이유가 없음
-//4. 스터디 추가 api -> 했음
-//5. 스터디 수정 api -> 기획 문서상 수정 불가능한 파트라고 함
-//ㅇㅇㅇ. 스터디 삭제 api필요 -> 필요한지 아닌지 애매함 지금
-//6. 스터디 달성여부 수정 api
-//7. 스터디 조회 api -> 했ㅅ음
-//8. 달성여부 수정시 미루기 api필요함
-//9. 다 개발하고 타이머쪽 코드도 한번 확인하기

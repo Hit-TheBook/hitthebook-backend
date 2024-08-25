@@ -1,8 +1,6 @@
 package dreamteam.hitthebook.domain.plannerschedule.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.dday.dto.DdayDto;
-import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.dto.PlannerDto;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
@@ -71,18 +69,20 @@ public class PlannerSchedule extends BaseEntity {
         this.scheduleContent = scheduleContent;
         this.scheduleType = scheduleType;
         this.member = member;
+        this.startAt = startAt;
+        this.endAt = endAt;
         this.beforeSchedule = beforeSchedule;
     }
 
     public static PlannerSchedule createByRequestDto(PlannerDto.ScheduleRequestDto scheduleRequestDto, ScheduleTypeEnum scheduleType, Member member){
-        return new PlannerSchedule(scheduleRequestDto.getScheduleDate(), scheduleRequestDto.getScheduleTitle(),
-                scheduleRequestDto.getContent(), scheduleType, member, scheduleRequestDto.getStartDate(), scheduleRequestDto.getEndDate());
+        return new PlannerSchedule(scheduleRequestDto.getScheduleAt(), scheduleRequestDto.getScheduleTitle(),
+                scheduleRequestDto.getContent(), scheduleType, member, scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
     }
 
     public static PlannerSchedule createNewPostponeEntity(PlannerDto.PostPoneDto postPoneDto, PlannerSchedule originalPlannerSchedule){
-        return new PlannerSchedule(postPoneDto.getScheduleDate(), originalPlannerSchedule.scheduleTitle, originalPlannerSchedule.scheduleContent,
-                originalPlannerSchedule.scheduleType, originalPlannerSchedule.member, postPoneDto.getStartDate(),
-                postPoneDto.getEndDate(), originalPlannerSchedule.beforeSchedule);
+        return new PlannerSchedule(postPoneDto.getScheduleAt(), originalPlannerSchedule.scheduleTitle, originalPlannerSchedule.scheduleContent,
+                originalPlannerSchedule.scheduleType, originalPlannerSchedule.member, postPoneDto.getStartAt(),
+                postPoneDto.getEndAt(), originalPlannerSchedule.beforeSchedule);
     }
 
 }

@@ -28,8 +28,8 @@ public class PlannerService {
 
     public void createSchedule(ScheduleRequestDto scheduleRequestDto, ScheduleTypeEnum scheduleType, String emailId){
         Member member = plannerHelper.findMemberByEmailId(emailId);
-        plannerHelper.checkInvalidStartTime(scheduleRequestDto.getStartDate(), scheduleRequestDto.getEndDate());
-        plannerHelper.checkSameDateOfScheduleTime(scheduleRequestDto.getStartDate(), scheduleRequestDto.getEndDate());
+        plannerHelper.checkInvalidStartTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
+        plannerHelper.checkSameDateOfScheduleTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
         PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, scheduleType, member);
         // 스케쥴타입에 따라서 일정이라면 알람을 만들어주는 aop와 스케쥴러 구현 필요
         plannerScheduleRepository.save(plannerSchedule);
@@ -50,29 +50,29 @@ public class PlannerService {
     public void createPostponeSchedule(String emailId, Long plannerScheduleId, PostPoneDto postPoneDto){
         Member member = plannerHelper.findMemberByEmailId(emailId);
         PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerId(plannerScheduleId);
-        plannerHelper.checkInvalidStartTime(postPoneDto.getStartDate(), postPoneDto.getEndDate());
-        plannerHelper.checkSameDateOfScheduleTime(postPoneDto.getStartDate(), postPoneDto.getEndDate());
+        plannerHelper.checkInvalidStartTime(postPoneDto.getStartAt(), postPoneDto.getEndAt());
+        plannerHelper.checkSameDateOfScheduleTime(postPoneDto.getStartAt(), postPoneDto.getEndAt());
         PlannerSchedule newPlannerSchedule = PlannerSchedule.createNewPostponeEntity(postPoneDto, plannerSchedule);
         plannerScheduleRepository.save(newPlannerSchedule);
     }
 
-    public void createDayReview(String emailId, ReviewRequestDto reviewRequestDto){
+    public void createDayReview(String emailId, LocalDateTime reviewAt){
         Member member = plannerHelper.findMemberByEmailId(emailId);
-        plannerHelper.checkReviewPresentAtDate(member, reviewRequestDto.getReviewDate());// 있는지 없는지 검사하고 없을 경우에만 생성하고 있는 경우에는 예외처리
-        PlannerReview plannerReview = PlannerReview.createByRequestDto(reviewRequestDto, member);
+        plannerHelper.checkReviewPresentAtDate(member, reviewAt);// 있는지 없는지 검사하고 없을 경우에만 생성하고 있는 경우에는 예외처리
+        PlannerReview plannerReview = PlannerReview.createByRequestDto(reviewAt, member);
         plannerReviewRepository.save(plannerReview);
     }
 
-    public void modifyDayReview(String emailId, ReviewUpdateRequestDto reviewUpdateRequestDto){
+    public void modifyDayReview(String emailId, ReviewUpdateRequestDto reviewUpdateRequestDto, LocalDateTime reviewAt){
         Member member = plannerHelper.findMemberByEmailId(emailId);
-        PlannerReview plannerReview = plannerHelper.findReviewByMemberAndDate(member, reviewUpdateRequestDto.getReviewDate());
+        PlannerReview plannerReview = plannerHelper.findReviewByMemberAndDate(member, reviewAt);
         //권한 다르면 예외처리 근데 애초에 위에서 걸림 Id로 찾는게 아니라서
         plannerHelper.reviewAutoSaveChange(plannerReview, reviewUpdateRequestDto);
     }
 
-    public ReviewDto getDayReview(String emailId, ReviewRequestDto reviewRequestDto){
+    public ReviewDto getDayReview(String emailId, LocalDateTime reviewDate){
         Member member = plannerHelper.findMemberByEmailId(emailId);
-        PlannerReview plannerReview = plannerHelper.findReviewByMemberAndDate(member, reviewRequestDto.getReviewDate());
+        PlannerReview plannerReview = plannerHelper.findReviewByMemberAndDate(member, reviewDate);
         return plannerHelper.toReviewDto(plannerReview);
     }
 

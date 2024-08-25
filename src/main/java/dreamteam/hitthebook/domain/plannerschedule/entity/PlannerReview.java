@@ -41,7 +41,7 @@ public class PlannerReview extends BaseEntity {
         this.member = member;
     }
 
-    public static PlannerReview createByRequestDto(PlannerDto.ReviewRequestDto reviewRequestDto, Member member){
-        return new PlannerReview(reviewRequestDto.getReviewDate(), member);
+    public static PlannerReview createByRequestDto(LocalDateTime reviewAt, Member member){
+        return new PlannerReview(reviewAt, member);
     }
 }

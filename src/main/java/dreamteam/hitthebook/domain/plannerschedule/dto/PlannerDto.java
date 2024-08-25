@@ -13,17 +13,8 @@ import java.util.List;
 public class PlannerDto {
     @Data
     @NoArgsConstructor
-    public static class ReviewRequestDto{
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-        private LocalDateTime reviewDate;
-    }
-
-    @Data
-    @NoArgsConstructor
     public static class ReviewUpdateRequestDto{
         private String content;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-        private LocalDateTime reviewDate;
     }
 
     @Data
@@ -42,11 +33,11 @@ public class PlannerDto {
         private String scheduleTitle;
         private String content;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-        private LocalDateTime scheduleDate;
+        private LocalDateTime scheduleAt;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-        private LocalDateTime startDate;
+        private LocalDateTime startAt;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-        private LocalDateTime endDate;
+        private LocalDateTime endAt;
     }
 
     @Data
@@ -60,11 +51,11 @@ public class PlannerDto {
     @NoArgsConstructor
     public static class PostPoneDto{
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-        private LocalDateTime scheduleDate;
+        private LocalDateTime scheduleAt;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-        private LocalDateTime startDate;
+        private LocalDateTime startAt;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
-        private LocalDateTime endDate;
+        private LocalDateTime endAt;
     }
 
     @Data
@@ -86,6 +77,8 @@ public class PlannerDto {
         private Long plannerScheduleId;
         private String scheduleTitle;
         private String content;
+        private LocalDateTime startAt;
+        private LocalDateTime endAt;
         private FeedbackTypeEnum feedbackType;
         private boolean wasPostponed;
         private LocalDateTime beforeScheduleDate;
@@ -94,6 +87,8 @@ public class PlannerDto {
             this.scheduleTitle = plannerSchedule.getScheduleTitle();
             this.content = plannerSchedule.getScheduleContent();
             this.feedbackType = plannerSchedule.getScheduleFeedback();
+            this.startAt = plannerSchedule.getStartAt();
+            this.endAt = plannerSchedule.getEndAt();
             PlannerSchedule beforeSchedule = plannerSchedule.getBeforeSchedule();
             this.wasPostponed = beforeSchedule != null;
             this.beforeScheduleDate = (beforeSchedule != null) ? beforeSchedule.getScheduleAt() : null;
