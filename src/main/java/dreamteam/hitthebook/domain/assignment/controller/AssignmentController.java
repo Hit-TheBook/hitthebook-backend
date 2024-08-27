@@ -59,4 +59,12 @@ public class AssignmentController {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return assignmentService.findAssignmentList(emailId,assignmentDateDto);
     }
+
+    @PostMapping("/{assignmentId}")
+    @SwaggerToken
+    @AssignmentStateDetail
+    public AssignmentEventListDto assignmentEventListFind(@PathVariable(name = "assignmentId")Long assignmentId, HttpServletRequest request){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        return assignmentService.findAssignmentEventList(assignmentId,emailId);
+    }
 }
