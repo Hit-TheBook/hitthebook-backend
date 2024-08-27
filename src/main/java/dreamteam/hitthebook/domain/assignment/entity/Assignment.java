@@ -3,7 +3,7 @@ package dreamteam.hitthebook.domain.assignment.entity;
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.assignment.dto.AssignmentDto;
 import dreamteam.hitthebook.domain.assignment.enumulation.AssignmentDayOfWeekEnum;
-import dreamteam.hitthebook.domain.assignmentevent.entity.AssignmentEvent;
+import dreamteam.hitthebook.domain.assignment.entity.AssignmentEvent;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

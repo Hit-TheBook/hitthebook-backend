@@ -145,4 +145,9 @@ public class SwaggerDetail {
     public @interface AssignmentListWithDateDetail {
     }
 
+    @Operation(summary = "해당 미션의 수행할 날짜들과 완료여부 불러오기", description = "해당 미션에 따른 미션 상태를 불러온다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AssignmentStateDetail {
+    }
 }

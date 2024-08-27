@@ -1,7 +1,6 @@
-package dreamteam.hitthebook.domain.assignmentevent.entity;
+package dreamteam.hitthebook.domain.assignment.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.assignment.entity.Assignment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

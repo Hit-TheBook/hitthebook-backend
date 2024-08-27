@@ -1,7 +1,7 @@
-package dreamteam.hitthebook.domain.assignmentevent.repository;
+package dreamteam.hitthebook.domain.assignment.repository;
 
 import dreamteam.hitthebook.domain.assignment.entity.Assignment;
-import dreamteam.hitthebook.domain.assignmentevent.entity.AssignmentEvent;
+import dreamteam.hitthebook.domain.assignment.entity.AssignmentEvent;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,4 +15,6 @@ public interface AssignmentEventRepository extends JpaRepository<AssignmentEvent
     List<AssignmentEvent> findByAssignment(Assignment assignment);
 
     List<AssignmentEvent> findByAssignment_MemberAndAssignmentDate(Member member, LocalDate assignmentDate);
+
+    List<AssignmentEvent> findByAssignment_MemberAndAssignment_AssignmentId(Member member, Long assignmentId);
 }

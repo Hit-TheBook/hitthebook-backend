@@ -4,7 +4,7 @@ package dreamteam.hitthebook.domain.assignment.service;
 import dreamteam.hitthebook.domain.assignment.entity.Assignment;
 import dreamteam.hitthebook.domain.assignment.helper.AssignmentHelper;
 import dreamteam.hitthebook.domain.assignment.repository.AssignmentRepository;
-import dreamteam.hitthebook.domain.assignmentevent.entity.AssignmentEvent;
+import dreamteam.hitthebook.domain.assignment.entity.AssignmentEvent;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +51,11 @@ public class AssignmentService {
     public AssignmentListDto findAssignmentList(String emailId, AssignmentDateDto assignmentDateDto){
         Member member = assignmentHelper.findMemberByEmailId(emailId);
         return assignmentHelper.toAssignmentListDto(member,assignmentDateDto);
+    }
+
+    public AssignmentEventListDto findAssignmentEventList(Long assignmentId, String emailId){
+        Member member = assignmentHelper.findMemberByEmailId(emailId);
+        return assignmentHelper.toAssignmentEventListDto(member,assignmentId);
     }
 
 }

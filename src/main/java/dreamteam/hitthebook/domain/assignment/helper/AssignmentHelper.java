@@ -3,8 +3,8 @@ package dreamteam.hitthebook.domain.assignment.helper;
 import dreamteam.hitthebook.domain.assignment.entity.Assignment;
 import dreamteam.hitthebook.domain.assignment.enumulation.AssignmentDayOfWeekEnum;
 import dreamteam.hitthebook.domain.assignment.repository.AssignmentRepository;
-import dreamteam.hitthebook.domain.assignmentevent.entity.AssignmentEvent;
-import dreamteam.hitthebook.domain.assignmentevent.repository.AssignmentEventRepository;
+import dreamteam.hitthebook.domain.assignment.entity.AssignmentEvent;
+import dreamteam.hitthebook.domain.assignment.repository.AssignmentEventRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 
@@ -81,6 +81,11 @@ public class AssignmentHelper {
                 .collect(Collectors.toList());
 
         return new AssignmentListDto(assignments);
+    }
+
+    public AssignmentEventListDto toAssignmentEventListDto(Member member, Long assignmentId) {
+        List<AssignmentEvent> assignmentEventList = assignmentEventRepository.findByAssignment_MemberAndAssignment_AssignmentId(member, assignmentId);
+        return new AssignmentEventListDto(assignmentEventList);
     }
 
     @Async
