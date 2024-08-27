@@ -24,20 +24,28 @@ public class TimerController {
     @PostMapping("")
     @SwaggerToken
     @TimerStartDetail
-    public CommonResponseDto timerCreate(HttpServletRequest request, TimerStartRequestDto timerStartRequestDto){
+    public TimerContents timerCreate(HttpServletRequest request, TimerStartRequestDto timerStartRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        timerService.createTimer(timerStartRequestDto, emailId);
+        return timerService.createTimer(timerStartRequestDto, emailId);
+    }
+
+    @PutMapping("/{timerId}/start")
+    @SwaggerToken
+    @TimerPlayDetail
+    public CommonResponseDto timerStartSet(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, TimerPlayRequestDto timerPlayRequestDto){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        timerService.setStartTimer(timerPlayRequestDto,timerId,emailId);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
     }
 
-    @PutMapping("/{timerId}")
+    @PutMapping("/{timerId}/end")
     @SwaggerToken
     @TimerEndDetail
-    public CommonResponseDto timerSet(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, TimerEndRequestDto timerEndRequestDto){
+    public CommonResponseDto timerEndSet(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, TimerEndRequestDto timerEndRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        timerService.setTimer(timerEndRequestDto,timerId,emailId);
+        timerService.setEndTimer(timerEndRequestDto,timerId,emailId);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();

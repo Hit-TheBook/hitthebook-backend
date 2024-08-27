@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.common.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,9 +12,11 @@ import java.time.LocalDateTime;
 @Data
 public class BaseEntity {
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     private Boolean isDeleted = false;
