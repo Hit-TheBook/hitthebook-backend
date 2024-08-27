@@ -82,7 +82,7 @@ public class PlannerSchedule extends BaseEntity {
     public static PlannerSchedule createNewPostponeEntity(PlannerDto.PostPoneDto postPoneDto, PlannerSchedule originalPlannerSchedule){
         return new PlannerSchedule(postPoneDto.getScheduleAt(), originalPlannerSchedule.scheduleTitle, originalPlannerSchedule.scheduleContent,
                 originalPlannerSchedule.scheduleType, originalPlannerSchedule.member, postPoneDto.getStartAt(),
-                postPoneDto.getEndAt(), originalPlannerSchedule.beforeSchedule);
+                postPoneDto.getEndAt(), originalPlannerSchedule);
     }
 
 }
