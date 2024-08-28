@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,13 +25,9 @@ public class AssignmentEvent extends BaseEntity {
     @Column(name = "assignment_event_id")
     private Long assignmentEventId;
 
-    private LocalDateTime assignmentExpiredAt;
+    private LocalDate assignmentDate;
 
-    private LocalDateTime assignmentAcheivedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private boolean assignmentIsComplete = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id")
