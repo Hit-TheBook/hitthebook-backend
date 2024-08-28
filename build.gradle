@@ -53,6 +53,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis
 
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'  // 타임리프
+
+	implementation 'org.springframework:spring-aop:3.2.8.RELEASE' // Spring AOP 라이브러리
+	implementation 'org.aspectj:aspectjweaver:1.7.4' // AspectJ 라이브러리 (옵션)
+	implementation 'org.springframework:spring-core:3.2.8.RELEASE' // Spring core (spring-aop 사용 시 필요)
 }
 
 tasks.named('test') {
