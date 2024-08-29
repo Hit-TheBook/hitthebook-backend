@@ -30,10 +30,15 @@ public class PlannerService {
         Member member = plannerHelper.findMemberByEmailId(emailId);
         plannerHelper.checkInvalidStartTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
         plannerHelper.checkSameDateOfScheduleTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
-
-        PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, scheduleType, member);
-        // 스케쥴타입에 따라서 일정이라면 알람을 만들어주는 aop와 스케쥴러 구현 필요
-        plannerScheduleRepository.save(plannerSchedule);
+        if(scheduleType == ScheduleTypeEnum.EVENT){
+            plannerHelper.createNewPlannerScheduleEvent(scheduleRequestDto, member);
+        }
+        else{
+            plannerHelper.createNewPlannerScheduleSubject(scheduleRequestDto, member);
+        } // if문이 너무 짜치는데 코드 개선하는 방법 연구하기
+//        PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, scheduleType, member);
+//        // 스케쥴타입에 따라서 일정이라면 알람을 만들어주는 aop와 스케쥴러 구현 필요
+//        plannerScheduleRepository.save(plannerSchedule);
     }
 
     public ScheduleListDto findSchedule(String emailId, ScheduleTypeEnum scheduleType, LocalDateTime scheduleAt){

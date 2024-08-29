@@ -1,5 +1,8 @@
 package dreamteam.hitthebook.domain.plannerschedule.helper;
 
+import dreamteam.hitthebook.domain.alert.entity.Alert;
+import dreamteam.hitthebook.domain.alert.enumulation.TargetPageTypeEnum;
+import dreamteam.hitthebook.domain.alert.repository.AlertRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerReview;
@@ -22,6 +25,7 @@ public class PlannerHelper {
     private final MemberRepository memberRepository;
     private final PlannerReviewRepository plannerReviewRepository;
     private final PlannerScheduleRepository plannerScheduleRepository;
+    private final AlertRepository alertRepository;
 
     // emailId를 기반으로 멤버 검색
     public Member findMemberByEmailId(String emailId){
@@ -39,11 +43,17 @@ public class PlannerHelper {
     public void createNewPlannerScheduleEvent(ScheduleRequestDto scheduleRequestDto, Member member){
         PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, ScheduleTypeEnum.EVENT, member);
         plannerScheduleRepository.save(plannerSchedule);
+        createNewPlannerScheduleEventAlert(plannerSchedule, member);
     }
 
     public void createNewPlannerScheduleSubject(ScheduleRequestDto scheduleRequestDto, Member member){
         PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, ScheduleTypeEnum.SUBJECT, member);
         plannerScheduleRepository.save(plannerSchedule);
+    }
+
+    public void createNewPlannerScheduleEventAlert(PlannerSchedule plannerSchedule, Member member){
+        Alert alert = new Alert(TargetPageTypeEnum.PLANNER, "등록하신 일정이 하루남았습니다.", member, plannerSchedule);
+        alertRepository.save(alert);
     }
 
     public void checkInvalidStartTime(LocalDateTime startAt, LocalDateTime endAt){

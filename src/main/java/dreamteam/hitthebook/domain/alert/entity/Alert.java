@@ -46,4 +46,13 @@ public class Alert extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planner_schedule_id")
     private PlannerSchedule plannerSchedule;
+
+    public Alert(TargetPageTypeEnum targetPage, String alertContent, Member member, PlannerSchedule plannerSchedule) {
+        this.targetPage = targetPage;
+        this.alertContent = alertContent;
+        this.alertTime = plannerSchedule.getScheduleAt().minusDays(1);
+        this.member = member;
+        this.plannerSchedule = plannerSchedule;
+    }
+
 }
