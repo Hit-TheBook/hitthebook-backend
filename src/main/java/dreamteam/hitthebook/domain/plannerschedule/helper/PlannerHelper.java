@@ -36,6 +36,16 @@ public class PlannerHelper {
         }
     }
 
+    public void createNewPlannerScheduleEvent(ScheduleRequestDto scheduleRequestDto, Member member){
+        PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, ScheduleTypeEnum.EVENT, member);
+        plannerScheduleRepository.save(plannerSchedule);
+    }
+
+    public void createNewPlannerScheduleSubject(ScheduleRequestDto scheduleRequestDto, Member member){
+        PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, ScheduleTypeEnum.SUBJECT, member);
+        plannerScheduleRepository.save(plannerSchedule);
+    }
+
     public void checkInvalidStartTime(LocalDateTime startAt, LocalDateTime endAt){
         if (startAt.isAfter(endAt)) {throw new RuntimeException();}
     }
