@@ -42,7 +42,7 @@ public class Assignment extends BaseEntity {
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AssignmentEvent> assignmentEvents;
 
-//    @OneToMany(mappedBy = "assignmentEvent", fetch = LAZY)
+//    @OneToMany(mappedBy = "assignmentEvent", fetch = FetchType.LAZY)
 //    private List<AssignmentEvent> assignmentEvents;
 
     @ManyToOne(fetch = FetchType.LAZY)
