@@ -116,6 +116,13 @@ public class LoginHelper {
         apiTokenRepository.save(token);
     }
 
+    public LoginTokenDto toTempTokenDto(Member member){
+        String accessToken = jwtTokenProvider.generateEternalToken(member);
+        String refreshToken = jwtTokenProvider.generateEternalToken(member);
+        saveRefreshToken(refreshToken, member);
+        return new LoginTokenDto("success", accessToken, refreshToken);
+    }
+
 
     public LoginTokenDto toLoginTokenDto(Member member){ // 해당 멤버의 토큰을 발급해줌
         String accessToken = jwtTokenProvider.generateAccessToken(member);

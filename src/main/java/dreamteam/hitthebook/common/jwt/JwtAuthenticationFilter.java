@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.common.jwt;
 
+import dreamteam.hitthebook.configuration.PathsConfig;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @Slf4j
 @AllArgsConstructor
@@ -26,6 +28,7 @@ public class JwtAuthenticationFilter implements Filter {
 
         String requestURI = httpRequest.getRequestURI();
         log.info("URI : {}", requestURI);
+
 
         String jwt = jwtTokenHelper.getJwtFromRequest(httpRequest);
 

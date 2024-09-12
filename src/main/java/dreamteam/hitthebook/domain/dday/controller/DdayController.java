@@ -30,7 +30,7 @@ public class DdayController {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         ddayService.createDday(ddayRequestDto, emailId);
         return CommonResponseDto.builder()
-                .message("successful")
+                .message("successful" + ddayRequestDto.getDdayName())
                 .build();
     }
 
@@ -41,7 +41,7 @@ public class DdayController {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         ddayService.modifyDday(ddayRequestDto, emailId, ddayId);
         return CommonResponseDto.builder()
-                .message("successful")
+                .message("successful" + ddayRequestDto.getDdayName())
                 .build();
     }
 

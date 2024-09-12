@@ -27,7 +27,7 @@ public class LoginService {
     public LoginTokenDto makeTokenService(LoginRequestDto loginRequestDto) {
         Member member = memberRepository.findByEmailIdAndPassword(loginRequestDto.emailId, loginRequestDto.password).orElseThrow(RuntimeException::new);
         loginHelper.ifExistRefreshTokenDelete(member);
-        return loginHelper.toLoginTokenDto(member);
+        return loginHelper.toTempTokenDto(member);
     }
 
     public LoginTokenDto loginService(LoginRequestDto loginRequestDto) {

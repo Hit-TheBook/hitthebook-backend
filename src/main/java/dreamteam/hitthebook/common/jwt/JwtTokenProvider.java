@@ -11,7 +11,6 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-
     @Value("${jwt.secret}")
     private String jwtSecret; // jwt를 만들 비밀키
 
@@ -24,6 +23,9 @@ public class JwtTokenProvider {
     @Value("${jwt.refreshExpiration}")
     private Long refreshExpiration; // 리프레시토큰 만료기한
 
+    @Value("${jwt.eternalExpiration}")
+    private Long eternalExpiration; // 무제한 토큰 만료기한
+
     //엑세스 토큰 생성, 토큰생성메소드의 인자에 엑세스토큰 만료기한 대입
     public String generateAccessToken(Member member) {
         return generateToken(member, accessExpiration);
@@ -33,6 +35,10 @@ public class JwtTokenProvider {
     public String generateRefreshToken(Member member) {
         return generateToken(member, refreshExpiration);
     }
+
+    public String generateEternalToken(Member member) { return generateToken(member, eternalExpiration); }
+
+    // 무제한 토큰 생성, 토큰 생성메소드의 인자에 만료기한 대입
 
     //토큰 생성 메소드
     private String generateToken(Member member, Long expiration) {
