@@ -2,6 +2,7 @@ package dreamteam.hitthebook.domain.login.controller;
 
 import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.domain.login.service.LoginService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class LoginController {
     private final LoginService loginService;
     @PostMapping("/login")
     @LoginDetail
-    public LoginTokenDto Login(@RequestBody LoginRequestDto loginRequestDto){
+    public LoginTokenDto Login(@Valid @RequestBody LoginRequestDto loginRequestDto){
         return loginService.loginService(loginRequestDto);
     }
 

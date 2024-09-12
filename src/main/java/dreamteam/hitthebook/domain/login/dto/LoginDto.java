@@ -1,11 +1,14 @@
 package dreamteam.hitthebook.domain.login.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LoginDto {
     public static class LoginRequestDto {
+        @NotBlank
         public String emailId;
+        @NotBlank
         public String password;
         public LoginRequestDto(String emailId, String password) {
             this.emailId = emailId;
