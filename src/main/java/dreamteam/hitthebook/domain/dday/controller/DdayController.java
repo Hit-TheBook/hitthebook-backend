@@ -4,6 +4,7 @@ import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
 import dreamteam.hitthebook.domain.dday.service.DdayService;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -26,22 +27,22 @@ public class DdayController {
     @PostMapping("")
     @SwaggerToken
     @DdayRegisterDetail
-    public CommonResponseDto ddayCreate(HttpServletRequest request, DdayRequestDto ddayRequestDto){
+    public CommonResponseDto ddayCreate(HttpServletRequest request, @Valid @RequestBody DdayRequestDto ddayRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         ddayService.createDday(ddayRequestDto, emailId);
         return CommonResponseDto.builder()
-                .message("successful" + ddayRequestDto.getDdayName())
+                .message("Successfully created D-Day")
                 .build();
     }
 
     @PutMapping("/{ddayId}")
     @SwaggerToken
     @DdayUpdateDetail
-    public CommonResponseDto ddayModify(@PathVariable(name = "ddayId") Long ddayId, HttpServletRequest request, DdayRequestDto ddayRequestDto){
+    public CommonResponseDto ddayModify(@PathVariable(name = "ddayId") Long ddayId, HttpServletRequest request, @Valid @RequestBody DdayRequestDto ddayRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         ddayService.modifyDday(ddayRequestDto, emailId, ddayId);
         return CommonResponseDto.builder()
-                .message("successful" + ddayRequestDto.getDdayName())
+                .message("Successfully modified D-Day")
                 .build();
     }
 
@@ -52,7 +53,7 @@ public class DdayController {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         ddayService.deleteDday(emailId, ddayId);
         return CommonResponseDto.builder()
-                .message("successful")
+                .message("Successfully deleted D-Day")
                 .build();
     }
 
@@ -63,7 +64,7 @@ public class DdayController {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         ddayService.setPrimaryDday(emailId, ddayId);
         return CommonResponseDto.builder()
-                .message("successful")
+                .message("Successfully created primary D-Day")
                 .build();
     }
 

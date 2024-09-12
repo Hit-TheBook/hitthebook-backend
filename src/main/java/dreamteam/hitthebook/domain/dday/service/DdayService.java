@@ -21,7 +21,6 @@ public class DdayService {
 
     // 디데이 생성
     public void createDday(DdayRequestDto ddayRequestDto, String emailId){
-        log.info("#######################################{}",ddayRequestDto);
         Member member = ddayHelper.findMemberByEmailId(emailId);
         Dday dday = Dday.createByRequestDto(ddayRequestDto, member);
         ddayRepository.save(dday);

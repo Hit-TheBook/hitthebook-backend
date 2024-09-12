@@ -1,11 +1,14 @@
 package dreamteam.hitthebook.domain.dday.helper;
 
+import dreamteam.hitthebook.common.exception.ModifyAuthenticationException;
+import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,17 +24,17 @@ public class DdayHelper {
 
     // emailId를 기반으로 멤버 검색
     public Member findMemberByEmailId(String emailId){
-        return memberRepository.findByEmailId(emailId).orElseThrow(RuntimeException::new); //익셉션 추가예정
+        return memberRepository.findByEmailId(emailId).orElseThrow(ResourceNotFoundException::new);
     }
 
     // ddayId를 기반으로 디데이 검색
     public Dday findDdayByDdayId(Long ddayId){
-        return ddayRepository.findById(ddayId).orElseThrow(RuntimeException::new); //익셉션 추가예정
+        return ddayRepository.findById(ddayId).orElseThrow(ResourceNotFoundException::new);
     }
 
     // dday 수정/삭제 권한 검사 후 예외 처리
     public void checkDdayEditPermission(Dday dday, Member member){
-        if(!(dday.getMember().equals(member))){throw new RuntimeException();}
+        if(!(dday.getMember().equals(member))){throw new ModifyAuthenticationException();}
     }
 
     // 디데이 엔티티 수정
@@ -79,7 +82,7 @@ public class DdayHelper {
 
     // 메인디데이 dto로 변환
     public PrimaryDdayDto toPrimaryDdayDto(Dday dday){
-        return new PrimaryDdayDto("successful", getPrimaryDdayName(dday), getPrimaryDdayRemain(dday));
+        return new PrimaryDdayDto("Successfully searched primary D-Day", getPrimaryDdayName(dday), getPrimaryDdayRemain(dday));
     }
 
     // 메인 디데이 dto로의 변환
@@ -101,6 +104,6 @@ public class DdayHelper {
 
     // 디데이 리스트 dto로 변환
     public DdayListDto toDdayListDto(Member member){
-        return new DdayListDto("successful", toPrimaryDdayContents(member), findUpcomingDdays(member), findOldDdays(member));
+        return new DdayListDto("Successfully searched D-Day list", toPrimaryDdayContents(member), findUpcomingDdays(member), findOldDdays(member));
     }
 }
