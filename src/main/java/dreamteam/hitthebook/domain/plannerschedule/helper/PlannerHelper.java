@@ -11,7 +11,6 @@ import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.repository.PlannerReviewRepository;
 import dreamteam.hitthebook.domain.plannerschedule.repository.PlannerScheduleRepository;
-import dreamteam.hitthebook.domain.plannerschedule.scheduler.PlannerScheduler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +26,6 @@ public class PlannerHelper {
     private final PlannerReviewRepository plannerReviewRepository;
     private final PlannerScheduleRepository plannerScheduleRepository;
     private final AlertRepository alertRepository;
-    private final PlannerScheduler plannerScheduler;
 
     // emailId를 기반으로 멤버 검색
     public Member findMemberByEmailId(String emailId){
@@ -46,7 +44,6 @@ public class PlannerHelper {
         PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, ScheduleTypeEnum.EVENT, member);
         plannerScheduleRepository.save(plannerSchedule);
         createNewPlannerScheduleEventAlert(plannerSchedule, member);
-        plannerScheduler.eventRun();
     }
 
     public void createNewPlannerScheduleSubject(ScheduleRequestDto scheduleRequestDto, Member member){

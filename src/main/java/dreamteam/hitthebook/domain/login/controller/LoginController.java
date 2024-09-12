@@ -30,7 +30,7 @@ public class LoginController {
 
     @PostMapping("/join")
     @JoinDetail
-    public CommonResponseDto memberJoin(@RequestBody JoinRequestDto joinRequestDto){
+    public CommonResponseDto memberJoin(@Valid @RequestBody JoinRequestDto joinRequestDto){
         return loginService.joinMember(joinRequestDto);
     }
 
