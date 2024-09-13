@@ -1,7 +1,9 @@
 package dreamteam.hitthebook.domain.login.controller;
 
 import dreamteam.hitthebook.common.dto.CommonResponseDto;
+import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
 import dreamteam.hitthebook.domain.login.service.LoginService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,8 @@ import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
 @RequiredArgsConstructor
 public class LoginController {
     private final LoginService loginService;
+    private final JwtTokenHelper jwtTokenHelper;
+
     @PostMapping("/login")
     @LoginDetail
     public LoginTokenDto Login(@Valid @RequestBody LoginRequestDto loginRequestDto){
@@ -42,8 +46,9 @@ public class LoginController {
 
     @PostMapping("/login/token/issue")
     @ReissueDetail
-    public LoginTokenDto tokenValidationIssue(@Valid @RequestBody ReissueTokenDto reissueTokenDto){
-        return loginService.issueTokenService(reissueTokenDto.refreshToken); // jwt DB에 저장 및 갱신하는 과정 수정 필요함
+    public LoginTokenDto tokenValidationIssue(@Valid HttpServletRequest request){
+        String refreshToken = (String) jwtTokenHelper.getJwtFromRequest(request);
+        return loginService.issueTokenService(refreshToken); // jwt DB에 저장 및 갱신하는 과정 수정 필요함
     }
 
     @PostMapping("/join/mail/authorization/verify")
