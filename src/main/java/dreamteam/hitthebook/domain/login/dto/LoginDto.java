@@ -28,6 +28,7 @@ public class LoginDto {
     }
 
     public static class ReissueTokenDto{
+        @NotBlank
         public String refreshToken;
     }
 
@@ -42,11 +43,14 @@ public class LoginDto {
     // 현재 HTTP로 통신을 하게될 가능성이 높은데, HTTPS로 바로 진행을 안할 수 있으므로 암호화에 대한 고민이 필요
 
     public static class EmailRequestDto{
+        @NotBlank
         public String emailId;
     }
 
     public static class AuthCodeRequestDto{
+        @NotBlank
         public String emailId;
+        @NotBlank
         public String authCode;
     }
 }

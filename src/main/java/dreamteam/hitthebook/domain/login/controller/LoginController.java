@@ -36,19 +36,19 @@ public class LoginController {
 
     @PostMapping("/join/mail/authorization")
     @AuthenticateEmailDetail
-    public CommonResponseDto emailAuthenticate(@RequestBody EmailRequestDto emailRequestDto){
+    public CommonResponseDto emailAuthenticate(@Valid @RequestBody EmailRequestDto emailRequestDto){
         return loginService.authenticateEmail(emailRequestDto);
     }
 
     @PostMapping("/login/token/issue")
     @ReissueDetail
-    public LoginTokenDto tokenValidationIssue(@RequestBody ReissueTokenDto reissueTokenDto){
+    public LoginTokenDto tokenValidationIssue(@Valid @RequestBody ReissueTokenDto reissueTokenDto){
         return loginService.issueTokenService(reissueTokenDto.refreshToken); // jwt DB에 저장 및 갱신하는 과정 수정 필요함
     }
 
     @PostMapping("/join/mail/authorization/verify")
     @AuthenticateEmailCodeDetail
-    public CommonResponseDto authenticationCodeVerify(@RequestBody AuthCodeRequestDto authCodeRequestDto){
+    public CommonResponseDto authenticationCodeVerify(@Valid @RequestBody AuthCodeRequestDto authCodeRequestDto){
         return loginService.verifyAuthenticationCode(authCodeRequestDto); // dto를 넘겨주는게 맞는듯
     }
 

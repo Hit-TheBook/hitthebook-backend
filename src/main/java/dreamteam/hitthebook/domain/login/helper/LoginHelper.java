@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.domain.login.helper;
 
+import dreamteam.hitthebook.common.exception.*;
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
 import dreamteam.hitthebook.domain.login.entity.ApiToken;
 import dreamteam.hitthebook.domain.login.repository.ApiTokenRepository;
@@ -43,18 +44,18 @@ public class LoginHelper {
     @Value("${jwt.refreshExpirationDay}")
     private Long refreshExpiration;
 
-    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // 정적 객체 생성 후 사용 비효율 적인 방법이지만 다른 방법을 모르겠음
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Member findMemberByEmailAndPassword(String emailId, String password){ // id와 비밀번호로 멤버 검색 bcrypt의 특징때문에 해당 로직 사용
-        Member member = memberRepository.findByEmailId(emailId).orElseThrow(RuntimeException::new);
+        Member member = memberRepository.findByEmailId(emailId).orElseThrow(IDNotFoundException::new);
         if(!authenticatePassword(password, member.getPassword())){
-            throw new RuntimeException();
+            throw new PasswordNotFoundException();
         }
         return member;
     }
     
     public void verifyEmailAvailability(String emailId){ // 이메일이 존재한다면 예외처리
-        if(memberRepository.findByEmailId(emailId).isPresent()){throw new RuntimeException();} // 나중에 예외 수정 예정}
+        if(memberRepository.findByEmailId(emailId).isPresent()){throw new DuplicateIDException();}
     }
 
     public void checkValidPassword(String password){ // 비밀번호 예외처리 구현예정, 비밀번호 기획 필요함
@@ -62,42 +63,42 @@ public class LoginHelper {
         Pattern LETTER_PATTERN = Pattern.compile("[a-zA-Z]");
         Pattern SPECIAL_CHAR_PATTERN = Pattern.compile("[^a-zA-Z0-9]");
         if (password == null || password.length() < 10 || password.length() > 20) {
-            throw new RuntimeException();
+            throw new InvalidFormatException();
         }
         if (!DIGIT_PATTERN.matcher(password).find()) {
-            throw new RuntimeException();
+            throw new InvalidFormatException();
         }
         if (!LETTER_PATTERN.matcher(password).find()) {
-            throw new RuntimeException();
+            throw new InvalidFormatException();
         }
         if (!SPECIAL_CHAR_PATTERN.matcher(password).find()) {
-            throw new RuntimeException();
+            throw new InvalidFormatException();
         }
     }
 
-    public void checkValidNickname(String nickname){ // 닉네임 예외처리 구현예정, 닉네임 기획 필요함
+    public void checkValidNickname(String nickname){
         Pattern VALID_CHAR_PATTERN = Pattern.compile("^[가-힣a-zA-Z0-9]+$");
         if (nickname == null) {
-            throw new RuntimeException();
+            throw new InvalidFormatException();
         }
 
         if (nickname.contains(" ")) {
-            throw new RuntimeException();
+            throw new InvalidFormatException();
         }
 
         byte[] nicknameBytes = nickname.getBytes(StandardCharsets.UTF_8);
         int length = nicknameBytes.length;
         if (length < 6 || length > 30) { // 한글 2자(6바이트) ~ 10자(30바이트) 기준
-            throw new RuntimeException();
+            throw new InvalidFormatException();
         }
 
         if (!VALID_CHAR_PATTERN.matcher(nickname).matches()) {
-            throw new RuntimeException();
+            throw new InvalidFormatException();
         }
     }
 
     public ApiToken findRefreshTokenAtDBByToken(String refreshToken){ // 리프레시토큰을 이용하여 DB에서 유효기간 내의 리프레시토큰 검색, 만료 기한 데이터는 일단 임시
-        return apiTokenRepository.findByRefreshTokenAndCreatedAtAfter(refreshToken, LocalDateTime.now().minusDays(refreshExpiration)).orElseThrow(RuntimeException::new);
+        return apiTokenRepository.findByRefreshTokenAndCreatedAtAfter(refreshToken, LocalDateTime.now().minusDays(refreshExpiration)).orElseThrow(InvalidTokenException::new);
     }
 
     public void ifExistRefreshTokenDelete(Member member){ //리프레시 토큰이 존재한다면, 제거해서 갱신을 대비
@@ -109,18 +110,18 @@ public class LoginHelper {
 
     public void deleteRefreshToken(ApiToken token){ // 리프레시토큰을 제거
         apiTokenRepository.delete(token);
-    }
+    } // 리프레시토큰 제거
 
     public void saveRefreshToken(String refreshToken, Member member){ // 리프레시토큰을 저장
         ApiToken token = new ApiToken(refreshToken, member);
         apiTokenRepository.save(token);
     }
 
-    public LoginTokenDto toTempTokenDto(Member member){
+    public LoginTokenDto toTempTokenDto(Member member){ // 임시 토큰 발급 관련
         String accessToken = jwtTokenProvider.generateEternalToken(member);
         String refreshToken = jwtTokenProvider.generateEternalToken(member);
         saveRefreshToken(refreshToken, member);
-        return new LoginTokenDto("success", accessToken, refreshToken);
+        return new LoginTokenDto("TempToken issued successfully", accessToken, refreshToken);
     }
 
 
@@ -128,7 +129,7 @@ public class LoginHelper {
         String accessToken = jwtTokenProvider.generateAccessToken(member);
         String refreshToken = jwtTokenProvider.generateRefreshToken(member);
         saveRefreshToken(refreshToken, member);
-        return new LoginTokenDto("success", accessToken, refreshToken);
+        return new LoginTokenDto("UserToken issued successfully", accessToken, refreshToken);
     }
 
     public void createNewMember(JoinRequestDto joinRequestDto){ // 새로운 멤버 생성
@@ -159,7 +160,7 @@ public class LoginHelper {
             mailSender.send(message);
         }
         catch (MailException e){
-            throw new RuntimeException(e); // 이메일 오류 예외처리 추가 예정
+            throw new EmailSendFailureException();
         }
     }
 
@@ -181,13 +182,13 @@ public class LoginHelper {
 
             mailSender.send(message);
         } catch (MessagingException e) {
-            log.info("HTML TEMPLATE AUTH CODE ERROR!!");
+            throw new EmailSendFailureException();
         }
     }
 
     public void checkValidateCode(String emailId, String authCode){ // 레디스에 저장된 인증번호와 일치한다면, 인증완료
         if(!authCodeHelper.validateAuthCode(emailId, authCode)){
-            throw new RuntimeException(); // 이메일 인증 오류 예외처리 추가
+            throw new EmailAuthenticationException();
         }
     }
 

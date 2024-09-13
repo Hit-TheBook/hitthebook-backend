@@ -1,6 +1,7 @@
 package dreamteam.hitthebook.domain.login.service;
 
 import dreamteam.hitthebook.common.dto.CommonResponseDto;
+import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
 import dreamteam.hitthebook.domain.login.entity.ApiToken;
 import dreamteam.hitthebook.domain.login.helper.LoginHelper;
@@ -25,7 +26,7 @@ public class LoginService {
     private final LoginHelper loginHelper;
 
     public LoginTokenDto makeTokenService(LoginRequestDto loginRequestDto) {
-        Member member = memberRepository.findByEmailIdAndPassword(loginRequestDto.emailId, loginRequestDto.password).orElseThrow(RuntimeException::new);
+        Member member = memberRepository.findByEmailIdAndPassword(loginRequestDto.emailId, loginRequestDto.password).orElseThrow(ResourceNotFoundException::new);
         loginHelper.ifExistRefreshTokenDelete(member);
         return loginHelper.toTempTokenDto(member);
     }
@@ -48,7 +49,7 @@ public class LoginService {
         //loginHelper.checkValidNickname(joinRequestDto.nickname); // 닉네임과 패스워드 모두 프론트엔드에서 별도로 검토처리를 함, 편의를 위해서 일단 주석처리
         loginHelper.createNewMember(joinRequestDto);
         return CommonResponseDto.builder()
-                .message("successful")
+                .message("Your registration was successful!")
                 .build();
     }
 
@@ -57,14 +58,14 @@ public class LoginService {
 //        loginHelper.sendAuthCodeMail(loginHelper.makeAuthCodeMail(emailRequestDto.emailId)); 기존에 메세지만 보내던 헬퍼코드
         loginHelper.makeAuthCodeTemplateMail(emailRequestDto.emailId);
         return CommonResponseDto.builder()
-                .message("successful")
+                .message("The verification code has been successfully sent to your email.")
                 .build();
     }
 
     public CommonResponseDto verifyAuthenticationCode(AuthCodeRequestDto authCodeRequestDto){
         loginHelper.checkValidateCode(authCodeRequestDto.emailId, authCodeRequestDto.authCode);
         return CommonResponseDto.builder()
-                .message("successful")
+                .message("Email authentication was successful!")
                 .build();
     }
 
