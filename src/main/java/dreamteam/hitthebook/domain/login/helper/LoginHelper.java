@@ -58,6 +58,10 @@ public class LoginHelper {
         if(memberRepository.findByEmailId(emailId).isPresent()){throw new DuplicateIDException();}
     }
 
+    public void verifyEmailExits(String emailId){
+        if(memberRepository.findByEmailId(emailId).isEmpty()){throw new DuplicateIDException();}
+    }
+
     public void checkValidPassword(String password){ // 비밀번호 예외처리 구현예정, 비밀번호 기획 필요함
         Pattern DIGIT_PATTERN = Pattern.compile("\\d");
         Pattern LETTER_PATTERN = Pattern.compile("[a-zA-Z]");

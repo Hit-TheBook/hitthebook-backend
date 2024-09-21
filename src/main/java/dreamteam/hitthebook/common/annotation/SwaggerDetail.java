@@ -73,7 +73,14 @@ public class SwaggerDetail {
     public @interface AuthenticateEmailDetail {
     }
 
-    @Operation(summary = "인증번호 확인", description = "인증번호의 유효기간은 5분이다, 인증번호를 보내고 유효한 인증번호라면 인증시켜준다.")
+    @Operation(summary = "비밀번호 찾기 시에 이메일로 인증번호 전송", description = "인증번호의 유효기간은 5분이다, 이미 존재하는 아이디라거나 이메일 발송 오류시 오류 발생")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface AuthenticateEmailAtForgotDetail {
+    }
+
+    @Operation(summary = "인증번호 확인", description = "인증번호의 유효기간은 5분이다, 인증번호를 보내고 유효한 인증번호라면 인증시켜준다." +
+            "비밀번호를 잊어버릴때도 같은 api 사용")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface AuthenticateEmailCodeDetail {

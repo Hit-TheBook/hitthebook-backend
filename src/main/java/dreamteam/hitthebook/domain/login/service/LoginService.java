@@ -62,6 +62,14 @@ public class LoginService {
                 .build();
     }
 
+    public CommonResponseDto authenticateEmailAtForgotPassword(EmailRequestDto emailRequestDto){
+        loginHelper.verifyEmailExits(emailRequestDto.emailId);
+        loginHelper.makeAuthCodeTemplateMail(emailRequestDto.emailId);
+        return CommonResponseDto.builder()
+                .message("The verification code has been successfully sent to your email.")
+                .build();
+    }
+
     public CommonResponseDto verifyAuthenticationCode(AuthCodeRequestDto authCodeRequestDto){
         loginHelper.checkValidateCode(authCodeRequestDto.emailId, authCodeRequestDto.authCode);
         return CommonResponseDto.builder()
