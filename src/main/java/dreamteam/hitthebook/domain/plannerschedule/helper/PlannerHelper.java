@@ -1,5 +1,7 @@
 package dreamteam.hitthebook.domain.plannerschedule.helper;
 
+import dreamteam.hitthebook.common.exception.InvalidScheduleTimeException;
+import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.domain.alert.entity.Alert;
 import dreamteam.hitthebook.domain.alert.enumulation.TargetPageTypeEnum;
 import dreamteam.hitthebook.domain.alert.repository.AlertRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static dreamteam.hitthebook.domain.plannerschedule.dto.PlannerDto.*;
 
@@ -29,14 +32,24 @@ public class PlannerHelper {
 
     // emailId를 기반으로 멤버 검색
     public Member findMemberByEmailId(String emailId){
-        return memberRepository.findByEmailId(emailId).orElseThrow(RuntimeException::new); //익셉션 추가예정
+        return memberRepository.findByEmailId(emailId).orElseThrow(ResourceNotFoundException::new); //익셉션 추가예정
     }
 
     public void checkSameDateOfScheduleTime(LocalDateTime startAt, LocalDateTime endAt){
         if(startAt.getYear() != endAt.getYear() ||
         startAt.getMonthValue() != endAt.getMonthValue() ||
         startAt.getDayOfMonth() != endAt.getDayOfMonth()){
-            throw new RuntimeException();
+            throw new InvalidScheduleTimeException();
+        }
+    }
+
+    public void checkSameTimeOfSchedule(Member member, ScheduleTypeEnum scheduleType, ScheduleRequestDto scheduleRequestDto){
+        Optional<PlannerSchedule> beforePlannerSchedule = plannerScheduleRepository.findByMemberAndScheduleTypeAndTimeRange(member, scheduleType,
+                scheduleRequestDto.getScheduleAt(), scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
+        Optional<PlannerSchedule> afterPlannerSchedule = plannerScheduleRepository.findByMemberAndScheduleTypeAndTimeRange2(member, scheduleType,
+                scheduleRequestDto.getScheduleAt(), scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
+        if(beforePlannerSchedule.isPresent() || afterPlannerSchedule.isPresent()){
+            throw new InvalidScheduleTimeException();
         }
     }
 
@@ -81,6 +94,10 @@ public class PlannerHelper {
         if(!(plannerSchedule.getMember().equals(member))){throw new RuntimeException();} // 예외처리 필요
     }
 
+    public void checkValidScheduleType(ScheduleTypeEnum scheduleType, PlannerSchedule plannerSchedule){
+        if(!(plannerSchedule.getScheduleType().equals(scheduleType))){throw new RuntimeException();}
+    }
+
     public PlannerReview findReviewByMemberAndDate(Member member, LocalDateTime reviewAt){
 //        int year = reviewDate.getYear();
 //        int month = reviewDate.getMonthValue();
@@ -102,8 +119,5 @@ public class PlannerHelper {
     public ReviewDto toReviewDto(PlannerReview plannerReview){
         return new ReviewDto(plannerReview.getReviewContent());
     }
-
-
-
 
 }

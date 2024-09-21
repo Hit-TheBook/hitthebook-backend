@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule, Long> {
 //    List<PlannerSchedule> findByMemberAndScheduleTypeAndScheduleAt(Member member, ScheduleTypeEnum scheduleType, LocalDateTime scheduleAt);
@@ -21,4 +22,30 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
             "DAY(p.scheduleAt) = DAY(:scheduleDate)")
     List<PlannerSchedule> findByMemberAndScheduleTypeAndScheduleAt(@Param("member") Member member,
                                                                    @Param("scheduleType") ScheduleTypeEnum scheduleType, @Param("scheduleDate") LocalDateTime scheduleDate);
+
+    @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
+            "p.scheduleType = :scheduleType AND " +
+            "YEAR(p.scheduleAt) = YEAR(:scheduleDate) AND " +
+            "MONTH(p.scheduleAt) = MONTH(:scheduleDate) AND " +
+            "DAY(p.scheduleAt) = DAY(:scheduleDate) AND " +
+            "p.startAt < :startAt AND p.endAt >= :startAt")
+    Optional<PlannerSchedule> findByMemberAndScheduleTypeAndTimeRange(@Param("member") Member member,
+                                                                      @Param("scheduleType") ScheduleTypeEnum scheduleType,
+                                                                      @Param("scheduleDate") LocalDateTime scheduleDate,
+                                                                      @Param("startAt") LocalDateTime startAt,
+                                                                      @Param("endAt") LocalDateTime endAt);
+
+    @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
+            "p.scheduleType = :scheduleType AND " +
+            "YEAR(p.scheduleAt) = YEAR(:scheduleDate) AND " +
+            "MONTH(p.scheduleAt) = MONTH(:scheduleDate) AND " +
+            "DAY(p.scheduleAt) = DAY(:scheduleDate) AND " +
+            "p.startAt >= :startAt AND p.startAt <= :endAt")
+    Optional<PlannerSchedule> findByMemberAndScheduleTypeAndTimeRange2(@Param("member") Member member,
+                                                                      @Param("scheduleType") ScheduleTypeEnum scheduleType,
+                                                                      @Param("scheduleDate") LocalDateTime scheduleDate,
+                                                                      @Param("startAt") LocalDateTime startAt,
+                                                                      @Param("endAt") LocalDateTime endAt);
+
+
 }

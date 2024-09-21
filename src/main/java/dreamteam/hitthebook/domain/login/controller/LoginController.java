@@ -58,11 +58,17 @@ public class LoginController {
     }
 
     // 생각보다 로직이 복잡할 것으로 보여서 나중에 구현
+    // 인증번호 받기
+    // 인증번호 확인
+    // 이거는 api같이 써도 될거같은데 확인해보기
+    // 비밀번호 이전과 같은지 확인하는 api
+    // 비밀번호 재설정 api
     @PostMapping("/login/password/forgot")
     public CommonResponseDto temporaryPasswordIssue(){
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
     }
+
 
 }

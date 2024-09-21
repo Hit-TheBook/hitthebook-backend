@@ -8,12 +8,14 @@ import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.service.PlannerService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+import static dreamteam.hitthebook.common.annotation.SwaggerDetail.*;
 import static dreamteam.hitthebook.domain.plannerschedule.dto.PlannerDto.*;
 
 @Slf4j
@@ -26,8 +28,9 @@ public class PlannerController {
 
     @PostMapping("/schedule/{scheduleType}")
     @SwaggerToken
+    @PlannerAddScheduleDetail
     public CommonResponseDto scheduleCreate(HttpServletRequest request,
-                                            @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType, @RequestBody ScheduleRequestDto scheduleRequestDto){
+                                            @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType, @Valid @RequestBody ScheduleRequestDto scheduleRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         plannerService.createSchedule(scheduleRequestDto, scheduleType, emailId);
         return CommonResponseDto.builder()
@@ -37,6 +40,7 @@ public class PlannerController {
 
     @GetMapping("/schdule/{scheduleType}/{scheduleDate}")
     @SwaggerToken
+    @PlannerFindScheduleDetail
     public ScheduleListDto scheduleFind(HttpServletRequest request,
                                         @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType,
                                         @PathVariable(name = "scheduleDate") LocalDateTime scheduleDate){
@@ -46,12 +50,13 @@ public class PlannerController {
 
     @PatchMapping("/schedule/{scheduleType}/{plannerScheduleId}/{result}")
     @SwaggerToken
+    @PlannerAddFeedbackDetail
     public CommonResponseDto scheduleFeedback(HttpServletRequest request,
                                               @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType,
                                               @PathVariable(name = "plannerScheduleId") Long plannerScheduleId,
                                               @PathVariable(name = "result")FeedbackTypeEnum feedbackType){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        plannerService.feedbackSchedule(emailId, plannerScheduleId, feedbackType);
+        plannerService.feedbackSchedule(scheduleType, emailId, plannerScheduleId, feedbackType);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
@@ -59,12 +64,13 @@ public class PlannerController {
 
     @PostMapping("/schedule/{scheduleType}/{plannerScheduleId}/postpone")
     @SwaggerToken
+    @PlannerPostponeScheduleDetail
     public CommonResponseDto postponeSchedule(HttpServletRequest request,
                                               @PathVariable(name = "scheduleType") ScheduleTypeEnum scheduleType,
                                               @PathVariable(name = "plannerScheduleId") Long plannerScheduleId,
-                                              @RequestBody PostPoneDto postPoneDto){
+                                              @Valid @RequestBody PostPoneDto postPoneDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        plannerService.createPostponeSchedule(emailId, plannerScheduleId, postPoneDto);
+        plannerService.createPostponeSchedule(scheduleType, emailId, plannerScheduleId, postPoneDto);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
@@ -77,6 +83,7 @@ public class PlannerController {
     // 키입력시마다 0.3초마다 PUT
     @PostMapping("/daily/review/{reviewAt}")
     @SwaggerToken
+    @PlannerAddDailyReviewDetail
     public CommonResponseDto dailyReviewCreate(HttpServletRequest request, @PathVariable(name = "reviewAt") LocalDateTime reviewAt){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         plannerService.createDayReview(emailId, reviewAt);
@@ -87,7 +94,8 @@ public class PlannerController {
 
     @PutMapping("/daily/review/{reviewAt}")
     @SwaggerToken
-    public CommonResponseDto dailyReviewModify(HttpServletRequest request, @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto,
+    @PlannerModifyDailyReviewDetail
+    public CommonResponseDto dailyReviewModify(HttpServletRequest request, @Valid @RequestBody ReviewUpdateRequestDto reviewUpdateRequestDto,
                                              @PathVariable(name = "reviewAt") LocalDateTime reviewAt){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         plannerService.modifyDayReview(emailId, reviewUpdateRequestDto, reviewAt);
@@ -98,6 +106,7 @@ public class PlannerController {
 
     @GetMapping("/daily/review/{reviewAt}")
     @SwaggerToken
+    @PlannerGetDailyReviewDetail
     public ReviewDto dailyReviewGet(HttpServletRequest request, @PathVariable(name = "reviewAt") LocalDateTime reviewAt){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return plannerService.getDayReview(emailId, reviewAt);

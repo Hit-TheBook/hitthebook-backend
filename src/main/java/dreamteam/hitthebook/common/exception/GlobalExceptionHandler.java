@@ -50,4 +50,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleEmailAutheticationException(EmailAuthenticationException ex) {
         return ResponseEntity.status(447).body(ex.getMessage());
     }
+
+    @ExceptionHandler(InvalidScheduleTimeException.class)
+    public ResponseEntity<String> handleInvalidScheduleTimeException(InvalidScheduleTimeException ex) {
+        return ResponseEntity.status(448).body(ex.getMessage());
+    }
 }

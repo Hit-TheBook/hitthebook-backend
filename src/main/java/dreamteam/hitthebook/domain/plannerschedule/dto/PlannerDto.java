@@ -3,6 +3,7 @@ package dreamteam.hitthebook.domain.plannerschedule.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,12 +31,16 @@ public class PlannerDto {
     @Data
     @NoArgsConstructor
     public static class ScheduleRequestDto{
+        @NotBlank
         private String scheduleTitle;
         private String content;
+        @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime scheduleAt;
+        @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime startAt;
+        @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime endAt;
     }
@@ -43,6 +48,7 @@ public class PlannerDto {
     @Data
     @NoArgsConstructor
     public static class DateDto{
+        @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime scheduleDate;
     }
@@ -50,10 +56,13 @@ public class PlannerDto {
     @Data
     @NoArgsConstructor
     public static class PostPoneDto{
+        @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime scheduleAt;
+        @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime startAt;
+        @NotBlank
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime endAt;
     }

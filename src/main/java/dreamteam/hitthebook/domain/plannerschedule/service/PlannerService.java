@@ -30,15 +30,14 @@ public class PlannerService {
         Member member = plannerHelper.findMemberByEmailId(emailId);
         plannerHelper.checkInvalidStartTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
         plannerHelper.checkSameDateOfScheduleTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
+        plannerHelper.checkSameTimeOfSchedule(member, scheduleType, scheduleRequestDto);
         if(scheduleType == ScheduleTypeEnum.EVENT){
             plannerHelper.createNewPlannerScheduleEvent(scheduleRequestDto, member);
         }
+
         else{
             plannerHelper.createNewPlannerScheduleSubject(scheduleRequestDto, member);
-        } // if문이 너무 짜치는데 코드 개선하는 방법 연구하기
-//        PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, scheduleType, member);
-//        // 스케쥴타입에 따라서 일정이라면 알람을 만들어주는 aop와 스케쥴러 구현 필요
-//        plannerScheduleRepository.save(plannerSchedule);
+        }
     }
 
     public ScheduleListDto findSchedule(String emailId, ScheduleTypeEnum scheduleType, LocalDateTime scheduleAt){
@@ -46,16 +45,19 @@ public class PlannerService {
         return plannerHelper.toScheduleListDto(member, scheduleType, scheduleAt);
     }
 
-    public void feedbackSchedule(String emailId, Long plannerScheduleId, FeedbackTypeEnum feedbackType){
+    public void feedbackSchedule(ScheduleTypeEnum scheduleType, String emailId, Long plannerScheduleId, FeedbackTypeEnum feedbackType){
         Member member = plannerHelper.findMemberByEmailId(emailId);
         PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerId(plannerScheduleId);
+        plannerHelper.checkValidScheduleType(scheduleType, plannerSchedule);
         plannerHelper.checkScheduleEditPermission(plannerSchedule, member);
         plannerHelper.updateFeedbackStatus(plannerSchedule, feedbackType);
     }
 
-    public void createPostponeSchedule(String emailId, Long plannerScheduleId, PostPoneDto postPoneDto){
+    public void createPostponeSchedule(ScheduleTypeEnum scheduleType, String emailId, Long plannerScheduleId, PostPoneDto postPoneDto){
         Member member = plannerHelper.findMemberByEmailId(emailId);
         PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerId(plannerScheduleId);
+        plannerHelper.checkScheduleEditPermission(plannerSchedule, member);
+        plannerHelper.checkValidScheduleType(scheduleType, plannerSchedule);
         plannerHelper.checkInvalidStartTime(postPoneDto.getStartAt(), postPoneDto.getEndAt());
         plannerHelper.checkSameDateOfScheduleTime(postPoneDto.getStartAt(), postPoneDto.getEndAt());
         PlannerSchedule newPlannerSchedule = PlannerSchedule.createNewPostponeEntity(postPoneDto, plannerSchedule);
@@ -72,7 +74,6 @@ public class PlannerService {
     public void modifyDayReview(String emailId, ReviewUpdateRequestDto reviewUpdateRequestDto, LocalDateTime reviewAt){
         Member member = plannerHelper.findMemberByEmailId(emailId);
         PlannerReview plannerReview = plannerHelper.findReviewByMemberAndDate(member, reviewAt);
-        //권한 다르면 예외처리 근데 애초에 위에서 걸림 Id로 찾는게 아니라서
         plannerHelper.reviewAutoSaveChange(plannerReview, reviewUpdateRequestDto);
     }
 
