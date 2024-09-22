@@ -62,7 +62,7 @@ public class LoginService {
                 .build();
     }
 
-    public CommonResponseDto authenticateEmailAtForgotPassword(EmailRequestDto emailRequestDto){
+    public CommonResponseDto authenticateEmailAtForgetPassword(EmailRequestDto emailRequestDto){
         loginHelper.verifyEmailExits(emailRequestDto.emailId);
         loginHelper.makeAuthCodeTemplateMail(emailRequestDto.emailId);
         return CommonResponseDto.builder()
@@ -77,5 +77,20 @@ public class LoginService {
                 .build();
     }
 
+    public CommonResponseDto isSamePassword(PasswordDto passwordDto){
+        Member member = loginHelper.findMemberByEmailId(passwordDto.emailId);
+        loginHelper.checkPasswordMatch(member, passwordDto.password);
+        return CommonResponseDto.builder()
+                .message("Password is different to previous password")
+                .build();
+    }
 
+    public CommonResponseDto resetPassword(PasswordDto passwordDto){
+        Member member = loginHelper.findMemberByEmailId(passwordDto.emailId);
+        // 패스워드 형식 예외처리
+        loginHelper.changePassword(member, passwordDto.password);
+        return CommonResponseDto.builder()
+                .message("Password changed successfully.")
+                .build();
+    }
 }

@@ -53,6 +53,11 @@ public class LoginHelper {
         }
         return member;
     }
+
+    // emailId를 기반으로 멤버 검색
+    public Member findMemberByEmailId(String emailId){
+        return memberRepository.findByEmailId(emailId).orElseThrow(ResourceNotFoundException::new);
+    }
     
     public void verifyEmailAvailability(String emailId){ // 이메일이 존재한다면 예외처리
         if(memberRepository.findByEmailId(emailId).isPresent()){throw new DuplicateIDException();}
@@ -194,6 +199,18 @@ public class LoginHelper {
         if(!authCodeHelper.validateAuthCode(emailId, authCode)){
             throw new EmailAuthenticationException();
         }
+    }
+
+    public void checkPasswordMatch(Member member, String password){
+        if(authenticatePassword(password, member.getPassword())){
+            throw new RuntimeException();
+        }
+    }
+
+    public void changePassword(Member member, String newPassword){
+        String securePassword = createNewSecurePassword(newPassword);
+        member.setPassword(securePassword);
+        memberRepository.save(member);
     }
 
 }

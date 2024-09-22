@@ -53,4 +53,11 @@ public class LoginDto {
         @NotBlank
         public String authCode;
     }
+
+    public static class PasswordDto{
+        @NotBlank
+        public String emailId;
+        @NotBlank
+        public String password;
+    }
 }

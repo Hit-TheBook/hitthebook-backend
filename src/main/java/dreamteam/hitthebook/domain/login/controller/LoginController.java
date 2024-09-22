@@ -66,21 +66,24 @@ public class LoginController {
 
     @PostMapping("/forget/mail/authorization")
     @AuthenticateEmailAtForgotDetail
-    public CommonResponseDto emailAuthenticateAtForgotPassword(@Valid @RequestBody EmailRequestDto emailRequestDto){
-        return loginService.authenticateEmailAtForgotPassword(emailRequestDto);
+    public CommonResponseDto emailAuthenticateAtForgetPassword(@Valid @RequestBody EmailRequestDto emailRequestDto){
+        return loginService.authenticateEmailAtForgetPassword(emailRequestDto);
+    }
+
+    @PostMapping("/forget/password/current")
+    @CheckPasswordMatchDetail
+    public CommonResponseDto samePasswordIs(@Valid @RequestBody PasswordDto passwordDto){
+        return loginService.isSamePassword(passwordDto);
+    }
+
+    //post가 더 적절한 것으로 판단됨
+    @PostMapping("/forget/password/reset")
+    public CommonResponseDto passwordReset(@Valid @RequestBody PasswordDto passwordDto){
+        return loginService.resetPassword(passwordDto);
     }
 
 
 
-
-
-
-    @PostMapping("/login/password/forgot")
-    public CommonResponseDto temporaryPasswordIssue(){
-        return CommonResponseDto.builder()
-                .message("successful")
-                .build();
-    }
 
 
 }

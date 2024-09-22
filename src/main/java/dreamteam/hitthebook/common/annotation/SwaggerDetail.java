@@ -94,6 +94,14 @@ public class SwaggerDetail {
     public @interface JoinDetail {
     }
 
+    @Operation(summary = "이전 비밀번호와 같은 비밀번호인지 검사하기", description = "이전 비밀번호와 검사하여 검사성공시 200이다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface CheckPasswordMatchDetail {
+    }
+
+
+
     @Operation(summary = "토큰 재발급", description = "리프레시토큰이 유효하다면 새로운 토큰 재발급 및 리프레시토큰 갱신")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
