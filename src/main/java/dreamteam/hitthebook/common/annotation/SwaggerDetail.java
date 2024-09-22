@@ -49,7 +49,7 @@ public class SwaggerDetail {
 
     @Operation(summary = "전체 dday 목록 가져오기", description = "대표 dday, 현재 활성화중인 dday, " +
             "이미 종료된 dday의 목록을 불러온다." +
-            "이미 종료된 dday의 남은 일수는 전부 0으로 처리했다.")
+            "remainingDays는 오늘과 endDate의 차이 그리고 DurationDays는 startDate와 endDate의 차이이다.")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface DdayGetListDetail {

@@ -34,6 +34,16 @@ public class DdayHelper {
         return ddayRepository.findById(ddayId).orElseThrow(ResourceNotFoundException::new);
     }
 
+    // 시작날짜가 이상한 날짜인지 체크한다
+    public void checkInvalidDday(DdayRequestDto ddayRequestDto) {
+        LocalDate startDate = ddayRequestDto.getStartDate().toLocalDate();
+        LocalDate endDate = ddayRequestDto.getEndDate().toLocalDate();
+
+        if (startDate.isAfter(endDate) || startDate.isEqual(endDate)) {
+            throw new RuntimeException();
+        }
+    }
+
     // dday 수정/삭제 권한 검사 후 예외 처리
     public void checkDdayEditPermission(Dday dday, Member member){
         if(!(dday.getMember().equals(member))){throw new ModifyAuthenticationException();}

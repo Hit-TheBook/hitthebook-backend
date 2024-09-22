@@ -21,6 +21,7 @@ public class DdayService {
 
     // 디데이 생성
     public void createDday(DdayRequestDto ddayRequestDto, String emailId){
+        ddayHelper.checkInvalidDday(ddayRequestDto);
         Member member = ddayHelper.findMemberByEmailId(emailId);
         Dday dday = Dday.createByRequestDto(ddayRequestDto, member);
         ddayRepository.save(dday);
@@ -28,6 +29,7 @@ public class DdayService {
 
     // 디데이 수정
     public void modifyDday(DdayRequestDto ddayRequestDto, String emailId, Long ddayId){
+        ddayHelper.checkInvalidDday(ddayRequestDto);
         Member member = ddayHelper.findMemberByEmailId(emailId);
         Dday originDday = ddayHelper.findDdayByDdayId(ddayId);
         ddayHelper.checkDdayEditPermission(originDday, member); // 수정자가 작성자 본인인지 확인후 다르면 예외처리

@@ -36,6 +36,7 @@ public class Dday extends BaseEntity {
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
+    // 급하게 만드느라 At으로 못만들었는데 이거 고치는게 되돌릴수없게 빡세네
 
     private boolean isPrimary = false; // 디폴트는 false
 
