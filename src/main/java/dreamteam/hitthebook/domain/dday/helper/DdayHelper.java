@@ -3,6 +3,7 @@ package dreamteam.hitthebook.domain.dday.helper;
 import dreamteam.hitthebook.common.exception.ModifyAuthenticationException;
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
+import dreamteam.hitthebook.domain.dday.enumulation.DdayTypeEnum;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -80,9 +82,19 @@ public class DdayHelper {
         return Optional.ofNullable(dday).map(Dday::getRemainingDays).orElse(null); // dday가 null이면 오류 없이 null 리턴
     }
 
+    public Integer getPrimaryDdayDuration(Dday dday) {
+        return Optional.ofNullable(dday).map(Dday::getDurationDays).orElse(null); // dday가 null이면 오류 없이 null 리턴
+    }
+
+    // 메인 디데이 종류 판별
+    public DdayTypeEnum getPrimaryDdayType(Dday dday) {
+        return Optional.ofNullable(dday).map(Dday::getDdayType).orElse(null); // dday가 null이면 오류없이 null 리턴
+    }
+
     // 메인디데이 dto로 변환
     public PrimaryDdayDto toPrimaryDdayDto(Dday dday){
-        return new PrimaryDdayDto("Successfully searched primary D-Day", getPrimaryDdayName(dday), getPrimaryDdayRemain(dday));
+        return new PrimaryDdayDto("Successfully searched primary D-Day", getPrimaryDdayName(dday),
+                getPrimaryDdayRemain(dday), getPrimaryDdayDuration(dday), getPrimaryDdayType(dday));
     }
 
     // 메인 디데이 dto로의 변환
@@ -94,12 +106,12 @@ public class DdayHelper {
 
     // 활성화된 디데이 리스트 검색
     public List<Dday> findUpcomingDdays(Member member){
-        return ddayRepository.findByMemberAndEndDateAfter(member, LocalDateTime.now());
+        return ddayRepository.findByMemberAndEndDateAfter(member, LocalDate.now().atStartOfDay());
     }
 
     // 이미 만료된 디데이 리스트 검색
     public List<Dday> findOldDdays(Member member){
-        return ddayRepository.findByMemberAndEndDateBefore(member, LocalDateTime.now());
+        return ddayRepository.findByMemberAndEndDateBefore(member, LocalDate.now().atStartOfDay());
     }
 
     // 디데이 리스트 dto로 변환

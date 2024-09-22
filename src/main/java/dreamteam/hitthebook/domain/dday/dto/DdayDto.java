@@ -3,6 +3,7 @@ package dreamteam.hitthebook.domain.dday.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
+import dreamteam.hitthebook.domain.dday.enumulation.DdayTypeEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -35,10 +36,14 @@ public class DdayDto {
         private String message;
         private String ddayName;
         private Integer remainingDays;
-        public PrimaryDdayDto(String message, String ddayName, Integer remainingDays) {
+        private Integer durationDays;
+        private DdayTypeEnum ddayTypeEnum;
+        public PrimaryDdayDto(String message, String ddayName, Integer remainingDays, Integer durationDays, DdayTypeEnum ddayTypeEnum) {
             this.message = message;
             this.ddayName = ddayName;
             this.remainingDays = remainingDays;
+            this.durationDays = durationDays;
+            this.ddayTypeEnum = ddayTypeEnum;
         }
     }
 
@@ -67,6 +72,7 @@ public class DdayDto {
         private Long ddayId;
         private String ddayName;
         private Integer remainingDays;
+        private Integer durationDays;
         private LocalDateTime startDate;
         private LocalDateTime endDate;
         public DdayContents(Dday dday) {
@@ -75,6 +81,7 @@ public class DdayDto {
             this.remainingDays = dday.getRemainingDays();
             this.startDate = dday.getStartDate();
             this.endDate = dday.getEndDate();
+            this.durationDays = dday.getDurationDays();
         }
     }
 }

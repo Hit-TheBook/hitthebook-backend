@@ -40,7 +40,8 @@ public class SwaggerDetail {
     }
 
     @Operation(summary = "대표dday 가져오기", description = "대표 dday를 불러온다" +
-            "이 기능은 나의 스터디에서 대표디데이를 나타내줘야하는데 그 때 쓰이는 api이다.")
+            "이 기능은 나의 스터디에서 대표디데이를 나타내줘야하는데 그 때 쓰이는 api이다." +
+            "타입은 NOT_STARTED, IN_PROGRESS, COMPLETED 중의 하나다.")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface DdayGetPrimaryDetail {
