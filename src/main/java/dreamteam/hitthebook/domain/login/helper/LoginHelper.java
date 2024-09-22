@@ -68,19 +68,31 @@ public class LoginHelper {
     }
 
     public void checkValidPassword(String password){ // 비밀번호 예외처리 구현예정, 비밀번호 기획 필요함
-        Pattern DIGIT_PATTERN = Pattern.compile("\\d");
-        Pattern LETTER_PATTERN = Pattern.compile("[a-zA-Z]");
-        Pattern SPECIAL_CHAR_PATTERN = Pattern.compile("[^a-zA-Z0-9]");
-        if (password == null || password.length() < 10 || password.length() > 20) {
+        Pattern UPPERCASE_PATTERN = Pattern.compile("[A-Z]"); // 대문자 패턴
+        Pattern LOWERCASE_PATTERN = Pattern.compile("[a-z]"); // 소문자 패턴
+        Pattern DIGIT_PATTERN = Pattern.compile("\\d"); // 숫자 패턴
+        Pattern SPECIAL_CHAR_PATTERN = Pattern.compile("[^a-zA-Z0-9]"); // 특수문자 패턴
+
+        // 비밀번호가 null이거나 길이가 8자리 미만 또는 16자리 초과면 예외 발생
+        if (password == null || password.length() < 8 || password.length() > 16) {
             throw new InvalidFormatException();
         }
-        if (!DIGIT_PATTERN.matcher(password).find()) {
-            throw new InvalidFormatException();
-        }
-        if (!LETTER_PATTERN.matcher(password).find()) {
-            throw new InvalidFormatException();
-        }
-        if (!SPECIAL_CHAR_PATTERN.matcher(password).find()) {
+
+        // 각 패턴에 맞는 문자가 포함되어 있는지 확인
+        boolean hasUppercase = UPPERCASE_PATTERN.matcher(password).find();
+        boolean hasLowercase = LOWERCASE_PATTERN.matcher(password).find();
+        boolean hasDigit = DIGIT_PATTERN.matcher(password).find();
+        boolean hasSpecialChar = SPECIAL_CHAR_PATTERN.matcher(password).find();
+
+        // 최소 2종류 이상의 문자가 포함되어 있는지 확인
+        int validCategoryCount = 0;
+        if (hasUppercase) validCategoryCount++;
+        if (hasLowercase) validCategoryCount++;
+        if (hasDigit) validCategoryCount++;
+        if (hasSpecialChar) validCategoryCount++;
+
+        // 두 가지 이상의 종류가 포함되지 않았다면 예외 발생
+        if (validCategoryCount < 2) {
             throw new InvalidFormatException();
         }
     }
@@ -97,7 +109,7 @@ public class LoginHelper {
 
         byte[] nicknameBytes = nickname.getBytes(StandardCharsets.UTF_8);
         int length = nicknameBytes.length;
-        if (length < 6 || length > 30) { // 한글 2자(6바이트) ~ 10자(30바이트) 기준
+        if (length <= 6 || length >= 18) { // 한글 2자(6바이트) ~ 10자(30바이트) 기준
             throw new InvalidFormatException();
         }
 

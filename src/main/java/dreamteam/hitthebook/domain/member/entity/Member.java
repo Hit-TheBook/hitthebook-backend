@@ -31,7 +31,7 @@ public class Member extends BaseEntity {
 
     private String password;
 
-    @Column(name = "nickname", nullable = false, unique = true) //length = 20
+//    @Column(name = "nickname", nullable = false, unique = true) //length = 20
     private String nickname;
 
     private LocalDateTime lastLoginedAt;
