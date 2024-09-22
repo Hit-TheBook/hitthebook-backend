@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.common.jwt;
 
+import dreamteam.hitthebook.common.exception.InvalidTokenException;
 import dreamteam.hitthebook.configuration.PathsConfig;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,17 +30,25 @@ public class JwtAuthenticationFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
         log.info("URI : {}", requestURI);
 
-
         String jwt = jwtTokenHelper.getJwtFromRequest(httpRequest);
 
-        if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-            String emailId = jwtTokenProvider.getEmailIdFromJWT(jwt);
+        // JWT가 존재하고 유효한지 검증
+        if (StringUtils.hasText(jwt)) {
+            if (jwtTokenProvider.validateToken(jwt)) {
+                // 토큰이 유효한 경우
+                String emailId = jwtTokenProvider.getEmailIdFromJWT(jwt);
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(emailId, null, new ArrayList<>());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(emailId, null, new ArrayList<>());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                // 토큰이 유효하지 않으면 InvalidTokenException 발생
+                throw new InvalidTokenException();
+            }
         }
+
+        // 필터 체인 계속 처리
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }
