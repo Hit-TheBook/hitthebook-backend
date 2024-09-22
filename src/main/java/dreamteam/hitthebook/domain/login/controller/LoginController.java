@@ -28,50 +28,68 @@ public class LoginController {
     @GetMapping("/temp/token")
     @TempTokenDetail
     public LoginTokenDto tempTokenMake(){
-        LoginRequestDto loginRequsetDto = new LoginRequestDto("test3@example.com","password3");
-        return loginService.makeTokenService(loginRequsetDto);
+        LoginRequestDto loginRequestDto = new LoginRequestDto("test3@example.com","password3");
+        return loginService.makeTokenService(loginRequestDto);
     }
 
     @PostMapping("/join")
     @JoinDetail
     public CommonResponseDto memberJoin(@Valid @RequestBody JoinRequestDto joinRequestDto){
-        return loginService.joinMember(joinRequestDto);
+        loginService.joinMember(joinRequestDto);
+        return CommonResponseDto.builder()
+                .message("Your registration was successful!")
+                .build();
     }
 
     @PostMapping("/login/token/issue")
     @ReissueDetail
-    public LoginTokenDto tokenValidationIssue(@Valid HttpServletRequest request){
+    public LoginTokenDto tokenValidationIssue(HttpServletRequest request){
         String refreshToken = (String) jwtTokenHelper.getJwtFromRequest(request);
         return loginService.issueTokenService(refreshToken);
     }
 
     @PostMapping("/mail/join/authorization")
     @AuthenticateEmailDetail
-    public CommonResponseDto emailAuthenticate(@RequestBody EmailRequestDto emailRequestDto){
-        return loginService.authenticateEmail(emailRequestDto);
+    public CommonResponseDto emailAuthenticate(@Valid @RequestBody EmailRequestDto emailRequestDto){
+        loginService.authenticateEmail(emailRequestDto);
+        return CommonResponseDto.builder()
+                .message("The verification code has been successfully sent to your email.")
+                .build();
     }
 
     @PostMapping("/mail/authorization/verify")
     @AuthenticateEmailCodeDetail
     public CommonResponseDto authenticationCodeVerify(@Valid @RequestBody AuthCodeRequestDto authCodeRequestDto){
-        return loginService.verifyAuthenticationCode(authCodeRequestDto);
+        loginService.verifyAuthenticationCode(authCodeRequestDto);
+        return CommonResponseDto.builder()
+                .message("Email authentication was successful!")
+                .build();
     }
 
     @PostMapping("/mail/forget/authorization")
     @AuthenticateEmailAtForgotDetail
     public CommonResponseDto emailAuthenticateAtForgetPassword(@Valid @RequestBody EmailRequestDto emailRequestDto){
-        return loginService.authenticateEmailAtForgetPassword(emailRequestDto);
+        loginService.authenticateEmailAtForgetPassword(emailRequestDto);
+        return CommonResponseDto.builder()
+                .message("The verification code has been successfully sent to your email.")
+                .build();
     }
 
     @PostMapping("/forget/password/current")
     @CheckPasswordMatchDetail
     public CommonResponseDto samePasswordIs(@Valid @RequestBody PasswordDto passwordDto){
-        return loginService.isSamePassword(passwordDto);
+        loginService.isSamePassword(passwordDto);
+        return CommonResponseDto.builder()
+                .message("Password is different to previous password")
+                .build();
     }
 
     //post가 더 적절한 것으로 판단됨
     @PostMapping("/forget/password/reset")
     public CommonResponseDto passwordReset(@Valid @RequestBody PasswordDto passwordDto){
-        return loginService.resetPassword(passwordDto);
+        loginService.resetPassword(passwordDto);
+        return CommonResponseDto.builder()
+                .message("Password changed successfully.")
+                .build();
     }
 }
