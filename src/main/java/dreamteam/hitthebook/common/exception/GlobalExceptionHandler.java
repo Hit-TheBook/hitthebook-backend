@@ -51,8 +51,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(447).body(ex.getMessage());
     }
 
-    @ExceptionHandler(InvalidScheduleTimeException.class)
-    public ResponseEntity<String> handleInvalidScheduleTimeException(InvalidScheduleTimeException ex) {
+    @ExceptionHandler(InvalidTimeDataException.class)
+    public ResponseEntity<String> handleInvalidTimeDataException(InvalidTimeDataException ex) {
         return ResponseEntity.status(448).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DuplicatePasswordException.class)
+    public ResponseEntity<String> handleDuplicatePasswordException(DuplicatePasswordException ex) {
+        return ResponseEntity.status(449).body(ex.getMessage());
     }
 }

@@ -100,12 +100,16 @@ public class SwaggerDetail {
     public @interface CheckPasswordMatchDetail {
     }
 
-
-
     @Operation(summary = "토큰 재발급", description = "리프레시토큰이 유효하다면 새로운 토큰 재발급 및 리프레시토큰 갱신")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ReissueDetail {
+    }
+
+    @Operation(summary = "비밀번호 재설정하기", description = "비밀번호가 형식과 일치하면 재설정한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ResetNewPasswordDetail {
     }
 
     //TimerController

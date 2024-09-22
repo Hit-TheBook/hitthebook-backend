@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,11 +20,11 @@ public class DdayDto {
         @NotBlank
         private String ddayName;
 
-        @NotBlank
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime startDate;
 
-        @NotBlank
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime endDate;
     }

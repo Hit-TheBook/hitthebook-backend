@@ -38,12 +38,6 @@ public class LoginController {
         return loginService.joinMember(joinRequestDto);
     }
 
-    @PostMapping("/join/mail/authorization")
-    @AuthenticateEmailDetail
-    public CommonResponseDto emailAuthenticate(@Valid @RequestBody EmailRequestDto emailRequestDto){
-        return loginService.authenticateEmail(emailRequestDto);
-    }
-
     @PostMapping("/login/token/issue")
     @ReissueDetail
     public LoginTokenDto tokenValidationIssue(@Valid HttpServletRequest request){
@@ -51,20 +45,19 @@ public class LoginController {
         return loginService.issueTokenService(refreshToken);
     }
 
-    @PostMapping("/join/mail/authorization/verify")
+    @PostMapping("/mail/join/authorization")
+    @AuthenticateEmailDetail
+    public CommonResponseDto emailAuthenticate(@RequestBody EmailRequestDto emailRequestDto){
+        return loginService.authenticateEmail(emailRequestDto);
+    }
+
+    @PostMapping("/mail/authorization/verify")
     @AuthenticateEmailCodeDetail
     public CommonResponseDto authenticationCodeVerify(@Valid @RequestBody AuthCodeRequestDto authCodeRequestDto){
         return loginService.verifyAuthenticationCode(authCodeRequestDto);
     }
 
-    // 생각보다 로직이 복잡할 것으로 보여서 나중에 구현
-    // 인증번호 받기 - O
-    // 인증번호 확인 - O
-    // 이거는 api같이 써도 될거같은데 확인해보기
-    // 비밀번호 이전과 같은지 확인하는 api
-    // 비밀번호 재설정 api
-
-    @PostMapping("/forget/mail/authorization")
+    @PostMapping("/mail/forget/authorization")
     @AuthenticateEmailAtForgotDetail
     public CommonResponseDto emailAuthenticateAtForgetPassword(@Valid @RequestBody EmailRequestDto emailRequestDto){
         return loginService.authenticateEmailAtForgetPassword(emailRequestDto);
@@ -81,9 +74,4 @@ public class LoginController {
     public CommonResponseDto passwordReset(@Valid @RequestBody PasswordDto passwordDto){
         return loginService.resetPassword(passwordDto);
     }
-
-
-
-
-
 }

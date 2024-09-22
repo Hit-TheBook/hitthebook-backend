@@ -32,8 +32,7 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
     Optional<PlannerSchedule> findByMemberAndScheduleTypeAndTimeRange(@Param("member") Member member,
                                                                       @Param("scheduleType") ScheduleTypeEnum scheduleType,
                                                                       @Param("scheduleDate") LocalDateTime scheduleDate,
-                                                                      @Param("startAt") LocalDateTime startAt,
-                                                                      @Param("endAt") LocalDateTime endAt);
+                                                                      @Param("startAt") LocalDateTime startAt);
 
     @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
             "p.scheduleType = :scheduleType AND " +

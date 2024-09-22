@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.plannerschedule.helper;
 
-import dreamteam.hitthebook.common.exception.InvalidScheduleTimeException;
+import dreamteam.hitthebook.common.exception.InvalidTimeDataException;
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.domain.alert.entity.Alert;
 import dreamteam.hitthebook.domain.alert.enumulation.TargetPageTypeEnum;
@@ -39,24 +39,24 @@ public class PlannerHelper {
         if(startAt.getYear() != endAt.getYear() ||
         startAt.getMonthValue() != endAt.getMonthValue() ||
         startAt.getDayOfMonth() != endAt.getDayOfMonth()){
-            throw new InvalidScheduleTimeException();
+            throw new InvalidTimeDataException();
         }
     }
 
     public void checkSameTimeOfSchedule(Member member, ScheduleTypeEnum scheduleType, ScheduleRequestDto scheduleRequestDto){
         Optional<PlannerSchedule> beforePlannerSchedule = plannerScheduleRepository.findByMemberAndScheduleTypeAndTimeRange(member, scheduleType,
-                scheduleRequestDto.getScheduleAt(), scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
+                scheduleRequestDto.getScheduleAt(), scheduleRequestDto.getStartAt());
         Optional<PlannerSchedule> afterPlannerSchedule = plannerScheduleRepository.findByMemberAndScheduleTypeAndTimeRange2(member, scheduleType,
                 scheduleRequestDto.getScheduleAt(), scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
         if(beforePlannerSchedule.isPresent() || afterPlannerSchedule.isPresent()){
-            throw new InvalidScheduleTimeException();
+            throw new InvalidTimeDataException();
         }
     }
 
     public void createNewPlannerScheduleEvent(ScheduleRequestDto scheduleRequestDto, Member member){
         PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, ScheduleTypeEnum.EVENT, member);
         plannerScheduleRepository.save(plannerSchedule);
-        createNewPlannerScheduleEventAlert(plannerSchedule, member);
+//        createNewPlannerScheduleEventAlert(plannerSchedule, member);
     }
 
     public void createNewPlannerScheduleSubject(ScheduleRequestDto scheduleRequestDto, Member member){
@@ -64,10 +64,10 @@ public class PlannerHelper {
         plannerScheduleRepository.save(plannerSchedule);
     }
 
-    public void createNewPlannerScheduleEventAlert(PlannerSchedule plannerSchedule, Member member){
-        Alert alert = new Alert(TargetPageTypeEnum.PLANNER, "등록하신 일정이 하루남았습니다.", member, plannerSchedule);
-        alertRepository.save(alert);
-    }
+//    public void createNewPlannerScheduleEventAlert(PlannerSchedule plannerSchedule, Member member){
+//        Alert alert = new Alert(TargetPageTypeEnum.PLANNER, "등록하신 일정이 하루남았습니다.", member, plannerSchedule);
+//        alertRepository.save(alert);
+//    }
 
     public void checkInvalidStartTime(LocalDateTime startAt, LocalDateTime endAt){
         if (startAt.isAfter(endAt)) {throw new RuntimeException();}
