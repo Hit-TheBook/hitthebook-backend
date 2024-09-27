@@ -1,6 +1,5 @@
 package dreamteam.hitthebook.common.jwt;
 
-import dreamteam.hitthebook.common.exception.InvalidTokenException;
 import dreamteam.hitthebook.configuration.PathsConfig;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,27 +27,35 @@ public class JwtAuthenticationFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
         String requestURI = httpRequest.getRequestURI();
-        log.info("URI : {}", requestURI);
+        String clientIp = getClientIp(httpRequest);
+        log.info("URI : {} / IP : {}", requestURI, clientIp);
+
 
         String jwt = jwtTokenHelper.getJwtFromRequest(httpRequest);
 
-        // JWT가 존재하고 유효한지 검증
-        if (StringUtils.hasText(jwt)) {
-            if (jwtTokenProvider.validateToken(jwt)) {
-                // 토큰이 유효한 경우
-                String emailId = jwtTokenProvider.getEmailIdFromJWT(jwt);
+        if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+            String emailId = jwtTokenProvider.getEmailIdFromJWT(jwt);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(emailId, null, new ArrayList<>());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(emailId, null, new ArrayList<>());
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                // 토큰이 유효하지 않으면 InvalidTokenException 발생
-                throw new InvalidTokenException();
-            }
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip != null && !ip.isEmpty() && !"unknown".equalsIgnoreCase(ip)) {
+            // X-Forwarded-For 헤더가 여러 IP를 포함할 수 있으므로 첫 번째 IP만 추출
+            return ip.split(",")[0];
         }
 
-        // 필터 체인 계속 처리
-        filterChain.doFilter(servletRequest, servletResponse);
+        ip = request.getHeader("X-Real-IP");
+        if (ip != null && !ip.isEmpty() && !"unknown".equalsIgnoreCase(ip)) {
+            return ip;
+        }
+
+        return request.getRemoteAddr();
     }
 }

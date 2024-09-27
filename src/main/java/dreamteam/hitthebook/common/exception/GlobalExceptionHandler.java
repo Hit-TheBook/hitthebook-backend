@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    // 애초에 서블렛으로 차단해서 컨트롤러어드바이스로 컨트롤을 못함
     @ExceptionHandler(InvalidTokenException.class) // 해당 토큰이 유효하지 않을 때
     public ResponseEntity<String> handleEInvalidTokenException(InvalidTokenException ex) {
         return ResponseEntity.status(499).body(ex.getMessage());
