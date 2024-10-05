@@ -24,24 +24,26 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
                                                                    @Param("scheduleType") ScheduleTypeEnum scheduleType, @Param("scheduleDate") LocalDateTime scheduleDate);
 
     @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
-            "p.scheduleType = :scheduleType AND " +
+            "YEAR(p.scheduleAt) = YEAR(:scheduleDate) AND " +
+            "MONTH(p.scheduleAt) = MONTH(:scheduleDate) AND " +
+            "DAY(p.scheduleAt) = DAY(:scheduleDate)")
+    List<PlannerSchedule> findByMemberAndScheduleAt(@Param("member") Member member, @Param("scheduleDate") LocalDateTime scheduleDate);
+
+    @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
             "YEAR(p.scheduleAt) = YEAR(:scheduleDate) AND " +
             "MONTH(p.scheduleAt) = MONTH(:scheduleDate) AND " +
             "DAY(p.scheduleAt) = DAY(:scheduleDate) AND " +
             "p.startAt < :startAt AND p.endAt >= :startAt")
-    Optional<PlannerSchedule> findByMemberAndScheduleTypeAndTimeRange(@Param("member") Member member,
-                                                                      @Param("scheduleType") ScheduleTypeEnum scheduleType,
+    Optional<PlannerSchedule> findByMemberAndTimeRange(@Param("member") Member member,
                                                                       @Param("scheduleDate") LocalDateTime scheduleDate,
                                                                       @Param("startAt") LocalDateTime startAt);
 
     @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
-            "p.scheduleType = :scheduleType AND " +
             "YEAR(p.scheduleAt) = YEAR(:scheduleDate) AND " +
             "MONTH(p.scheduleAt) = MONTH(:scheduleDate) AND " +
             "DAY(p.scheduleAt) = DAY(:scheduleDate) AND " +
             "p.startAt >= :startAt AND p.startAt <= :endAt")
-    Optional<PlannerSchedule> findByMemberAndScheduleTypeAndTimeRange2(@Param("member") Member member,
-                                                                      @Param("scheduleType") ScheduleTypeEnum scheduleType,
+    Optional<PlannerSchedule> findByMemberAndTimeRange2(@Param("member") Member member,
                                                                       @Param("scheduleDate") LocalDateTime scheduleDate,
                                                                       @Param("startAt") LocalDateTime startAt,
                                                                       @Param("endAt") LocalDateTime endAt);

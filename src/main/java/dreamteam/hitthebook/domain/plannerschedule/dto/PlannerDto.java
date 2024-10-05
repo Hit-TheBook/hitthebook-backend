@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -31,16 +32,16 @@ public class PlannerDto {
     @Data
     @NoArgsConstructor
     public static class ScheduleRequestDto{
-        @NotBlank
+        @NotNull
         private String scheduleTitle;
         private String content;
-        @NotBlank
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime scheduleAt;
-        @NotBlank
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime startAt;
-        @NotBlank
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime endAt;
     }
@@ -48,7 +49,7 @@ public class PlannerDto {
     @Data
     @NoArgsConstructor
     public static class DateDto{
-        @NotBlank
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime scheduleDate;
     }
@@ -56,13 +57,13 @@ public class PlannerDto {
     @Data
     @NoArgsConstructor
     public static class PostPoneDto{
-        @NotBlank
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime scheduleAt;
-        @NotBlank
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime startAt;
-        @NotBlank
+        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
         private LocalDateTime endAt;
     }

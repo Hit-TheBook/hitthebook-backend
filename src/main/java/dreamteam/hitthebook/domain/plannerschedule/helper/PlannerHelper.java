@@ -43,10 +43,10 @@ public class PlannerHelper {
         }
     }
 
-    public void checkSameTimeOfSchedule(Member member, ScheduleTypeEnum scheduleType, ScheduleRequestDto scheduleRequestDto){
-        Optional<PlannerSchedule> beforePlannerSchedule = plannerScheduleRepository.findByMemberAndScheduleTypeAndTimeRange(member, scheduleType,
+    public void checkSameTimeOfSchedule(Member member, ScheduleRequestDto scheduleRequestDto){
+        Optional<PlannerSchedule> beforePlannerSchedule = plannerScheduleRepository.findByMemberAndTimeRange(member,
                 scheduleRequestDto.getScheduleAt(), scheduleRequestDto.getStartAt());
-        Optional<PlannerSchedule> afterPlannerSchedule = plannerScheduleRepository.findByMemberAndScheduleTypeAndTimeRange2(member, scheduleType,
+        Optional<PlannerSchedule> afterPlannerSchedule = plannerScheduleRepository.findByMemberAndTimeRange2(member,
                 scheduleRequestDto.getScheduleAt(), scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
         if(beforePlannerSchedule.isPresent() || afterPlannerSchedule.isPresent()){
             throw new InvalidTimeDataException();
@@ -80,9 +80,17 @@ public class PlannerHelper {
     public List<PlannerSchedule> getSchedulesByCriteria(Member member, ScheduleTypeEnum scheduleType, LocalDateTime scheduleAt){
         return plannerScheduleRepository.findByMemberAndScheduleTypeAndScheduleAt(member, scheduleType, scheduleAt);
     }
+
+    public List<PlannerSchedule> getAllSchedulesByCriteria(Member member, LocalDateTime scheduleAt){
+        return plannerScheduleRepository.findByMemberAndScheduleAt(member, scheduleAt);
+    }
     
     public ScheduleListDto toScheduleListDto(Member member, ScheduleTypeEnum scheduleType, LocalDateTime scheduleAt){
         return new ScheduleListDto("successful", getSchedulesByCriteria(member, scheduleType, scheduleAt));
+    }
+
+    public ScheduleListDto toScheduleAllListDto(Member member, LocalDateTime scheduleAt){
+        return new ScheduleListDto("successful", getAllSchedulesByCriteria(member, scheduleAt));
     }
 
     public void updateFeedbackStatus(PlannerSchedule plannerSchedule, FeedbackTypeEnum feedbackType){

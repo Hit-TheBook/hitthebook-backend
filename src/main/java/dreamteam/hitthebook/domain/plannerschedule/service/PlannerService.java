@@ -30,7 +30,7 @@ public class PlannerService {
         Member member = plannerHelper.findMemberByEmailId(emailId);
         plannerHelper.checkInvalidStartTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
         plannerHelper.checkSameDateOfScheduleTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
-        plannerHelper.checkSameTimeOfSchedule(member, scheduleType, scheduleRequestDto);
+        plannerHelper.checkSameTimeOfSchedule(member, scheduleRequestDto);
         if(scheduleType == ScheduleTypeEnum.EVENT){
             plannerHelper.createNewPlannerScheduleEvent(scheduleRequestDto, member);
         }
@@ -43,6 +43,11 @@ public class PlannerService {
     public ScheduleListDto findSchedule(String emailId, ScheduleTypeEnum scheduleType, LocalDateTime scheduleAt){
         Member member = plannerHelper.findMemberByEmailId(emailId);
         return plannerHelper.toScheduleListDto(member, scheduleType, scheduleAt);
+    }
+
+    public ScheduleListDto findAllSchedule(String emailId, LocalDateTime scheduleAt){
+        Member member = plannerHelper.findMemberByEmailId(emailId);
+        return plannerHelper.toScheduleAllListDto(member, scheduleAt);
     }
 
     public void feedbackSchedule(ScheduleTypeEnum scheduleType, String emailId, Long plannerScheduleId, FeedbackTypeEnum feedbackType){
