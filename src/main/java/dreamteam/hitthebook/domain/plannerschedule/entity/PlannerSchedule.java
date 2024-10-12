@@ -60,6 +60,8 @@ public class PlannerSchedule extends BaseEntity {
         this.scheduleContent = scheduleContent;
         this.scheduleType = scheduleType;
         this.member = member;
+        this.startAt = startAt;
+        this.endAt = endAt;
     }
 
     public PlannerSchedule(LocalDateTime scheduleAt, String scheduleTitle, String scheduleContent, ScheduleTypeEnum scheduleType, Member member,

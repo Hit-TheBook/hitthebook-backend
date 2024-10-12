@@ -35,6 +35,7 @@ public class PlannerHelper {
         return memberRepository.findByEmailId(emailId).orElseThrow(ResourceNotFoundException::new); //익셉션 추가예정
     }
 
+    // startAt과 endAt의 날짜가 다르다면 익셉션을 터뜨림
     public void checkSameDateOfScheduleTime(LocalDateTime startAt, LocalDateTime endAt){
         if(startAt.getYear() != endAt.getYear() ||
         startAt.getMonthValue() != endAt.getMonthValue() ||
