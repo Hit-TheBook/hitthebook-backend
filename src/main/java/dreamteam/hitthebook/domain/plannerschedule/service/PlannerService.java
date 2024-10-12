@@ -52,7 +52,7 @@ public class PlannerService {
 
     public void feedbackSchedule(ScheduleTypeEnum scheduleType, String emailId, Long plannerScheduleId, FeedbackTypeEnum feedbackType){
         Member member = plannerHelper.findMemberByEmailId(emailId);
-        PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerId(plannerScheduleId);
+        PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerScheduleId(plannerScheduleId);
         plannerHelper.checkValidScheduleType(scheduleType, plannerSchedule);
         plannerHelper.checkScheduleEditPermission(plannerSchedule, member);
         plannerHelper.updateFeedbackStatus(plannerSchedule, feedbackType);
@@ -60,7 +60,7 @@ public class PlannerService {
 
     public void createPostponeSchedule(ScheduleTypeEnum scheduleType, String emailId, Long plannerScheduleId, PostPoneDto postPoneDto){
         Member member = plannerHelper.findMemberByEmailId(emailId);
-        PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerId(plannerScheduleId);
+        PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerScheduleId(plannerScheduleId);
         plannerHelper.checkScheduleEditPermission(plannerSchedule, member);
         plannerHelper.checkValidScheduleType(scheduleType, plannerSchedule);
         plannerHelper.checkInvalidStartTime(postPoneDto.getStartAt(), postPoneDto.getEndAt());
