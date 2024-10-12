@@ -1,7 +1,7 @@
 package dreamteam.hitthebook.domain.point.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.point.enumulation.PointActionEnum;
 import dreamteam.hitthebook.domain.point.enumulation.PointReasonEnum;
 import jakarta.persistence.*;

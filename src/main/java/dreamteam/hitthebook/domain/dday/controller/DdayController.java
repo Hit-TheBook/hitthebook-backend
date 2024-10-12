@@ -2,7 +2,6 @@ package dreamteam.hitthebook.domain.dday.controller;
 
 import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
 import dreamteam.hitthebook.domain.dday.service.DdayService;
-import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

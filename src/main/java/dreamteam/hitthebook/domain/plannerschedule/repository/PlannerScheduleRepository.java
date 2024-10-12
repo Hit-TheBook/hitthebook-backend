@@ -1,7 +1,6 @@
 package dreamteam.hitthebook.domain.plannerschedule.repository;
 
-import dreamteam.hitthebook.domain.member.entity.Member;
-import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerReview;
+import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;

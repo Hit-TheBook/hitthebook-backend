@@ -1,13 +1,12 @@
 package dreamteam.hitthebook.domain.dday.repository;
 
 import dreamteam.hitthebook.domain.dday.entity.Dday;
-import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.login.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface DdayRepository extends JpaRepository<Dday, Long>{

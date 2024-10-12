@@ -1,7 +1,7 @@
 package dreamteam.hitthebook.domain.report.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.mission.entity.Mission;
 import dreamteam.hitthebook.domain.missionchat.entity.MissionChat;
 import dreamteam.hitthebook.domain.missionpost.entity.MissionPost;

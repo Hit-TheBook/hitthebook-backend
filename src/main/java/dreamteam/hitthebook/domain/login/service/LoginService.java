@@ -1,13 +1,12 @@
 package dreamteam.hitthebook.domain.login.service;
 
-import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
 import dreamteam.hitthebook.domain.login.entity.ApiToken;
 import dreamteam.hitthebook.domain.login.helper.LoginHelper;
 import dreamteam.hitthebook.domain.login.repository.ApiTokenRepository;
-import dreamteam.hitthebook.domain.member.entity.Member;
-import dreamteam.hitthebook.domain.member.repository.MemberRepository;
+import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.login.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -25,14 +25,6 @@ public class Image extends BaseEntity {
     private Long imageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mission_id")
-    private Mission mission;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mission_post_id")
-    private MissionPost missionPost;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emblem_id")
     private Emblem emblem;
 
