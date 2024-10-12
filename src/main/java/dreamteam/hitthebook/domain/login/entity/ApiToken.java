@@ -15,7 +15,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE Api_Token SET is_deleted = true WHERE token_id = ?")
+@SQLDelete(sql = "UPDATE api_token SET is_deleted = true WHERE token_id = ?")
 @Getter @Setter
 public class ApiToken extends BaseEntity {
     @Id

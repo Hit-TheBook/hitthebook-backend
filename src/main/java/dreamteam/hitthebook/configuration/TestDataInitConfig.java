@@ -3,6 +3,7 @@ package dreamteam.hitthebook.configuration;
 
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
+import dreamteam.hitthebook.domain.login.entity.ApiToken;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +26,8 @@ public class TestDataInitConfig {
     private final MemberRepository memberRepository;
     private final DdayRepository ddayRepository;
     private final PlannerScheduleRepository plannerScheduleRepository;
+
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostConstruct
     @Transactional
@@ -41,7 +45,7 @@ public class TestDataInitConfig {
         Member member2= new Member();
         member2.setEmailId("test2@example.com");
         member2.setNickname("에스파");
-        member2.setPassword("password2");
+        member2.setPassword(passwordEncoder.encode("password2"));
         memberRepository.save(member2);
 
         Member member3 = new Member();
@@ -98,7 +102,7 @@ public class TestDataInitConfig {
                 "깃허브 이슈와 마일스톤에 관해서도 공부해보고 다양한 깃플로우 전략들을 비교해가며" +
                 "실제로 현업에서는 어떤식으로 깃허브를 사용하게 될지 미리 연습하는 시간을 가진다.");
         plannerSchedule1.setScheduleType(ScheduleTypeEnum.SUBJECT);
-        plannerSchedule1.setScheduleFeedback(FeedbackTypeEnum.NONE);
+        plannerSchedule1.setScheduleFeedback(FeedbackTypeEnum.FAILED);
         plannerSchedule1.setMember(member3);
         plannerScheduleRepository.save(plannerSchedule1);
 
@@ -109,7 +113,7 @@ public class TestDataInitConfig {
         plannerSchedule2.setScheduleTitle("동네친구들 술약속");
         plannerSchedule2.setScheduleContent("오늘 오랜만에 동네친구들이랑 모이는 날 봉수육 가서 수육한잔과 소주 크~ 캬~");
         plannerSchedule2.setScheduleType(ScheduleTypeEnum.EVENT);
-        plannerSchedule2.setScheduleFeedback(FeedbackTypeEnum.NONE);
+        plannerSchedule2.setScheduleFeedback(FeedbackTypeEnum.FAILED);
         plannerSchedule2.setMember(member3);
         plannerScheduleRepository.save(plannerSchedule2);
 
@@ -159,7 +163,7 @@ public class TestDataInitConfig {
         plannerSchedule6.setScheduleTitle("백준 2문제 풀기");
         plannerSchedule6.setScheduleContent("백준문제를 안푼지 너무 오래되서 풀어보려고 한다.");
         plannerSchedule6.setScheduleType(ScheduleTypeEnum.SUBJECT);
-        plannerSchedule6.setScheduleFeedback(FeedbackTypeEnum.NONE);
+        plannerSchedule6.setScheduleFeedback(FeedbackTypeEnum.FAILED);
         plannerSchedule6.setMember(member3);
         plannerScheduleRepository.save(plannerSchedule6);
 
