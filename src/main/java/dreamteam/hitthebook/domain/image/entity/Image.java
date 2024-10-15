@@ -2,8 +2,6 @@ package dreamteam.hitthebook.domain.image.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.emblem.entity.Emblem;
-import dreamteam.hitthebook.domain.mission.entity.Mission;
-import dreamteam.hitthebook.domain.missionpost.entity.MissionPost;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

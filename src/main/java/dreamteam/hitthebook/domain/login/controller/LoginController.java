@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.domain.login.controller;
 
+import dreamteam.hitthebook.common.annotation.SwaggerToken;
 import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
 import dreamteam.hitthebook.domain.login.service.LoginService;
@@ -43,6 +44,7 @@ public class LoginController {
 
     @PostMapping("/login/token/issue")
     @ReissueDetail
+    @SwaggerToken
     public LoginTokenDto tokenValidationIssue(HttpServletRequest request){
         String refreshToken = (String) jwtTokenHelper.getJwtFromRequest(request);
         return loginService.issueTokenService(refreshToken);
