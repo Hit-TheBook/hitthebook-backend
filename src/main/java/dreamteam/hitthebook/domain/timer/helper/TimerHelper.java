@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 
+import java.time.Duration;
 import java.util.List;
 
 
@@ -54,6 +55,19 @@ public class TimerHelper {
     public TimerListDto toTimerListDto(Member member, TimerDateDto timerDateDto) {
         List<Timer> timerList = timerRepository.findByMemberAndStudyStartTime(member, timerDateDto.getStudyDate());
         return new TimerListDto(timerList);
+    }
+
+    public TotalTimeDto getTotalStudyTime(Member member, TimerDateDto timerDateDto) {
+        List<Timer> timerList = timerRepository.findByMemberAndStudyStartTime(member, timerDateDto.getStudyDate());
+
+        Duration totalStudyTime = timerList.stream()
+                .map(Timer::getStudyTimeLength)
+                .reduce(Duration.ZERO, Duration::plus);
+
+        TotalTimeDto totalTimeDto = new TotalTimeDto();
+        totalTimeDto.setStudyTimeLength(totalStudyTime);
+
+        return totalTimeDto;
     }
 
 }

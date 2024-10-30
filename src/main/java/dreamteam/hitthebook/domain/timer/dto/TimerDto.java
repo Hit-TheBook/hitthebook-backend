@@ -1,7 +1,12 @@
 package dreamteam.hitthebook.domain.timer.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dreamteam.hitthebook.domain.timer.entity.Timer;
+import dreamteam.hitthebook.domain.timer.enumulation.TimerColorTypeEnum;
+import dreamteam.hitthebook.domain.timer.helper.DurationSerializer;
+import dreamteam.hitthebook.domain.timer.helper.LocalDateTimeDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +14,10 @@ import lombok.NoArgsConstructor;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TimerDto {
 
@@ -19,7 +26,13 @@ public class TimerDto {
     public static class TimerStartRequestDto{
 
         @Schema(description = "과목명", example = "수학", type = "string")
-        private String subjectName; //과목명
+        private String subjectName;
+
+        @Schema(description = "목표 시간 (HH:mm:ss 형식)", example = "12:50:00")
+        private String timerTargetTime;
+
+        @Schema(description = "타이머 색깔", example = "RED")
+        private TimerColorTypeEnum timerColorType;
 
     }
 
@@ -78,5 +91,19 @@ public class TimerDto {
             this.subjectName = timer.getSubjectName();
             this.studyTimeLength = timer.getStudyTimeLength();
         }
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class TotalTimeDto {
+
+        @JsonSerialize(using = DurationSerializer.class)
+        private Duration studyTimeLength;
+
+    }
+    @Data
+    @NoArgsConstructor
+    public static class TimerStatisticsDto {
+        private Map<String, Long> statistics;
     }
 }

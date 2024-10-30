@@ -80,4 +80,21 @@ public class TimerController {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return timerService.findTimerList(emailId,timerDateDto);
     }
+
+    @GetMapping("/totalStudyTime")
+    @SwaggerToken
+    @TotalTimerDetail
+    public TotalTimeDto totalTimerFind(HttpServletRequest request, TimerDateDto timerDateDto){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        return timerService.getTotalTimer(emailId,timerDateDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<TimerStatisticsDto> getTimerStatistics(
+            @RequestParam String subjectName,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam String period) {
+        TimerStatisticsDto statistics = timerStatisticsService.getTimerStatistics(subjectName, date, period);
+        return ResponseEntity.ok(statistics);
+    }
 }

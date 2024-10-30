@@ -7,8 +7,11 @@ import dreamteam.hitthebook.domain.timer.helper.TimerHelper;
 import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static dreamteam.hitthebook.domain.timer.dto.TimerDto.*;
 
@@ -65,4 +68,15 @@ public class TimerService {
         return timerHelper.toTimerListDto(member,timerDateDto);
     }
 
+    public TotalTimeDto getTotalTimer(String emailId, TimerDateDto timerDateDto){
+        Member member = timerHelper.findMemberByEmailId(emailId);
+        return timerHelper.getTotalStudyTime(member,timerDateDto);
+    }
+
+    @Scheduled(cron = "0 0 5 * * ?")
+    public void accessTimerDb() {
+        // DB 작업 수행
+        List<Timer> timers = timerRepository.findAll();
+        // 비즈니스 로직 수행
+    }
 }
