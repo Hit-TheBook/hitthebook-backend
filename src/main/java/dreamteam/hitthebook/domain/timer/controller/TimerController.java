@@ -8,7 +8,13 @@ import dreamteam.hitthebook.domain.timer.service.TimerService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.Map;
 
 import static dreamteam.hitthebook.common.annotation.SwaggerDetail.*;
 import static dreamteam.hitthebook.domain.timer.dto.TimerDto.*;
@@ -89,12 +95,16 @@ public class TimerController {
         return timerService.getTotalTimer(emailId,timerDateDto);
     }
 
-    @GetMapping
-    public ResponseEntity<TimerStatisticsDto> getTimerStatistics(
+    @GetMapping("/dailyStatistics")
+    @SwaggerToken
+    public ResponseEntity<Map<LocalDate, Duration>> getDailyStatistics(
+            HttpServletRequest request,
             @RequestParam String subjectName,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam String period) {
-        TimerStatisticsDto statistics = timerStatisticsService.getTimerStatistics(subjectName, date, period);
-        return ResponseEntity.ok(statistics);
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        LocalDate targetDate = (date != null) ? date : LocalDate.now();
+        Map<LocalDate, Duration> dailyStats = timerService.getDailyStatisticsForWeek(emailId, subjectName, targetDate);
+        return ResponseEntity.ok(dailyStats);
     }
 }

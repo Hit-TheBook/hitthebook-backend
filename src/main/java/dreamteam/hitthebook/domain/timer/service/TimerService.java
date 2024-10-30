@@ -11,7 +11,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static dreamteam.hitthebook.domain.timer.dto.TimerDto.*;
 
@@ -71,6 +80,30 @@ public class TimerService {
     public TotalTimeDto getTotalTimer(String emailId, TimerDateDto timerDateDto){
         Member member = timerHelper.findMemberByEmailId(emailId);
         return timerHelper.getTotalStudyTime(member,timerDateDto);
+    }
+
+    public Map<LocalDate, Duration> getDailyStatisticsForWeek(String emailId, String subjectName, LocalDate date) {
+        Member member = timerHelper.findMemberByEmailId(emailId);
+
+        LocalDate sunday = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate saturday = sunday.plusDays(6);
+
+        List<Timer> timers = timerRepository.findWeeklyTimersByMemberAndSubject(
+                member, subjectName, sunday.atStartOfDay(), saturday.atTime(LocalTime.MAX));
+
+        Map<LocalDate, Duration> dailyStats = IntStream.range(0, 7)
+                .mapToObj(sunday::plusDays)
+                .collect(Collectors.toMap(
+                        d -> d,
+                        d -> Duration.ZERO
+                ));
+
+        for (Timer timer : timers) {
+            LocalDate timerDate = timer.getStudyStartTime().toLocalDate();
+            dailyStats.merge(timerDate, timer.getStudyTimeLength(), Duration::plus);
+        }
+
+        return dailyStats;
     }
 
     @Scheduled(cron = "0 0 5 * * ?")
