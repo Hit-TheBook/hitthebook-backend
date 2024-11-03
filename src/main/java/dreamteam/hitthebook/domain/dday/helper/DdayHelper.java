@@ -5,14 +5,12 @@ import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.enumulation.DdayTypeEnum;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
-import dreamteam.hitthebook.domain.member.entity.Member;
-import dreamteam.hitthebook.domain.member.repository.MemberRepository;
+import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.login.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

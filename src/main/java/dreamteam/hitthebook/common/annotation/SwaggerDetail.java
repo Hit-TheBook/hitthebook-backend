@@ -189,7 +189,7 @@ public class SwaggerDetail {
 
     //PlannerController
     @Operation(summary = "플래너에 일정 추가하기", description = "플래너에 일정들을 추가한다." +
-            "겹치는 일정이 있으면 배제한다(그렇게 만들기 위한 로직은 아직 구현중...)")
+            "겹치는 일정이 있으면 배제한다")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface PlannerAddScheduleDetail{
@@ -199,6 +199,12 @@ public class SwaggerDetail {
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface PlannerFindScheduleDetail{
+    }
+
+    @Operation(summary = "일별 플래너 리스트 전체 불러오기(유형구분없이)", description = "일정의 종류를 구분하지 않는다, 또한 날짜를 파라미터로 입력한다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface PlannerAllFindScheduleDetail{
     }
 
     @Operation(summary = "스케줄에 피드백 추가하기", description = "스케쥴에 피드백을 추가한다. 예외처리검사는 본인인지와" +

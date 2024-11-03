@@ -2,7 +2,6 @@ package dreamteam.hitthebook.domain.login.entity;
 
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,9 +14,8 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE Api_Token SET is_deleted = true WHERE token_id = ?")
-@Getter
-@Setter
+@SQLDelete(sql = "UPDATE api_token SET is_deleted = true WHERE token_id = ?")
+@Getter @Setter
 public class ApiToken extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

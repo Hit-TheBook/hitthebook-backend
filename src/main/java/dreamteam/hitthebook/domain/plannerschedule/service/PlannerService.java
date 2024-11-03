@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.plannerschedule.service;
 
-import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerReview;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
@@ -30,7 +30,7 @@ public class PlannerService {
         Member member = plannerHelper.findMemberByEmailId(emailId);
         plannerHelper.checkInvalidStartTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
         plannerHelper.checkSameDateOfScheduleTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
-        plannerHelper.checkSameTimeOfSchedule(member, scheduleType, scheduleRequestDto);
+        plannerHelper.checkSameTimeOfSchedule(member, scheduleRequestDto);
         if(scheduleType == ScheduleTypeEnum.EVENT){
             plannerHelper.createNewPlannerScheduleEvent(scheduleRequestDto, member);
         }
@@ -45,9 +45,14 @@ public class PlannerService {
         return plannerHelper.toScheduleListDto(member, scheduleType, scheduleAt);
     }
 
+    public ScheduleListDto findAllSchedule(String emailId, LocalDateTime scheduleAt){
+        Member member = plannerHelper.findMemberByEmailId(emailId);
+        return plannerHelper.toScheduleAllListDto(member, scheduleAt);
+    }
+
     public void feedbackSchedule(ScheduleTypeEnum scheduleType, String emailId, Long plannerScheduleId, FeedbackTypeEnum feedbackType){
         Member member = plannerHelper.findMemberByEmailId(emailId);
-        PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerId(plannerScheduleId);
+        PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerScheduleId(plannerScheduleId);
         plannerHelper.checkValidScheduleType(scheduleType, plannerSchedule);
         plannerHelper.checkScheduleEditPermission(plannerSchedule, member);
         plannerHelper.updateFeedbackStatus(plannerSchedule, feedbackType);
@@ -55,7 +60,7 @@ public class PlannerService {
 
     public void createPostponeSchedule(ScheduleTypeEnum scheduleType, String emailId, Long plannerScheduleId, PostPoneDto postPoneDto){
         Member member = plannerHelper.findMemberByEmailId(emailId);
-        PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerId(plannerScheduleId);
+        PlannerSchedule plannerSchedule = plannerHelper.findPlannerScheduleBySchedulePlannerScheduleId(plannerScheduleId);
         plannerHelper.checkScheduleEditPermission(plannerSchedule, member);
         plannerHelper.checkValidScheduleType(scheduleType, plannerSchedule);
         plannerHelper.checkInvalidStartTime(postPoneDto.getStartAt(), postPoneDto.getEndAt());

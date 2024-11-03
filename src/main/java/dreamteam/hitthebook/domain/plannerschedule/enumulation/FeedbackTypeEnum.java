@@ -4,6 +4,5 @@ public enum FeedbackTypeEnum {
     DONE, // 완료 O
     PARTIAL, // 부분성공 (세모)
     FAILED, // 실패 X
-    POSTPONED, // 미뤘음
-    NONE // 아직 미정
+    POSTPONED // 미뤘음
 }

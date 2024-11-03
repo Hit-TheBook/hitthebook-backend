@@ -3,7 +3,7 @@ package dreamteam.hitthebook.domain.dday.entity;
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.dday.dto.DdayDto;
 import dreamteam.hitthebook.domain.dday.enumulation.DdayTypeEnum;
-import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.login.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

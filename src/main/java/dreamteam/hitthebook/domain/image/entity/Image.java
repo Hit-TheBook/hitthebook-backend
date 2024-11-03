@@ -2,8 +2,6 @@ package dreamteam.hitthebook.domain.image.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.emblem.entity.Emblem;
-import dreamteam.hitthebook.domain.mission.entity.Mission;
-import dreamteam.hitthebook.domain.missionpost.entity.MissionPost;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,14 +21,6 @@ public class Image extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
     private Long imageId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mission_id")
-    private Mission mission;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mission_post_id")
-    private MissionPost missionPost;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emblem_id")

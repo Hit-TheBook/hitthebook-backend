@@ -1,6 +1,6 @@
-package dreamteam.hitthebook.domain.member.repository;
+package dreamteam.hitthebook.domain.login.repository;
 
-import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.login.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

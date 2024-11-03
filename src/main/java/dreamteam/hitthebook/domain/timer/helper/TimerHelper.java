@@ -1,7 +1,7 @@
 package dreamteam.hitthebook.domain.timer.helper;
 
-import dreamteam.hitthebook.domain.member.entity.Member;
-import dreamteam.hitthebook.domain.member.repository.MemberRepository;
+import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.login.repository.MemberRepository;
 import dreamteam.hitthebook.domain.timer.entity.Timer;
 import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
 import lombok.RequiredArgsConstructor;

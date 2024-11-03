@@ -1,9 +1,8 @@
-package dreamteam.hitthebook.domain.member.entity;
+package dreamteam.hitthebook.domain.login.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.emblem.entity.Emblem;
 import dreamteam.hitthebook.domain.level.entity.Level;
-import dreamteam.hitthebook.domain.login.dto.LoginDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

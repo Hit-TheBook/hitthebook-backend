@@ -27,7 +27,8 @@ public class JwtAuthenticationFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
         String requestURI = httpRequest.getRequestURI();
-        log.info("URI : {}", requestURI);
+        String clientIp = getClientIp(httpRequest);
+        log.info("URI : {} / IP : {}", requestURI, clientIp);
 
 
         String jwt = jwtTokenHelper.getJwtFromRequest(httpRequest);
@@ -41,5 +42,20 @@ public class JwtAuthenticationFilter implements Filter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip != null && !ip.isEmpty() && !"unknown".equalsIgnoreCase(ip)) {
+            // X-Forwarded-For 헤더가 여러 IP를 포함할 수 있으므로 첫 번째 IP만 추출
+            return ip.split(",")[0];
+        }
+
+        ip = request.getHeader("X-Real-IP");
+        if (ip != null && !ip.isEmpty() && !"unknown".equalsIgnoreCase(ip)) {
+            return ip;
+        }
+
+        return request.getRemoteAddr();
     }
 }

@@ -48,6 +48,15 @@ public class PlannerController {
         return plannerService.findSchedule(emailId, scheduleType, scheduleDate);
     }
 
+    @GetMapping("/schdule/{scheduleDate}")
+    @SwaggerToken
+    @PlannerAllFindScheduleDetail
+    public ScheduleListDto scheduleAllFind(HttpServletRequest request,
+                                        @PathVariable(name = "scheduleDate") LocalDateTime scheduleDate){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        return plannerService.findAllSchedule(emailId, scheduleDate);
+    }
+
     @PatchMapping("/schedule/{scheduleType}/{plannerScheduleId}/{result}")
     @SwaggerToken
     @PlannerAddFeedbackDetail

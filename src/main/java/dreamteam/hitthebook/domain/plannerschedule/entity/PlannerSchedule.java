@@ -1,7 +1,7 @@
 package dreamteam.hitthebook.domain.plannerschedule.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.dto.PlannerDto;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
@@ -43,7 +43,7 @@ public class PlannerSchedule extends BaseEntity {
     private ScheduleTypeEnum scheduleType;
 
     @Enumerated(EnumType.STRING)
-    private FeedbackTypeEnum scheduleFeedback;
+    private FeedbackTypeEnum scheduleFeedback = FeedbackTypeEnum.FAILED;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -60,6 +60,8 @@ public class PlannerSchedule extends BaseEntity {
         this.scheduleContent = scheduleContent;
         this.scheduleType = scheduleType;
         this.member = member;
+        this.startAt = startAt;
+        this.endAt = endAt;
     }
 
     public PlannerSchedule(LocalDateTime scheduleAt, String scheduleTitle, String scheduleContent, ScheduleTypeEnum scheduleType, Member member,

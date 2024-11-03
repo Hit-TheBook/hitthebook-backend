@@ -1,7 +1,7 @@
 package dreamteam.hitthebook.domain.timer.service;
 
 
-import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.timer.entity.Timer;
 import dreamteam.hitthebook.domain.timer.helper.TimerHelper;
 import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
