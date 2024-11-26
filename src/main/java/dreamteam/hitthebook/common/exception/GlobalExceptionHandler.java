@@ -61,4 +61,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleDuplicatePasswordException(DuplicatePasswordException ex) {
         return ResponseEntity.status(449).body(ex.getMessage());
     }
+
+    @ExceptionHandler(DuplicateNicknameException.class)
+    public ResponseEntity<String> handleDuplicateNicknameException(DuplicateNicknameException ex){
+        return ResponseEntity.status(450).body(ex.getMessage());
+    }
 }

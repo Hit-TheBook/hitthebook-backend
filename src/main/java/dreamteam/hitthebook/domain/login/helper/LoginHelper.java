@@ -2,8 +2,6 @@ package dreamteam.hitthebook.domain.login.helper;
 
 import dreamteam.hitthebook.common.exception.*;
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
-import dreamteam.hitthebook.domain.login.entity.ApiToken;
-import dreamteam.hitthebook.domain.login.repository.ApiTokenRepository;
 import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.login.repository.MemberRepository;
 import jakarta.mail.MessagingException;
@@ -24,7 +22,6 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
@@ -34,7 +31,6 @@ import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
 @RequiredArgsConstructor
 public class LoginHelper {
     private final MemberRepository memberRepository;
-    private final ApiTokenRepository apiTokenRepository;
     private final JavaMailSender mailSender;
     private final AuthCodeHelper authCodeHelper;
     private final JwtTokenProvider jwtTokenProvider;
@@ -59,6 +55,11 @@ public class LoginHelper {
         return memberRepository.findByEmailId(emailId).orElseThrow(ResourceNotFoundException::new);
     }
 
+    // 중복된 닉네임이 존재한다면 450번 상태코드
+    public void findSameNickname(String nickname){
+        if(memberRepository.findByNickname(nickname).isPresent()){throw new DuplicateNicknameException();}
+    }
+
     // 이메일이 존재한다면 예외처리(회원가입시에 진행하므로 중복되는 이메일을 검사)
     public void verifyEmailAvailability(String emailId){
         if(memberRepository.findByEmailId(emailId).isPresent()){throw new DuplicateIDException();}
@@ -66,7 +67,7 @@ public class LoginHelper {
 
     // 존재하지 않는 이메일이라면 예외처리 (비밀번호 찾기에 이용하기 때문에 존재하는 이메일만 인증번호 발송을 진행함)
     public void verifyEmailExits(String emailId){
-        if(memberRepository.findByEmailId(emailId).isEmpty()){throw new DuplicateIDException();}
+        if(memberRepository.findByEmailId(emailId).isEmpty()){throw new ResourceNotFoundException();}
     }
 
     // 8자~16자의 비밀번호, 소문자/대문자/숫자/특수문자 중에서 2가지 이상을 필요로 함
@@ -113,7 +114,7 @@ public class LoginHelper {
 
         byte[] nicknameBytes = nickname.getBytes(StandardCharsets.UTF_8);
         int length = nicknameBytes.length;
-        if (length <= 6 || length >= 18) { // 한글 2자(6바이트) ~ 6자(18바이트) 기준 2자~6자
+        if (length < 6 || length > 18) { // 한글 2자(6바이트) ~ 6자(18바이트) 기준 2자~6자
             throw new InvalidFormatException();
         }
 
@@ -122,35 +123,21 @@ public class LoginHelper {
         }
     }
 
-    // 리프레시토큰을 이용하여 DB에서 유효기간 내의 리프레시토큰 검색, 만료 기한 데이터는 일단 임시
-    public ApiToken findRefreshTokenAtDBByToken(String refreshToken){
-        return apiTokenRepository.findByRefreshTokenAndCreatedAtAfter(refreshToken, LocalDateTime.now().minusDays(refreshExpiration)).orElseThrow(InvalidTokenException::new);
-    }
-
-    //리프레시 토큰이 존재한다면, 제거해서 갱신을 대비
-    public void ifExistRefreshTokenDelete(Member member){
-        ApiToken originToken = apiTokenRepository.findByMemberAndCreatedAtAfter(member,LocalDateTime.now().minusDays(refreshExpiration));
-        if(originToken != null){
-            deleteRefreshToken(originToken);
+    public void checkVerifyToken(String token){
+        if(!jwtTokenProvider.validateToken(token)){
+            throw new InvalidTokenException();
         }
     }
 
-    // 리프레시토큰 제거
-    public void deleteRefreshToken(ApiToken token){ // 리프레시토큰을 제거
-        apiTokenRepository.delete(token);
-    }
-
-    // 리프레시토큰을 저장
-    public void saveRefreshToken(String refreshToken, Member member){
-        ApiToken token = new ApiToken(refreshToken, member);
-        apiTokenRepository.save(token);
+    public Member findMemberByRefreshToken(String refreshToken){
+        String emailId = jwtTokenProvider.getEmailIdFromJWT(refreshToken);
+        return memberRepository.findByEmailId(emailId).orElseThrow(IDNotFoundException::new);
     }
 
     // 임시 토큰 발급 관련
     public LoginTokenDto toTempTokenDto(Member member){
         String accessToken = jwtTokenProvider.generateEternalToken(member);
         String refreshToken = jwtTokenProvider.generateEternalToken(member);
-        saveRefreshToken(refreshToken, member);
         return new LoginTokenDto("TempToken issued successfully", accessToken, refreshToken);
     }
 
@@ -158,7 +145,6 @@ public class LoginHelper {
     public LoginTokenDto toLoginTokenDto(Member member){
         String accessToken = jwtTokenProvider.generateAccessToken(member);
         String refreshToken = jwtTokenProvider.generateRefreshToken(member);
-        saveRefreshToken(refreshToken, member);
         return new LoginTokenDto("UserToken issued successfully", accessToken, refreshToken);
     }
 

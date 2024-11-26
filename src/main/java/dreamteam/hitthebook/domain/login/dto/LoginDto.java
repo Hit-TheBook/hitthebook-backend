@@ -60,4 +60,9 @@ public class LoginDto {
         @NotBlank
         public String password;
     }
+
+    public static class NicknameDto{
+        @NotBlank
+        public String nickname;
+    }
 }

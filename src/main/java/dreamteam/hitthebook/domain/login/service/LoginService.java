@@ -2,13 +2,12 @@ package dreamteam.hitthebook.domain.login.service;
 
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
-import dreamteam.hitthebook.domain.login.entity.ApiToken;
 import dreamteam.hitthebook.domain.login.helper.LoginHelper;
-import dreamteam.hitthebook.domain.login.repository.ApiTokenRepository;
 import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.login.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,26 +20,23 @@ import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
 public class LoginService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final ApiTokenRepository tokenRepository;
     private final LoginHelper loginHelper;
 
-    public LoginTokenDto makeTokenService(LoginRequestDto loginRequestDto) {
-        Member member = memberRepository.findByEmailIdAndPassword(loginRequestDto.emailId, loginRequestDto.password).orElseThrow(ResourceNotFoundException::new);
-        loginHelper.ifExistRefreshTokenDelete(member);
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    public LoginTokenDto makeTokenService() {
+        Member member = memberRepository.findByEmailIdAndPassword("test3@example.com", passwordEncoder.encode("qwer1234")).orElseThrow(ResourceNotFoundException::new);
         return loginHelper.toTempTokenDto(member);
     }
 
     public LoginTokenDto loginService(LoginRequestDto loginRequestDto) {
         Member member = loginHelper.findMemberByEmailAndPassword(loginRequestDto.emailId, loginRequestDto.password);
-        loginHelper.ifExistRefreshTokenDelete(member);
         return loginHelper.toLoginTokenDto(member);
     }
 
     public LoginTokenDto issueTokenService(String refreshToken) {
-        ApiToken storedRefreshToken = loginHelper.findRefreshTokenAtDBByToken(refreshToken);
-        loginHelper.deleteRefreshToken(storedRefreshToken);
-        Member member = storedRefreshToken.getMember();
-        return loginHelper.toLoginTokenDto(member);
+        loginHelper.checkVerifyToken(refreshToken);
+        return loginHelper.toLoginTokenDto(loginHelper.findMemberByRefreshToken(refreshToken));
     }
 
     public void joinMember(JoinRequestDto joinRequestDto){
@@ -52,7 +48,6 @@ public class LoginService {
 
     public void authenticateEmail(EmailRequestDto emailRequestDto){
         loginHelper.verifyEmailAvailability(emailRequestDto.emailId);
-//        loginHelper.sendAuthCodeMail(loginHelper.makeAuthCodeMail(emailRequestDto.emailId)); 기존에 메세지만 보내던 헬퍼코드
         loginHelper.makeAuthCodeTemplateMail(emailRequestDto.emailId);
     }
 
@@ -68,6 +63,10 @@ public class LoginService {
     public void isSamePassword(PasswordDto passwordDto){
         Member member = loginHelper.findMemberByEmailId(passwordDto.emailId);
         loginHelper.checkPasswordMatch(member, passwordDto.password);
+    }
+
+    public void isSameNickname(NicknameDto nicknameDto){
+        loginHelper.findSameNickname(nicknameDto.nickname);
     }
 
     public void resetPassword(PasswordDto passwordDto){

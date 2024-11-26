@@ -37,8 +37,8 @@ public class JwtTokenProvider {
     }
 
     public String generateEternalToken(Member member) { return generateToken(member, eternalExpiration); }
-
     // 무제한 토큰 생성, 토큰 생성메소드의 인자에 만료기한 대입
+
 
     //토큰 생성 메소드
     private String generateToken(Member member, Long expiration) {

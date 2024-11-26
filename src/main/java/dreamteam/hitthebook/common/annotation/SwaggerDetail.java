@@ -101,6 +101,12 @@ public class SwaggerDetail {
     public @interface CheckPasswordMatchDetail {
     }
 
+    @Operation(summary = "닉네임 중복확인 검사하기", description = "존재하지 않는 닉네임이라면 200이다.")
+    @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface CheckNicknameMatchDetail {
+    }
+
     @Operation(summary = "토큰 재발급", description = "리프레시토큰이 유효하다면 새로운 토큰 재발급 및 리프레시토큰 갱신")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)

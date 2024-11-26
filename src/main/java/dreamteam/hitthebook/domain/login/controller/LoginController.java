@@ -26,11 +26,10 @@ public class LoginController {
         return loginService.loginService(loginRequestDto);
     }
 
-    @GetMapping("/temp/token")
+    @GetMapping("/test/testToken/tempToken")
     @TempTokenDetail
     public LoginTokenDto tempTokenMake(){
-        LoginRequestDto loginRequestDto = new LoginRequestDto("test3@example.com","password3");
-        return loginService.makeTokenService(loginRequestDto);
+        return loginService.makeTokenService();
     }
 
     @PostMapping("/join")
@@ -83,6 +82,15 @@ public class LoginController {
         loginService.isSamePassword(passwordDto);
         return CommonResponseDto.builder()
                 .message("Password is different to previous password")
+                .build();
+    }
+
+    @PostMapping("/member/nickname/check")
+    @CheckNicknameMatchDetail
+    public CommonResponseDto sameNicknameIs(@Valid @RequestBody NicknameDto nicknameDto){
+        loginService.isSameNickname(nicknameDto);
+        return CommonResponseDto.builder()
+                .message("Nickname is unique data")
                 .build();
     }
 

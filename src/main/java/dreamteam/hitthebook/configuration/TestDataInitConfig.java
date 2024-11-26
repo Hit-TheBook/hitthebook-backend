@@ -38,19 +38,25 @@ public class TestDataInitConfig {
         Member member1 = new Member();
         member1.setEmailId("test1@example.com");
         member1.setNickname("뉴진스");
-        member1.setPassword("password1");
+        member1.setPassword(passwordEncoder.encode("qwer1234"));
         memberRepository.save(member1);
 
         Member member2= new Member();
         member2.setEmailId("test2@example.com");
         member2.setNickname("에스파");
-        member2.setPassword(passwordEncoder.encode("password2"));
+        member2.setPassword(passwordEncoder.encode("qwer1234"));
         memberRepository.save(member2);
 
         Member member3 = new Member();
         member3.setEmailId("test3@example.com");
         member3.setNickname("아이브");
-        member3.setPassword("password3");
+        member3.setPassword(passwordEncoder.encode("qwer1234"));
+        memberRepository.save(member3);
+
+        Member member4 = new Member();
+        member4.setEmailId("test4@example.com");
+        member4.setNickname("예비군");
+        member4.setPassword(passwordEncoder.encode("qwer1234"));
         memberRepository.save(member3);
 
         // dday test data init
