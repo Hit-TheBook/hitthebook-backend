@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.common.jwt;
 
+import dreamteam.hitthebook.common.exception.InvalidTokenException;
 import dreamteam.hitthebook.configuration.PathsConfig;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,15 +33,19 @@ public class JwtAuthenticationFilter implements Filter {
 
 
         String jwt = jwtTokenHelper.getJwtFromRequest(httpRequest);
+        try{
+            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+                String emailId = jwtTokenProvider.getEmailIdFromJWT(jwt);
 
-        if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-            String emailId = jwtTokenProvider.getEmailIdFromJWT(jwt);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(emailId, null, new ArrayList<>());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(emailId, null, new ArrayList<>());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }catch (RuntimeException ex){
+            throw new InvalidTokenException();
         }
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
