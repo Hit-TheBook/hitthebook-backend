@@ -2,7 +2,6 @@ package dreamteam.hitthebook.domain.login.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.emblem.entity.Emblem;
-import dreamteam.hitthebook.domain.level.entity.Level;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,9 +41,7 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "emblem_id")
     private Emblem emblem;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "level_id")
-    private Level level;
+    private int level;
 
     public Member (String emailId, String paassword, String nickname){
         this.emailId = emailId;

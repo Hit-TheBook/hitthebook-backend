@@ -2,10 +2,12 @@ package dreamteam.hitthebook.domain.timer.controller;
 
 
 import dreamteam.hitthebook.common.annotation.SwaggerToken;
+import dreamteam.hitthebook.common.annotation.TimerSwaggerDetail;
 import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
 import dreamteam.hitthebook.domain.timer.service.TimerService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Map;
 
-import static dreamteam.hitthebook.common.annotation.SwaggerDetail.*;
 import static dreamteam.hitthebook.domain.timer.dto.TimerDto.*;
+import static dreamteam.hitthebook.common.annotation.TimerSwaggerDetail.*;
 
 @Slf4j
 @RestController
@@ -26,21 +28,23 @@ public class TimerController {
     private final JwtTokenHelper jwtTokenHelper;
     private final TimerService timerService;
 
-    @PostMapping("")
+    @PostMapping("/{subjectName}")
     @SwaggerToken
-    public CommonResponseDto timerCreate(HttpServletRequest request, TimerStartRequestDto timerStartRequestDto){
+    @AddTimerSubjectDetail
+    public CommonResponseDto timerCreate(HttpServletRequest request, @PathVariable(name = "subjectName")String subjectName){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        timerService.createTimer(timerStartRequestDto, emailId);
+        timerService.createTimer(subjectName, emailId);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
     }
 
-    @PostMapping("/{timerId}")
+    @PostMapping("/history/{timerId}")
     @SwaggerToken
-    public CommonResponseDto timerEndSet(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, TimerEndRequestDto timerEndRequestDto){
+    @AddTimerHistoryDetail
+    public CommonResponseDto timerUpdate(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, @Valid TimerHistoryRequestDto timerHistoryRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        timerService.setEndTimer(timerEndRequestDto,timerId,emailId);
+        timerService.updateTimer(timerHistoryRequestDto,timerId,emailId);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
@@ -48,6 +52,7 @@ public class TimerController {
 
     @DeleteMapping("/{timerId}")
     @SwaggerToken
+    @DeleteTimerSubjectDetail
     public CommonResponseDto timerDelete(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         timerService.deleteTimer(timerId,emailId);
@@ -56,11 +61,13 @@ public class TimerController {
                 .build();
     }
 
-    @PatchMapping("/{timerId}")
+    @PatchMapping("/{timerId}/{subjectName}")
     @SwaggerToken
-    public CommonResponseDto timerModify(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, TimerStartRequestDto timerStartRequestDto){
+    @ModifyTimerSubjectDetail
+    public CommonResponseDto timerSubjectNameModify(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request,
+                                                    @PathVariable(name = "subjectName")String subjectName){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        timerService.modifyTimerName(timerStartRequestDto,timerId,emailId);
+        timerService.modifyTimerName(subjectName, timerId, emailId);
         return CommonResponseDto.builder()
                 .message("successful")
                 .build();
@@ -68,40 +75,68 @@ public class TimerController {
 
     @GetMapping("/list")
     @SwaggerToken
-    public TimerListDto timerListFind(HttpServletRequest request, TimerDateDto timerDateDto){
+    @FindTimerListDetail
+    public TimerListDto timerListFind(HttpServletRequest request){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        return timerService.findTimerList(emailId,timerDateDto);
+        return timerService.findTimerList(emailId);
     }
 
-    @GetMapping("/totalResult")
+    @GetMapping("/today/data")
     @SwaggerToken
-    public TotalInfoDto totalTimerFind(HttpServletRequest request, TimerDateDto timerDateDto){
+    @GetTimerInfoDetail
+    public TodayTimerDataDto todayTimerDataGet(HttpServletRequest request){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        return timerService.getTotalTimer(emailId,timerDateDto);
+        return timerService.getTodayTimerData(emailId);
     }
 
-    @GetMapping("/dailyStatistics")
+    @GetMapping("/Statistics/daily/total/{targetDate}")
     @SwaggerToken
-    public ResponseEntity<Map<LocalDate, Duration>> getDailyStatistics(
-            HttpServletRequest request,
-            @RequestParam(required = false) String subjectName) {
-
+    @GetTotalDailyTimerStatisticsDetail
+    public TargetDateDailyStatistics totalDailyStatisticsGet(HttpServletRequest request, @PathVariable(name = "targetDate") LocalDate targetDate){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        Map<LocalDate, Duration> dailyStats = timerService.getDailyStatisticsForWeek(emailId, subjectName, LocalDate.now());
-        return ResponseEntity.ok(dailyStats);
+        return timerService.getTotalDailyStatistics(emailId, targetDate);
     }
 
-    @GetMapping("/weeklyStatistics")
+    @GetMapping("/Statistics/daily/subject/{targetDate}/{subjectName}")
     @SwaggerToken
-    public ResponseEntity<Map<LocalDate, Duration>> getWeeklyStatistics(
-            HttpServletRequest request,
-            @RequestParam(required = false) String subjectName) {
+    @GetSubjectDailyTimerStatisticsDetail
+    public TargetDateDailyStatistics subjectDailyStatisticsGet(HttpServletRequest request, @PathVariable(name = "targetDate") LocalDate targetDate,
+                                                       @PathVariable(name = "subjectName") String subjectName){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
-        Map<LocalDate, Duration> weeklyStats = timerService.getWeeklyStatisticsForLastFourWeeks(emailId, subjectName, LocalDate.now());
-        return ResponseEntity.ok(weeklyStats);
+        return timerService.getSubjectDailyStatistics(emailId, targetDate, subjectName);
     }
 
-//    public CommonResponseDto temp
+    @GetMapping("Statistics/weekly/total/{targetDate}")
+    @SwaggerToken
+    @GetTotalWeeklyTimerStatisticsDetail
+    public TargetDateWeeklyStatistics totalWeeklyStatisticsGet(HttpServletRequest request, @PathVariable(name = "targetDate") LocalDate targetDate){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        return timerService.getTotalWeeklyStatistics(emailId, targetDate);
+    }
+
+    @GetMapping("/Statistics/weekly/subject/{targetDate}/{subjectName}")
+    @SwaggerToken
+    @GetSubjectWeeklyTimerStatisticsDetail
+    public TargetDateWeeklyStatistics subjectWeeklyStatisticsGet(HttpServletRequest request, @PathVariable(name = "targetDate") LocalDate targetDate,
+                                                        @PathVariable(name = "subjectName") String subjectName){
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        return timerService.getSubjectWeeklyStatistics(emailId, targetDate, subjectName);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

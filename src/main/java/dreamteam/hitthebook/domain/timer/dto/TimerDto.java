@@ -1,21 +1,17 @@
 package dreamteam.hitthebook.domain.timer.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dreamteam.hitthebook.domain.timer.entity.Timer;
 import dreamteam.hitthebook.domain.timer.entity.TimerHistory;
-import dreamteam.hitthebook.domain.timer.helper.DurationSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class TimerDto {
 
@@ -39,14 +35,16 @@ public class TimerDto {
 
     @Data
     @NoArgsConstructor
-    public static class TimerEndRequestDto{
+    public static class TimerHistoryRequestDto {
 
         @Schema(description = "타이머 종료 시간", example = "00:00:00", type = "string")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "UTC")
+        @NotNull
         private Duration studyTimeLength;
 
         @Schema(description = "타이머 목표 시간", example = "00:00:00", type = "string")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "UTC")
+        @NotNull
         private Duration targetTime;
 
         @Schema(description = "타이머 획득 점수")
@@ -62,37 +60,25 @@ public class TimerDto {
 
     @Data
     @NoArgsConstructor
-    public static class TimerDateDto{
-
-        @Schema(description = "날짜 입력", example = "2024-11-12", type = "string")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
-        private LocalDate studyDate;
-
-    }
-
-    @Data
-    @NoArgsConstructor
     public static class TimerListDto {
-
-        private List<TimerContents> timerContentsList = new ArrayList<>();
+        private List<TimerContent> timerContentList = new ArrayList<>();
 
         public TimerListDto(List<Timer> timerList) {
             for (Timer timer : timerList) {
-                this.timerContentsList.add(new TimerContents(timer));
+                this.timerContentList.add(new TimerContent(timer));
             }
         }
     }
 
     @Data
     @NoArgsConstructor
-    public static class TimerContents {
-
+    public static class TimerContent {
         private Long timerId;
         private String subjectName;
         private Duration totalStudyTime;
         private int totalScore;
 
-        public TimerContents(Timer timer) {
+        public TimerContent(Timer timer) {
             this.timerId = timer.getTimerId();
             this.subjectName = timer.getSubjectName();
             this.totalStudyTime = timer.getTotalStudyTimeLength();
@@ -102,17 +88,52 @@ public class TimerDto {
 
     @Data
     @NoArgsConstructor
-    public static class TotalInfoDto {
-
-        private Duration studyTimeLength;
-
-        private int score;
-
+    public static class TodayTimerDataDto {
+        private Duration studyTimeLength = Duration.ZERO;
+        private int score = 0;
+        private int presentLevel;
+        public TodayTimerDataDto(List<TimerHistory> timerHistoryList, int presentLevel) {
+            this.presentLevel = presentLevel;
+            for (TimerHistory timerHistory : timerHistoryList) {
+                this.studyTimeLength = this.studyTimeLength.plus(timerHistory.getStudyTimeLength());
+                this.score += timerHistory.getScore();
+            }
+        }
     }
+
     @Data
     @NoArgsConstructor
-    public static class TimerStatisticsDto {
+    public static class TargetDateDailyStatistics{
+        private Duration monday;
+        private Duration tuesday;
+        private Duration wednesday;
+        private Duration thursday;
+        private Duration friday;
+        private Duration saturday;
+        private Duration sunday;
+        public TargetDateDailyStatistics(Duration monday, Duration tuesday, Duration wednesday, Duration thursday, Duration friday, Duration saturday, Duration sunday) {
+            this.monday = monday;
+            this.tuesday = tuesday;
+            this.wednesday = wednesday;
+            this.thursday = thursday;
+            this.friday = friday;
+            this.saturday = saturday;
+            this.sunday = sunday;
+        }
+    }
 
-        private Map<String, Long> statistics;
+    @Data
+    @NoArgsConstructor
+    public static class TargetDateWeeklyStatistics{
+        private Duration firstWeek;
+        private Duration secondWeek;
+        private Duration thirdWeek;
+        private Duration fourthWeek;
+        public TargetDateWeeklyStatistics(Duration firstWeek, Duration secondWeek, Duration thirdWeek, Duration fourthWeek) {
+            this.firstWeek = firstWeek;
+            this.secondWeek = secondWeek;
+            this.thirdWeek = thirdWeek;
+            this.fourthWeek = fourthWeek;
+        }
     }
 }

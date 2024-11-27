@@ -119,6 +119,9 @@ public class SwaggerDetail {
     public @interface ResetNewPasswordDetail {
     }
 
+
+
+
     //TimerController
     @Operation(summary = "과목 추가", description = "과목명에 따른 타이머를 추가한다.")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
@@ -187,6 +190,10 @@ public class SwaggerDetail {
     public @interface AssignmentStateDetail {
     }
 
+
+
+
+
     //PlannerController
     @Operation(summary = "플래너에 일정 추가하기", description = "플래너에 일정들을 추가한다." +
             "겹치는 일정이 있으면 배제한다")
@@ -239,6 +246,9 @@ public class SwaggerDetail {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface PlannerGetDailyReviewDetail{
     }
+
+
+
 
 
 }

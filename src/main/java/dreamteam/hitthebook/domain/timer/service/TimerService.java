@@ -1,13 +1,13 @@
 package dreamteam.hitthebook.domain.timer.service;
 
 
-import dreamteam.hitthebook.common.exception.DuplicateSubjectNameException;
+import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.timer.entity.Timer;
-import dreamteam.hitthebook.domain.timer.entity.TimerHistory;
 import dreamteam.hitthebook.domain.timer.helper.TimerHelper;
 import dreamteam.hitthebook.domain.timer.repository.TimerHistoryRepository;
 import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
+import jakarta.persistence.criteria.CommonAbstractCriteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,92 +32,74 @@ public class TimerService {
     private final TimerHelper timerHelper;
     private final TimerHistoryRepository timerHistoryRepository;
 
-    public void createTimer(TimerStartRequestDto timerStartRequestDto, String emailId){
+    public void createTimer(String subjectName, String emailId){
         Member member = timerHelper.findMemberByEmailId(emailId);
-        if (timerRepository.existsBySubjectName(timerStartRequestDto.getSubjectName())) {
-            throw new DuplicateSubjectNameException();
-        }
-        Timer timer = Timer.createByRequestDto(timerStartRequestDto,member);
+        timerHelper.checkSameSubjectName(subjectName);
+        Timer timer = Timer.createBySubjectName(subjectName, member);
         timerRepository.save(timer);
     }
 
-//    public void setStartTimer(TimerPlayRequestDto timerPlayRequestDto, Long timerId, String emailId)
-//    {
-//        Member member = timerHelper.findMemberByEmailId(emailId);
-//        Timer originTimer = timerHelper.findTimerByTimerId(timerId);
-//        timerHelper.checkTimerEditPermission(originTimer,member);
-//        timerHelper.createTimerHistory(timerPlayRequestDto, originTimer, member);
-//    }
-
-    public void setEndTimer(TimerEndRequestDto timerEndRequestDto, Long timerId, String emailId)
-    {
+    public void updateTimer(TimerHistoryRequestDto timerHistoryRequestDto, Long timerId, String emailId){
         Member member = timerHelper.findMemberByEmailId(emailId);
         Timer timer = timerHelper.findTimerByTimerId(timerId);
         timerHelper.checkTimerEditPermission(timer,member);
-        timerHelper.updateTimerEnd(timer,timerEndRequestDto);
-        if(timerEndRequestDto.getScore()!=0)
-            timerHelper.createTimerAlert(timer,timerEndRequestDto);
+        timerHelper.updateTimerData(timer, timerHistoryRequestDto);
+        timerHelper.updateMemberScore(timerHistoryRequestDto, member);
     }
 
-    public void deleteTimer(Long timerId, String emailId)
-    {
+    public void deleteTimer(Long timerId, String emailId){
         Member member = timerHelper.findMemberByEmailId(emailId);
         Timer timer = timerHelper.findTimerByTimerId(timerId);
         timerHelper.checkTimerEditPermission(timer,member);
-        timerHelper.deleteTimerHistoriesByTimerId(timerId);
+        timerHelper.deleteTimerHistoryByTimerId(timer);
         timerHelper.deleteTimerEntity(timer);
     }
 
-    public void modifyTimerName(TimerStartRequestDto timerStartRequestDto, Long timerId, String emailId)
-    {
+    public void modifyTimerName(String subjectName, Long timerId, String emailId){
         Member member = timerHelper.findMemberByEmailId(emailId);
-        if (timerRepository.existsBySubjectName(timerStartRequestDto.getSubjectName())) {
-            throw new DuplicateSubjectNameException();
-        }
+        timerHelper.checkSameSubjectName(subjectName);
         Timer timer = timerHelper.findTimerByTimerId(timerId);
         timerHelper.checkTimerEditPermission(timer,member);
-        timerHelper.updateTimerName(timer,timerStartRequestDto);
+        timerHelper.updateTimerName(timer, subjectName);
     }
 
-    public TimerListDto findTimerList(String emailId, TimerDateDto timerDateDto) {
+    public TimerListDto findTimerList(String emailId) {
         Member member = timerHelper.findMemberByEmailId(emailId);
-        LocalDate studyDate = timerDateDto.getStudyDate();
-        List<Timer> timerList = timerRepository.findByMemberAndStudyTime(member, studyDate);
-        return new TimerListDto(timerList);
+        return timerHelper.toTimerListDto(member);
     }
 
-    public TotalInfoDto getTotalTimer(String emailId, TimerDateDto timerDateDto){
+    public TodayTimerDataDto getTodayTimerData(String emailId){
         Member member = timerHelper.findMemberByEmailId(emailId);
-        return timerHelper.getTotalInfo(member,timerDateDto);
+        return timerHelper.toTodayTimerDataDto(member);
     }
 
-    public Map<LocalDate, Duration> getDailyStatisticsForWeek(String emailId, String subjectName, LocalDate date) {
+    public TargetDateDailyStatistics getTotalDailyStatistics(String emailId, LocalDate targetDate){
         Member member = timerHelper.findMemberByEmailId(emailId);
-
-        LocalDate sunday = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-        LocalDate saturday = sunday.plusDays(6);
-
-        Map<LocalDate, Duration> dailyStats = timerHelper.initializeDateMap(sunday, 7);
-        List<Timer> timerHistories = timerHelper.findTimersInRange(member, sunday, saturday);
-
-        timerHelper.addDurationToMap(dailyStats, timerHistories, subjectName, false);
-
-        return dailyStats;
+        return timerHelper.toTotalTargetDateDailyStatistics(member, targetDate);
     }
 
-    public Map<LocalDate, Duration> getWeeklyStatisticsForLastFourWeeks(String emailId, String subjectName, LocalDate date) {
+    public TargetDateDailyStatistics getSubjectDailyStatistics(String emailId, LocalDate targetDate, String subjectName){
         Member member = timerHelper.findMemberByEmailId(emailId);
-
-        LocalDate sundayOfCurrentWeek = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-        LocalDate sundayFourWeeksAgo = sundayOfCurrentWeek.minusWeeks(3);
-
-        Map<LocalDate, Duration> weeklyStats = timerHelper.initializeWeekMap(sundayFourWeeksAgo, 4);
-        List<Timer> timerHistories = timerHelper.findTimersInRange(member, sundayFourWeeksAgo, sundayOfCurrentWeek.plusDays(6));
-
-        timerHelper.addDurationToMap(weeklyStats, timerHistories, subjectName, true);
-
-        return weeklyStats;
+        return timerHelper.toSubjectTargetDateDailyStatistics(member, targetDate, subjectName);
     }
+
+    public TargetDateWeeklyStatistics getTotalWeeklyStatistics(String emailId, LocalDate targetDate){
+        Member member = timerHelper.findMemberByEmailId(emailId);
+        return timerHelper.toTotalTargetDateWeeklyStatistics(member, targetDate);
+    }
+
+    public TargetDateWeeklyStatistics getSubjectWeeklyStatistics(String emailId, LocalDate targetDate, String subjectName){
+        Member member = timerHelper.findMemberByEmailId(emailId);
+        return timerHelper.toSubjectTargetDateWeeklyStatistics(member, targetDate, subjectName);
+    }
+
+
+
+
+
+
+
+
 
     @Scheduled(cron = "0 0 5 * * ?")
     public void accessTimerDb() {

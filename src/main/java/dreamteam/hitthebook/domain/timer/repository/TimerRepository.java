@@ -12,26 +12,13 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TimerRepository extends JpaRepository<Timer, Long> {
+    Optional<Timer> findBySubjectName(String subjectName);
 
-    boolean existsBySubjectName(String subjectName);
+    List<Timer> findByMember(Member member);
 
-    Timer findBySubjectName(String subjectName);
 
-    @Query("SELECT th FROM Timer th WHERE th.member = :member AND FUNCTION('DATE', th.studyTime) = :studyDate")
-    List<Timer> findByMemberAndStudyTime(
-            @Param("member") Member member,
-            @Param("studyDate") LocalDate studyDate
-    );
-
-    @Query("SELECT t FROM Timer t WHERE t.member = :member AND FUNCTION('DATE', t.studyTime) = :studyDate")
-    List<Timer> findByMemberAndStudyTimeDate(@Param("member") Member member, @Param("studyDate") LocalDate studyDate);
-
-    List<Timer> findByMemberAndStudyTimeBetween(
-            Member member,
-            LocalDateTime startDate,
-            LocalDateTime endDat
-    );
 }

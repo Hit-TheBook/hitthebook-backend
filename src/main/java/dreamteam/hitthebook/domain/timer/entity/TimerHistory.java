@@ -2,6 +2,8 @@ package dreamteam.hitthebook.domain.timer.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.timer.dto.TimerDto;
+import dreamteam.hitthebook.common.util.DurationConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +14,7 @@ import org.hibernate.annotations.Where;
 
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -30,10 +33,12 @@ public class TimerHistory extends BaseEntity {
 
     private int score;
 
+    @Convert(converter = DurationConverter.class)
     private Duration studyTimeLength;
 
     private LocalDateTime studyTime;
 
+    @Convert(converter = DurationConverter.class)
     private Duration targetTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,4 +49,16 @@ public class TimerHistory extends BaseEntity {
     @JoinColumn(name = "timer_id")
     private Timer timer;
 
+    public TimerHistory(Member member, Timer timer, int score, Duration studyTimeLength, Duration targetTime) {
+        this.member = member;
+        this.timer = timer;
+        this.score = score;
+        this.studyTimeLength = studyTimeLength;
+        this.studyTime = LocalDateTime.now();
+        this.targetTime = targetTime;
+    }
+
+    public static TimerHistory createByTimerHistoryRequestDto(Timer timer, TimerDto.TimerHistoryRequestDto timerHistoryRequestDto, Member member) {
+        return new TimerHistory(member, timer, timerHistoryRequestDto.getScore(), timerHistoryRequestDto.getStudyTimeLength(), timerHistoryRequestDto.getTargetTime());
+    }
 }

@@ -4,6 +4,7 @@ import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.timer.dto.TimerDto;
 
+import dreamteam.hitthebook.common.util.DurationConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,34 +23,29 @@ import java.time.LocalDateTime;
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE timer SET is_deleted = true WHERE timer_id = ?")
 @Getter @Setter
-@Table(name = "timer")
 public class Timer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "timer_id", nullable = false)
     private Long timerId;
 
-    private LocalDateTime studyTime;
-
     private String subjectName;
 
-    private Duration totalStudyTimeLength;
+    @Convert(converter = DurationConverter.class)
+    private Duration totalStudyTimeLength = Duration.ZERO;
 
-    private int totalScore;
+    private int totalScore = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public Timer(LocalDateTime studyTime, String subjectName, Duration totalStudyTime, int totalScore, Member member) {
-        this.studyTime = studyTime;
+    public Timer(String subjectName, Member member) {
         this.subjectName = subjectName;
-        this.totalStudyTimeLength = totalStudyTime;
-        this.totalScore = totalScore;
         this.member = member;
     }
 
-    public static Timer createByRequestDto(TimerDto.TimerStartRequestDto timerStartRequestDto, Member member) {
-        return new Timer(LocalDateTime.now(),timerStartRequestDto.getSubjectName(), Duration.ZERO, 0 , member);
+    public static Timer createBySubjectName(String subjectName, Member member) {
+        return new Timer(subjectName, member);
     }
 }

@@ -66,4 +66,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleDuplicateNicknameException(DuplicateNicknameException ex){
         return ResponseEntity.status(450).body(ex.getMessage());
     }
+
+    @ExceptionHandler(DuplicateSubjectNameException.class)
+    public ResponseEntity<String> handleDuplicateSubjectNameException(DuplicateSubjectNameException ex){
+        return ResponseEntity.status(451).body(ex.getMessage());
+    }
 }
