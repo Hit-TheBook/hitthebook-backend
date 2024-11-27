@@ -51,7 +51,7 @@ public class TimerHelper {
     }
 
     public void updateTimerData(Timer timer, TimerHistoryRequestDto timerHistoryRequestDto) {
-        timer.setTotalStudyTimeLength(timer.getTotalStudyTimeLength().plus(timerHistoryRequestDto.getStudyTimeLength()));
+        timer.setTotalStudyTimeLength(timer.getTotalStudyTimeLength().plus(timerHistoryRequestDto.getStudyTimeLengthAsDuration()));
         timer.setTotalScore(timer.getTotalScore() + timerHistoryRequestDto.getScore());
         timerRepository.save(timer);
         createTimerHistory(timer, timerHistoryRequestDto, timer.getMember());

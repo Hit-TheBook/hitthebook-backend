@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,15 +41,23 @@ public class TimerDto {
         @Schema(description = "타이머 종료 시간", example = "00:00:00", type = "string")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "UTC")
         @NotNull
-        private Duration studyTimeLength;
+        private String studyTimeLength;
 
         @Schema(description = "타이머 목표 시간", example = "00:00:00", type = "string")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "UTC")
         @NotNull
-        private Duration targetTime;
+        private String targetTime;
 
         @Schema(description = "타이머 획득 점수")
         private int score;
+
+        public Duration getStudyTimeLengthAsDuration() {
+            return Duration.between(LocalTime.MIN, LocalTime.parse(this.studyTimeLength));
+        }
+
+        public Duration getTargetTimeAsDuration() {
+            return Duration.between(LocalTime.MIN, LocalTime.parse(this.targetTime));
+        }
     }
 
     @Data

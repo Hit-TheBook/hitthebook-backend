@@ -16,7 +16,11 @@ public class TimerSwaggerDetail {
     }
 
     @Operation(summary = "타이머 종료 api", description = "타이머가 종료됐을 때 서버로 전송, 타이머 히스토리 데이터 저장 및 " +
-            "타이머 과목별 데이터에 데이터를 갱신한다. 수정 및 생성이지만 요청의 의미가 큰것으로 판단되어 post사용")
+            "타이머 과목별 데이터에 데이터를 갱신한다. 수정 및 생성이지만 요청의 의미가 큰것으로 판단되어 post사용" +
+            "스웨거 보면 밑에 이상한거도 많이 뜨는데 그냥 무시하고" +
+            "studyTimeLength랑 targetTime랑 score 이렇게 세 개만 보내주면 됨" +
+            "스트링으로 저 형식만 맞도록 보내면 됨" +
+            "참고로 처리방식때문에 24시간 이상 처리를 못함")
     @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     public @interface AddTimerHistoryDetail{

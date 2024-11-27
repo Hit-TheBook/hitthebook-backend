@@ -59,6 +59,6 @@ public class TimerHistory extends BaseEntity {
     }
 
     public static TimerHistory createByTimerHistoryRequestDto(Timer timer, TimerDto.TimerHistoryRequestDto timerHistoryRequestDto, Member member) {
-        return new TimerHistory(member, timer, timerHistoryRequestDto.getScore(), timerHistoryRequestDto.getStudyTimeLength(), timerHistoryRequestDto.getTargetTime());
+        return new TimerHistory(member, timer, timerHistoryRequestDto.getScore(), timerHistoryRequestDto.getStudyTimeLengthAsDuration(), timerHistoryRequestDto.getTargetTimeAsDuration());
     }
 }
