@@ -7,7 +7,6 @@ import dreamteam.hitthebook.domain.login.entity.Member;
 import dreamteam.hitthebook.domain.login.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +21,8 @@ public class LoginService {
     private final JwtTokenProvider jwtTokenProvider;
     private final LoginHelper loginHelper;
 
-    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     public LoginTokenDto makeTokenService() {
-        Member member = memberRepository.findByEmailIdAndPassword("test3@example.com", passwordEncoder.encode("qwer1234")).orElseThrow(ResourceNotFoundException::new);
+        Member member = memberRepository.findByEmailId("test3@example.com").orElseThrow(ResourceNotFoundException::new);
         return loginHelper.toTempTokenDto(member);
     }
 

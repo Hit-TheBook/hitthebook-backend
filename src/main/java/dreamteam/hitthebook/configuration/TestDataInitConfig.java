@@ -57,7 +57,7 @@ public class TestDataInitConfig {
         member4.setEmailId("test4@example.com");
         member4.setNickname("예비군");
         member4.setPassword(passwordEncoder.encode("qwer1234"));
-        memberRepository.save(member3);
+        memberRepository.save(member4);
 
         // dday test data init
 

@@ -12,6 +12,7 @@ public class PathsConfig {
     };
 
     public static final String[] PUBLIC_WHITELIST = {
+            "/test/testToken/tempToken",
             "/",
             "/login",
             "/login/**",

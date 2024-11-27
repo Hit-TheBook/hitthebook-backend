@@ -31,9 +31,9 @@ public class JwtAuthenticationFilter implements Filter {
         String clientIp = getClientIp(httpRequest);
         log.info("URI : {} / IP : {}", requestURI, clientIp);
 
+        try {
+            String jwt = jwtTokenHelper.getJwtFromRequest(httpRequest);
 
-        String jwt = jwtTokenHelper.getJwtFromRequest(httpRequest);
-        try{
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 String emailId = jwtTokenProvider.getEmailIdFromJWT(jwt);
 
@@ -41,13 +41,21 @@ public class JwtAuthenticationFilter implements Filter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                throw new RuntimeException("Invalid Token");
             }
-        }catch (RuntimeException ex){
-            throw new InvalidTokenException();
-        }
 
-        filterChain.doFilter(servletRequest, servletResponse);
+            // 정상적인 경우 필터 체인을 계속 진행
+            filterChain.doFilter(servletRequest, servletResponse);
+        } catch (Exception ex) {
+            // 토큰 인증 실패 처리
+            log.error("Token authentication failed: {}", ex.getMessage());
+            httpResponse.setStatus(499);
+            httpResponse.setContentType("application/json");
+            httpResponse.getWriter().write("{\"error\": \"Invalid Token\"}");
+        }
     }
+
 
     private String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
