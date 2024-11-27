@@ -9,6 +9,10 @@ import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.repository.PlannerScheduleRepository;
+import dreamteam.hitthebook.domain.timer.entity.Timer;
+import dreamteam.hitthebook.domain.timer.entity.TimerHistory;
+import dreamteam.hitthebook.domain.timer.repository.TimerHistoryRepository;
+import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Configuration
@@ -27,6 +32,8 @@ public class TestDataInitConfig {
     private final PlannerScheduleRepository plannerScheduleRepository;
 
     private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final TimerRepository timerRepository;
+    private final TimerHistoryRepository timerHistoryRepository;
 
     @PostConstruct
     @Transactional
@@ -171,6 +178,111 @@ public class TestDataInitConfig {
         plannerSchedule6.setScheduleFeedback(FeedbackTypeEnum.FAILED);
         plannerSchedule6.setMember(member3);
         plannerScheduleRepository.save(plannerSchedule6);
+
+
+        //timer data init
+        Timer timer1 = new Timer();
+        timer1.setSubjectName("스프링부트");
+        timer1.setTotalStudyTimeLength(Duration.ofHours(7));
+        timer1.setTotalScore(510);
+        timer1.setMember(member3);
+        timerRepository.save(timer1);
+
+        TimerHistory timerHistory1 = new TimerHistory();
+        timerHistory1.setScore(70);
+        timerHistory1.setStudyTimeLength(Duration.ofHours(1));
+        timerHistory1.setStudyTime(LocalDateTime.now());
+        timerHistory1.setTargetTime(Duration.ofMinutes(50));
+        timerHistory1.setMember(member3);
+        timerHistory1.setTimer(timer1);
+        timerHistoryRepository.save(timerHistory1);
+
+        TimerHistory timerHistory2 = new TimerHistory();
+        timerHistory2.setScore(70);
+        timerHistory2.setStudyTimeLength(Duration.ofHours(1));
+        timerHistory2.setStudyTime(LocalDateTime.now().minusDays(1));
+        timerHistory2.setTargetTime(Duration.ofMinutes(50));
+        timerHistory2.setMember(member3);
+        timerHistory2.setTimer(timer1);
+        timerHistoryRepository.save(timerHistory2);
+
+        TimerHistory timerHistory3 = new TimerHistory();
+        timerHistory3.setScore(70);
+        timerHistory3.setStudyTimeLength(Duration.ofMinutes(50));
+        timerHistory3.setStudyTime(LocalDateTime.now().minusDays(3));
+        timerHistory3.setTargetTime(Duration.ofMinutes(30));
+        timerHistory3.setMember(member3);
+        timerHistory3.setTimer(timer1);
+        timerHistoryRepository.save(timerHistory3);
+
+        TimerHistory timerHistory4 = new TimerHistory();
+        timerHistory4.setScore(70);
+        timerHistory4.setStudyTimeLength(Duration.ofMinutes(50));
+        timerHistory4.setStudyTime(LocalDateTime.now().minusDays(4));
+        timerHistory4.setTargetTime(Duration.ofMinutes(30));
+        timerHistory4.setMember(member3);
+        timerHistory4.setTimer(timer1);
+        timerHistoryRepository.save(timerHistory4);
+
+        TimerHistory timerHistory5 = new TimerHistory();
+        timerHistory5.setScore(10);
+        timerHistory5.setStudyTimeLength(Duration.ofMinutes(10));
+        timerHistory5.setStudyTime(LocalDateTime.now().minusDays(5));
+        timerHistory5.setTargetTime(Duration.ofMinutes(10));
+        timerHistory5.setMember(member3);
+        timerHistory5.setTimer(timer1);
+        timerHistoryRepository.save(timerHistory5);
+
+        TimerHistory timerHistory6 = new TimerHistory();
+        timerHistory6.setScore(0);
+        timerHistory6.setStudyTimeLength(Duration.ofMinutes(50));
+        timerHistory6.setStudyTime(LocalDateTime.now().minusDays(6));
+        timerHistory6.setTargetTime(Duration.ofMinutes(55));
+        timerHistory6.setMember(member3);
+        timerHistory6.setTimer(timer1);
+        timerHistoryRepository.save(timerHistory6);
+
+        TimerHistory timerHistory7 = new TimerHistory();
+        timerHistory7.setScore(0);
+        timerHistory7.setStudyTimeLength(Duration.ofMinutes(20));
+        timerHistory7.setStudyTime(LocalDateTime.now().minusDays(7));
+        timerHistory7.setTargetTime(Duration.ofMinutes(50));
+        timerHistory7.setMember(member3);
+        timerHistory7.setTimer(timer1);
+        timerHistoryRepository.save(timerHistory7);
+
+        TimerHistory timerHistory8 = new TimerHistory();
+        timerHistory8.setScore(220);
+        timerHistory8.setStudyTimeLength(Duration.ofHours(2));
+        timerHistory8.setStudyTime(LocalDateTime.now().minusDays(12));
+        timerHistory8.setTargetTime(Duration.ofMinutes(20));
+        timerHistory8.setMember(member3);
+        timerHistory8.setTimer(timer1);
+        timerHistoryRepository.save(timerHistory8);
+
+
+        Timer timer2 = new Timer();
+        timer2.setSubjectName("플러터");
+        timer2.setTotalStudyTimeLength(Duration.ofHours(0));
+        timer2.setTotalScore(0);
+        timer2.setMember(member3);
+        timerRepository.save(timer2);
+
+        Timer timer3 = new Timer();
+        timer3.setSubjectName("리액트");
+        timer3.setTotalStudyTimeLength(Duration.ofMinutes(35));
+        timer3.setTotalScore(45);
+        timer3.setMember(member3);
+        timerRepository.save(timer3);
+
+        TimerHistory timerHistory9 = new TimerHistory();
+        timerHistory9.setScore(45);
+        timerHistory9.setStudyTimeLength(Duration.ofMinutes(35));
+        timerHistory9.setStudyTime(LocalDateTime.now().minusDays(1));
+        timerHistory9.setTargetTime(Duration.ofMinutes(25));
+        timerHistory9.setMember(member3);
+        timerHistory9.setTimer(timer3);
+        timerHistoryRepository.save(timerHistory9);
 
         log.info("Test data initialized");
     }

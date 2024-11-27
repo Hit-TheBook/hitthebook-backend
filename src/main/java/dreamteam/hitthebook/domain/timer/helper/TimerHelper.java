@@ -132,11 +132,12 @@ public class TimerHelper {
                 dailySumData.get(3),dailySumData.get(4),dailySumData.get(5),dailySumData.get(6));
     }
 
-    public List<Duration> getTotalDailyStudyTimeByDateAndSubjectName(Member member, LocalDate targetDate, String subjectName){
+    public List<Duration> getTotalDailyStudyTimeByDateAndSubjectName(Member member, LocalDate targetDate, String subjectName) {
         List<LocalDate> targetWeek = findWeekRangeByDate(targetDate);
+
         return targetWeek.stream()
-                .map(date -> timerHistoryRepository.findStudyTimeLengthsByMemberAndDateAndSubjectName(member, targetDate.getYear(),
-                                targetDate.getMonthValue(), targetDate.getDayOfMonth(), subjectName)
+                .map(date -> timerHistoryRepository.findStudyTimeLengthsByMemberAndDateAndSubjectName(
+                                member, date.getYear(), date.getMonthValue(), date.getDayOfMonth(), subjectName)
                         .stream()
                         .reduce(Duration.ZERO, Duration::plus)) // 각 날짜별 합계
                 .collect(Collectors.toList());
@@ -215,8 +216,8 @@ public class TimerHelper {
         List<List<LocalDate>> allWeeks = findWeeklyInformationByDate(member, targetDate);
         return allWeeks.stream()
                 .map(week -> week.stream()
-                        .map(date -> timerHistoryRepository.findStudyTimeLengthsByMemberAndDateAndSubjectName(member, targetDate.getYear(),
-                                targetDate.getMonthValue(), targetDate.getDayOfMonth(), subjectName))
+                        .map(date -> timerHistoryRepository.findStudyTimeLengthsByMemberAndDateAndSubjectName(member, date.getYear(),
+                                date.getMonthValue(), date.getDayOfMonth(), subjectName))
                         .flatMap(List::stream) // 각 날짜의 공부 시간을 하나의 스트림으로 변환
                         .reduce(Duration.ZERO, Duration::plus)) // 주간 합계 계산
                 .collect(Collectors.toList()); // 4주치 결과 리스트로 반환
