@@ -1,7 +1,6 @@
-package dreamteam.hitthebook.domain.login.helper;
+package dreamteam.hitthebook.domain.member.helper;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;

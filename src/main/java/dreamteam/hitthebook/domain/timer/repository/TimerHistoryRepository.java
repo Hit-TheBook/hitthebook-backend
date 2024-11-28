@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.timer.repository;
 
-import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.timer.entity.Timer;
 import dreamteam.hitthebook.domain.timer.entity.TimerHistory;
 import io.lettuce.core.dynamic.annotation.Param;

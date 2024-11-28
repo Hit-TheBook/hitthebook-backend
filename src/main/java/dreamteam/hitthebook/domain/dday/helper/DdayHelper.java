@@ -5,8 +5,8 @@ import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.enumulation.DdayTypeEnum;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
-import dreamteam.hitthebook.domain.login.entity.Member;
-import dreamteam.hitthebook.domain.login.repository.MemberRepository;
+import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

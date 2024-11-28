@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.plannerschedule.repository;
 
-import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

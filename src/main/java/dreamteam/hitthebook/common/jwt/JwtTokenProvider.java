@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.common.jwt;
 
-import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.member.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

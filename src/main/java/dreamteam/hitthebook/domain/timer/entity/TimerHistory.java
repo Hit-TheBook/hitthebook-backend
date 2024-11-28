@@ -1,7 +1,7 @@
 package dreamteam.hitthebook.domain.timer.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.timer.dto.TimerDto;
 import dreamteam.hitthebook.common.util.DurationConverter;
 import jakarta.persistence.*;
@@ -14,7 +14,6 @@ import org.hibernate.annotations.Where;
 
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 

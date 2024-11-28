@@ -1,24 +1,18 @@
 package dreamteam.hitthebook.domain.timer.service;
 
 
-import dreamteam.hitthebook.common.dto.CommonResponseDto;
-import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.timer.entity.Timer;
 import dreamteam.hitthebook.domain.timer.helper.TimerHelper;
 import dreamteam.hitthebook.domain.timer.repository.TimerHistoryRepository;
 import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
-import jakarta.persistence.criteria.CommonAbstractCriteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
-import java.util.*;
 
 import static dreamteam.hitthebook.domain.timer.dto.TimerDto.*;
 

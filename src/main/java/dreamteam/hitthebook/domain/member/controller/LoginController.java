@@ -1,9 +1,9 @@
-package dreamteam.hitthebook.domain.login.controller;
+package dreamteam.hitthebook.domain.member.controller;
 
 import dreamteam.hitthebook.common.annotation.SwaggerToken;
 import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
-import dreamteam.hitthebook.domain.login.service.LoginService;
+import dreamteam.hitthebook.domain.member.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import static dreamteam.hitthebook.common.annotation.SwaggerDetail.*;
-import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
+import static dreamteam.hitthebook.domain.member.dto.LoginDto.*;
 
 @Slf4j
 @RestController
@@ -19,6 +19,8 @@ import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
 public class LoginController {
     private final LoginService loginService;
     private final JwtTokenHelper jwtTokenHelper;
+
+    // 리프레시 토큰 로직 수정 필요
 
     @PostMapping("/login")
     @LoginDetail

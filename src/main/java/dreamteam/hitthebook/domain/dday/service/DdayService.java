@@ -3,7 +3,7 @@ package dreamteam.hitthebook.domain.dday.service;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.helper.DdayHelper;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
-import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

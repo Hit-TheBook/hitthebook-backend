@@ -1,7 +1,7 @@
 package dreamteam.hitthebook.domain.plannerschedule.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.dto.PlannerDto;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;

@@ -2,7 +2,7 @@ package dreamteam.hitthebook.domain.alert.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.alert.enumulation.TargetPageTypeEnum;
-import dreamteam.hitthebook.domain.login.entity.Member;
+import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,9 +1,9 @@
-package dreamteam.hitthebook.domain.login.helper;
+package dreamteam.hitthebook.domain.member.helper;
 
 import dreamteam.hitthebook.common.exception.*;
 import dreamteam.hitthebook.common.jwt.JwtTokenProvider;
-import dreamteam.hitthebook.domain.login.entity.Member;
-import dreamteam.hitthebook.domain.login.repository.MemberRepository;
+import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import org.thymeleaf.context.Context;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
-import static dreamteam.hitthebook.domain.login.dto.LoginDto.*;
+import static dreamteam.hitthebook.domain.member.dto.LoginDto.*;
 
 @Slf4j
 @Component

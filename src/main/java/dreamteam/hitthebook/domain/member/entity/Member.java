@@ -1,4 +1,4 @@
-package dreamteam.hitthebook.domain.login.entity;
+package dreamteam.hitthebook.domain.member.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.emblem.entity.Emblem;

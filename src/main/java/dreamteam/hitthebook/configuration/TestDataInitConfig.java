@@ -3,8 +3,8 @@ package dreamteam.hitthebook.configuration;
 
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
-import dreamteam.hitthebook.domain.login.entity.Member;
-import dreamteam.hitthebook.domain.login.repository.MemberRepository;
+import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
