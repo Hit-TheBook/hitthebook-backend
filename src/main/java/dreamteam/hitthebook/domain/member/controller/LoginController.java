@@ -21,7 +21,6 @@ public class LoginController {
     private final JwtTokenHelper jwtTokenHelper;
 
     // 리프레시 토큰 로직 수정 필요
-
     @PostMapping("/login")
     @LoginDetail
     public LoginTokenDto Login(@Valid @RequestBody LoginRequestDto loginRequestDto){

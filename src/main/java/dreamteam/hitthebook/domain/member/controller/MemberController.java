@@ -22,12 +22,14 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/nickname")
+    @GetNicknameDetail
     public NicknameDto nicknameGet(HttpServletRequest request) {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return memberService.getNickname(emailId);
     }
 
     @PutMapping("/nickname/{nickname}")
+    @ModifyNicknameDetail
     public CommonResponseDto nicknameModify(@PathVariable(name = "nickname") String nickname, HttpServletRequest request) {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         memberService.modifyNickname(emailId, nickname);
@@ -46,12 +48,14 @@ public class MemberController {
     }
 
     @GetMapping("/level")
+    @GetLevelDetail
     public LevelDto levelGet(HttpServletRequest request) {
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return memberService.getLevel(emailId);
     }
 
     @GetMapping("/emblem")
+    @GetEmblemDetail
     public EmblemDto emblemGet(HttpServletRequest request){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return memberService.getEmblem(emailId);
