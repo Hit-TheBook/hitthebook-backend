@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import static dreamteam.hitthebook.common.annotation.SwaggerDetail.*;
+import static dreamteam.hitthebook.common.annotation.LoginSwaggerDetail.*;
 import static dreamteam.hitthebook.domain.member.dto.LoginDto.*;
 
 @Slf4j

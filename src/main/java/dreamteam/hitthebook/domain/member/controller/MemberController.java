@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import static dreamteam.hitthebook.domain.member.dto.MemberDto.*;
+import static dreamteam.hitthebook.common.annotation.MemberSwaggerDetail.*;
 
 @Slf4j
 @RestController("/member")
@@ -36,7 +37,7 @@ public class MemberController {
     }
 
     @PostMapping("/nickname/check/{nickname}")
-    @SwaggerDetail.CheckNicknameMatchDetail
+    @CheckNicknameMatchDetail
     public CommonResponseDto sameNicknameIs(@PathVariable(name = "nickname") String nickname){
         memberService.isSameNickname(nickname);
         return CommonResponseDto.builder()

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-import static dreamteam.hitthebook.common.annotation.SwaggerDetail.*;
+import static dreamteam.hitthebook.common.annotation.PlannerSwaggerDetail.*;
 import static dreamteam.hitthebook.domain.plannerschedule.dto.PlannerDto.*;
 
 @Slf4j

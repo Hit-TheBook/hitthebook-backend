@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.common.annotation.SwaggerToken;
 
-import static dreamteam.hitthebook.common.annotation.SwaggerDetail.*;
+import static dreamteam.hitthebook.common.annotation.DdaySwaggerDetail.*;
 import static dreamteam.hitthebook.domain.dday.dto.DdayDto.*;
 
 
