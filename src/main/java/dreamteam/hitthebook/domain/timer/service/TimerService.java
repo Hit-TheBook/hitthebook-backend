@@ -24,7 +24,6 @@ public class TimerService {
 
     private final TimerRepository timerRepository;
     private final TimerHelper timerHelper;
-    private final TimerHistoryRepository timerHistoryRepository;
 
     public void createTimer(String subjectName, String emailId){
         Member member = timerHelper.findMemberByEmailId(emailId);

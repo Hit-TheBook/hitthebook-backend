@@ -2,6 +2,7 @@ package dreamteam.hitthebook.domain.timer.helper;
 
 import dreamteam.hitthebook.common.exception.DuplicateSubjectNameException;
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
+import dreamteam.hitthebook.common.util.Level;
 import dreamteam.hitthebook.domain.alert.repository.AlertRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
@@ -30,6 +31,7 @@ public class TimerHelper {
     private final TimerRepository timerRepository;
     private final TimerHistoryRepository timerHistoryRepository;
     private final AlertRepository alertRepository;
+    private final List<Level> levels;
 
     public Member findMemberByEmailId(String emailId){
         return memberRepository.findByEmailId(emailId).orElseThrow(ResourceNotFoundException::new);
@@ -58,14 +60,24 @@ public class TimerHelper {
     }
 
     public void updateMemberScore(TimerHistoryRequestDto timerHistoryRequestDto, Member member){
-        Long newPoint = member.getPoint() + (long) timerHistoryRequestDto.getScore();
+        int newPoint = member.getPoint() + timerHistoryRequestDto.getScore();
         member.setPoint(newPoint);
-        updateMemberLevel(newPoint);
+        updateMemberLevel(member);
         memberRepository.save(member);
     }
 
-    public void updateMemberLevel(Long presentPoint){
-        // 레벨갱신 로직
+    public Level findLevelByPoints(int points) {
+        return levels.stream()
+                .filter(level -> points >= level.getMinPoint() && points <= level.getMaxPoint())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Point data is invalid"));
+    }
+
+    public void updateMemberLevel(Member member){
+        int points = member.getPoint();
+        Level level = findLevelByPoints(points);
+        member.setLevel(level.getLevel());
+        memberRepository.save(member);
     }
 
     public void checkTimerEditPermission(Timer timer, Member member){
@@ -90,21 +102,12 @@ public class TimerHelper {
         timerRepository.save(timer);
     }
 
-    public List<Timer> findTimerListByMember(Member member){
-        return timerRepository.findByMember(member);
-    }
-
     public List<TimerHistory> findTodayTimerHistoryByMember(Member member) {
-//        List<TimerHistory> timerHistoryList = new ArrayList<>();
-//        List<Timer> timerList = findTimerListByMember(member);
-//        for (Timer timer : timerList) {
-//            timerHistoryList.addAll(timerHistoryRepository.findByTimerAndToday(timer));
-//        }
-//        return timerHistoryList; -> db검색이 지나치게 많아서 비효율적인 방법이므로 jpa에서 jpql로 해결시도
         return timerHistoryRepository.findTodayTimerHistoryByMember(member);
     }
 
     public TodayTimerDataDto toTodayTimerDataDto(Member member) {
+        updateMemberLevel(member);
         return new TodayTimerDataDto(findTodayTimerHistoryByMember(member), member.getLevel());
     }
 
@@ -159,41 +162,6 @@ public class TimerHelper {
     }
 
     public List<Duration> getTotalWeeklyStudyTimeByDate(Member member, LocalDate targetDate){
-//        Duration sumDuration = Duration.ZERO;
-//        List<LocalDate> targetWeek1 = findWeekRangeByDate(targetDate.minusDays(21));
-//        List<LocalDate> targetWeek2 = findWeekRangeByDate(targetDate.minusDays(14));
-//        List<LocalDate> targetWeek3 = findWeekRangeByDate(targetDate.minusDays(7));
-//        List<LocalDate> targetWeek4 = findWeekRangeByDate(targetDate);
-//        for (LocalDate targetWeek : targetWeek1) {
-//            List<Duration> dayDurationList = timerHistoryRepository.findStudyTimeLengthsByMemberAndDate(member, targetDate.getYear(),
-//                    targetDate.getMonthValue(), targetDate.getDayOfMonth());
-//            for (Duration dayDuration : dayDurationList) {
-//                sumDuration = sumDuration.plus(dayDuration);
-//            }
-//        }
-//        for (LocalDate targetWeek : targetWeek2) {
-//            List<Duration> dayDurationList = timerHistoryRepository.findStudyTimeLengthsByMemberAndDate(member, targetDate.getYear(),
-//                    targetDate.getMonthValue(), targetDate.getDayOfMonth());
-//            for (Duration dayDuration : dayDurationList) {
-//                sumDuration = sumDuration.plus(dayDuration);
-//            }
-//        }
-//        for (LocalDate targetWeek : targetWeek3) {
-//            List<Duration> dayDurationList = timerHistoryRepository.findStudyTimeLengthsByMemberAndDate(member, targetDate.getYear(),
-//                    targetDate.getMonthValue(), targetDate.getDayOfMonth());
-//            for (Duration dayDuration : dayDurationList) {
-//                sumDuration = sumDuration.plus(dayDuration);
-//            }
-//        }
-//        for (LocalDate targetWeek : targetWeek4) {
-//            List<Duration> dayDurationList = timerHistoryRepository.findStudyTimeLengthsByMemberAndDate(member, targetDate.getYear(),
-//                    targetDate.getMonthValue(), targetDate.getDayOfMonth());
-//            for (Duration dayDuration : dayDurationList) {
-//                sumDuration = sumDuration.plus(dayDuration);
-//            }
-//        }
-//        return sumDuration;
-
         // 4주간의 날짜 리스트 생성
         List<List<LocalDate>> allWeeks = findWeeklyInformationByDate(member, targetDate);
 

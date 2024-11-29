@@ -18,24 +18,6 @@ public class TimerDto {
 
     @Data
     @NoArgsConstructor
-    public static class TimerStartRequestDto{
-
-        @Schema(description = "과목명", example = "수학", type = "string")
-        private String subjectName;
-
-    }
-
-    @Data
-    @NoArgsConstructor
-    public static class TimerPlayRequestDto{
-
-        @Schema(description = "타이머 목표 시간", example = "00:00:00", type = "string")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "UTC")
-        private Duration targetTime;
-    }
-
-    @Data
-    @NoArgsConstructor
     public static class TimerHistoryRequestDto {
 
         @Schema(description = "타이머 종료 시간", example = "00:00:00", type = "string")
@@ -58,13 +40,6 @@ public class TimerDto {
         public Duration getTargetTimeAsDuration() {
             return Duration.between(LocalTime.MIN, LocalTime.parse(this.targetTime));
         }
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class TimerEndResponseDto {
-        private int score;
     }
 
     @Data

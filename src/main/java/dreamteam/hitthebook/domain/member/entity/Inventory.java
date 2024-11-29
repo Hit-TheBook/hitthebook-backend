@@ -1,7 +1,6 @@
-package dreamteam.hitthebook.domain.image.entity;
+package dreamteam.hitthebook.domain.member.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.emblem.entity.Emblem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,17 +13,20 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE image SET is_deleted = true WHERE image_id = ?")
-@Getter @Setter
-public class Image extends BaseEntity {
+@SQLDelete(sql = "UPDATE inventory SET is_deleted = true WHERE inventory_id = ?")
+@Getter
+@Setter
+public class Inventory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
-    private Long imageId;
+    @Column(name = "inventory_id")
+    private Long inventoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emblem_id")
     private Emblem emblem;
 
-    private String imageUri;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 }

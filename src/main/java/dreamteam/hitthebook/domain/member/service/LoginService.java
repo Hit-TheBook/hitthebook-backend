@@ -18,7 +18,6 @@ import static dreamteam.hitthebook.domain.member.dto.LoginDto.*;
 @Transactional
 public class LoginService {
     private final MemberRepository memberRepository;
-    private final JwtTokenProvider jwtTokenProvider;
     private final LoginHelper loginHelper;
 
     public LoginTokenDto makeTokenService() {
@@ -60,10 +59,6 @@ public class LoginService {
     public void isSamePassword(PasswordDto passwordDto){
         Member member = loginHelper.findMemberByEmailId(passwordDto.emailId);
         loginHelper.checkPasswordMatch(member, passwordDto.password);
-    }
-
-    public void isSameNickname(NicknameDto nicknameDto){
-        loginHelper.findSameNickname(nicknameDto.nickname);
     }
 
     public void resetPassword(PasswordDto passwordDto){

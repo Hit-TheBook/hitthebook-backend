@@ -87,15 +87,6 @@ public class LoginController {
                 .build();
     }
 
-    @PostMapping("/member/nickname/check")
-    @CheckNicknameMatchDetail
-    public CommonResponseDto sameNicknameIs(@Valid @RequestBody NicknameDto nicknameDto){
-        loginService.isSameNickname(nicknameDto);
-        return CommonResponseDto.builder()
-                .message("Nickname is unique data")
-                .build();
-    }
-
     //post가 더 적절한 것으로 판단됨
     @PostMapping("/forget/password/reset")
     public CommonResponseDto passwordReset(@Valid @RequestBody PasswordDto passwordDto){

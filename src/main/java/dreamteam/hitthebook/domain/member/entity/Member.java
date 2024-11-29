@@ -1,7 +1,6 @@
 package dreamteam.hitthebook.domain.member.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.emblem.entity.Emblem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,13 +34,9 @@ public class Member extends BaseEntity {
     private LocalDateTime lastLoginedAt;
 
     @Column(name = "point")
-    private Long point = 0L;
+    private int point = 0;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "emblem_id")
-    private Emblem emblem;
-
-    private int level;
+    private int level = 1;
 
     public Member (String emailId, String paassword, String nickname){
         this.emailId = emailId;

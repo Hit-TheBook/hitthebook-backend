@@ -3,7 +3,12 @@ package dreamteam.hitthebook.configuration;
 
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
+import dreamteam.hitthebook.domain.member.entity.Emblem;
+import dreamteam.hitthebook.domain.member.entity.Inventory;
 import dreamteam.hitthebook.domain.member.entity.Member;
+import dreamteam.hitthebook.domain.member.enumulation.EmblemEnumlation;
+import dreamteam.hitthebook.domain.member.repository.EmblemRepository;
+import dreamteam.hitthebook.domain.member.repository.InventoryRepository;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
@@ -34,6 +39,8 @@ public class TestDataInitConfig {
     private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final TimerRepository timerRepository;
     private final TimerHistoryRepository timerHistoryRepository;
+    private final EmblemRepository emblemRepository;
+    private final InventoryRepository inventoryRepository;
 
     @PostConstruct
     @Transactional
@@ -57,6 +64,7 @@ public class TestDataInitConfig {
         Member member3 = new Member();
         member3.setEmailId("test3@example.com");
         member3.setNickname("아이브");
+        member3.setPoint(123);
         member3.setPassword(passwordEncoder.encode("qwer1234"));
         memberRepository.save(member3);
 
@@ -283,6 +291,158 @@ public class TestDataInitConfig {
         timerHistory9.setMember(member3);
         timerHistory9.setTimer(timer3);
         timerHistoryRepository.save(timerHistory9);
+
+
+        //emblem init data
+
+        Emblem emblem1 = new Emblem();
+        emblem1.setEmblemName(EmblemEnumlation.TIMERSUBJECT1H);
+        emblem1.setEmblemContent("누적 1시간 달성(과목)");
+        emblemRepository.save(emblem1);
+
+        Emblem emblem2 = new Emblem();
+        emblem2.setEmblemName(EmblemEnumlation.TIMERSUBJECT2H);
+        emblem2.setEmblemContent("누적 2시간 달성(과목)");
+        emblemRepository.save(emblem2);
+
+        Emblem emblem3 = new Emblem();
+        emblem3.setEmblemName(EmblemEnumlation.TIMERSUBJECT3H);
+        emblem3.setEmblemContent("누적 3시간 달성(과목)");
+        emblemRepository.save(emblem3);
+
+        Emblem emblem4 = new Emblem();
+        emblem4.setEmblemName(EmblemEnumlation.TIMERSUBJECT15M);
+        emblem4.setEmblemContent("누적 15분 달성(과목)");
+        emblemRepository.save(emblem4);
+
+        Emblem emblem5 = new Emblem();
+        emblem5.setEmblemName(EmblemEnumlation.TIMERSUBJECT30M);
+        emblem5.setEmblemContent("누적 30분 달성(과목)");
+        emblemRepository.save(emblem5);
+
+        Emblem emblem6 = new Emblem();
+        emblem6.setEmblemName(EmblemEnumlation.PLANNERSEQUENCE2D);
+        emblem6.setEmblemContent("연속 2일 플래너 사용");
+        emblemRepository.save(emblem6);
+
+        Emblem emblem7 = new Emblem();
+        emblem7.setEmblemName(EmblemEnumlation.PLANNERSEQUENCE7D);
+        emblem7.setEmblemContent("연속 7일 플래너 사용");
+        emblemRepository.save(emblem7);
+
+        Emblem emblem8 = new Emblem();
+        emblem8.setEmblemName(EmblemEnumlation.PLANNERSEQUENCE14D);
+        emblem8.setEmblemContent("연속 14일 플래너 사용");
+        emblemRepository.save(emblem8);
+
+        Emblem emblem9 = new Emblem();
+        emblem9.setEmblemName(EmblemEnumlation.PLANNERSEQUENCE28D);
+        emblem9.setEmblemContent("연속 28일 플래너 사용");
+        emblemRepository.save(emblem9);
+
+        Emblem emblem10 = new Emblem();
+        emblem10.setEmblemName(EmblemEnumlation.PLANNERSTUDYFIRST);
+        emblem10.setEmblemContent("첫 공부 플래너 추가");
+
+        Emblem emblem11 = new Emblem();
+        emblem11.setEmblemName(EmblemEnumlation.PLANNERSCHEDULEFIRST);
+        emblem11.setEmblemContent("첫 일정 플래너 추가");
+        emblemRepository.save(emblem11);
+
+        Emblem emblem12 = new Emblem();
+        emblem12.setEmblemName(EmblemEnumlation.DDAYFIRST);
+        emblem12.setEmblemContent("첫 디데이 추가");
+        emblemRepository.save(emblem12);
+
+        Emblem emblem13 = new Emblem();
+        emblem13.setEmblemName(EmblemEnumlation.TIMERGOALFIRST);
+        emblem13.setEmblemContent("타이머 첫 목표 달성");
+        emblemRepository.save(emblem13);
+
+        Emblem emblem14 = new Emblem();
+        emblem14.setEmblemName(EmblemEnumlation.TIMERFIRST);
+        emblem14.setEmblemContent("첫 타이머 시작");
+        emblemRepository.save(emblem14);
+
+        Emblem emblem15 = new Emblem();
+        emblem15.setEmblemName(EmblemEnumlation.TIMERTOTAL6H);
+        emblem15.setEmblemContent("타이머 누적 6시간 달성");
+        emblemRepository.save(emblem15);
+
+        Emblem emblem16 = new Emblem();
+        emblem16.setEmblemName(EmblemEnumlation.TIMERTOTAL9H);
+        emblem16.setEmblemContent("타이머 누적 9시간 달성");
+        emblemRepository.save(emblem16);
+
+        Emblem emblem17 = new Emblem();
+        emblem17.setEmblemName(EmblemEnumlation.TIMERTOTAL12H);
+        emblem17.setEmblemContent("타이머 누적 12시간 달성");
+        emblemRepository.save(emblem17);
+
+        Emblem emblem18 = new Emblem();
+        emblem18.setEmblemName(EmblemEnumlation.TIMERTOTAL15H);
+        emblem18.setEmblemContent("타이머 누적 15시간 달성");
+        emblemRepository.save(emblem18);
+
+        Emblem emblem19 = new Emblem();
+        emblem19.setEmblemName(EmblemEnumlation.TIMERTOTAL20H);
+        emblem19.setEmblemContent("타이머 누적 20시간 달성");
+        emblemRepository.save(emblem19);
+
+        Emblem emblem20 = new Emblem();
+        emblem20.setEmblemName(EmblemEnumlation.TIMERTOTAL30H);
+        emblem20.setEmblemContent("타이머 누적 30시간 달성");
+        emblemRepository.save(emblem20);
+
+        Emblem emblem21 = new Emblem();
+        emblem21.setEmblemName(EmblemEnumlation.TIMERTOTAL50H);
+        emblem21.setEmblemContent("타이머 누적 50시간 달성");
+        emblemRepository.save(emblem21);
+
+        Emblem emblem22 = new Emblem();
+        emblem22.setEmblemName(EmblemEnumlation.TIMERTOTAL50H);
+        emblem22.setEmblemContent("타이머 누적 100시간 달성");
+        emblemRepository.save(emblem22);
+
+        Emblem emblem23 = new Emblem();
+        emblem23.setEmblemName(EmblemEnumlation.TIMERTOTAL50H);
+        emblem23.setEmblemContent("타이머 누적 200시간 달성");
+        emblemRepository.save(emblem23);
+
+        Emblem emblem24 = new Emblem();
+        emblem24.setEmblemName(EmblemEnumlation.TIMERTOTAL50H);
+        emblem24.setEmblemContent("타이머 누적 300시간 달성");
+        emblemRepository.save(emblem24);
+
+        Emblem emblem25 = new Emblem();
+        emblem25.setEmblemName(EmblemEnumlation.TIMERTOTAL50H);
+        emblem25.setEmblemContent("타이머 누적 400시간 달성");
+        emblemRepository.save(emblem25);
+
+        Inventory inventory1 = new Inventory();
+        inventory1.setMember(member3);
+        inventory1.setEmblem(emblem1);
+        inventoryRepository.save(inventory1);
+
+        Inventory inventory2 = new Inventory();
+        inventory2.setMember(member3);
+        inventory2.setEmblem(emblem2);
+        inventoryRepository.save(inventory2);
+
+        Inventory inventory3 = new Inventory();
+        inventory3.setMember(member3);
+        inventory3.setEmblem(emblem3);
+        inventoryRepository.save(inventory3);
+
+        Inventory inventory4 = new Inventory();
+        inventory4.setMember(member3);
+        inventory4.setEmblem(emblem4);
+        inventoryRepository.save(inventory4);
+
+        Inventory inventory5 = new Inventory();
+        inventory5.setMember(member3);
+        inventory5.setEmblem(emblem5);
+        inventoryRepository.save(inventory5);
 
         log.info("Test data initialized");
     }

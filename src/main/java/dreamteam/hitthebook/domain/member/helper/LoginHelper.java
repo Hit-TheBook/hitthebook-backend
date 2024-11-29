@@ -55,11 +55,6 @@ public class LoginHelper {
         return memberRepository.findByEmailId(emailId).orElseThrow(ResourceNotFoundException::new);
     }
 
-    // 중복된 닉네임이 존재한다면 450번 상태코드
-    public void findSameNickname(String nickname){
-        if(memberRepository.findByNickname(nickname).isPresent()){throw new DuplicateNicknameException();}
-    }
-
     // 이메일이 존재한다면 예외처리(회원가입시에 진행하므로 중복되는 이메일을 검사)
     public void verifyEmailAvailability(String emailId){
         if(memberRepository.findByEmailId(emailId).isPresent()){throw new DuplicateIDException();}
