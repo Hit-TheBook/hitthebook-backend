@@ -48,4 +48,10 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
                                                                       @Param("endAt") LocalDateTime endAt);
 
 
+    @Query("SELECT COUNT(ps) > 0 FROM PlannerSchedule ps WHERE ps.member = :member AND " +
+            "YEAR(ps.createdAt) = :year AND MONTH(ps.createdAt) = :month AND DAY(ps.createdAt) = :day")
+    boolean existsByMemberAndCreatedAt(@Param("member") Member member,
+                                       @Param("year") int year,
+                                       @Param("month") int month,
+                                       @Param("day") int day);
 }

@@ -19,15 +19,12 @@ public class TimerDto {
     @Data
     @NoArgsConstructor
     public static class TimerHistoryRequestDto {
-
         @Schema(description = "타이머 종료 시간", example = "00:00:00", type = "string")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "UTC")
-        @NotNull
         private String studyTimeLength;
 
         @Schema(description = "타이머 목표 시간", example = "00:00:00", type = "string")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "UTC")
-        @NotNull
         private String targetTime;
 
         @Schema(description = "타이머 획득 점수")

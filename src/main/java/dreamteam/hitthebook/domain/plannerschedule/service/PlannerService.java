@@ -1,5 +1,7 @@
 package dreamteam.hitthebook.domain.plannerschedule.service;
 
+import dreamteam.hitthebook.common.commonutil.PlannerUsedEvent;
+import dreamteam.hitthebook.common.commonutil.TimerUsedEvent;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerReview;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
@@ -10,6 +12,7 @@ import dreamteam.hitthebook.domain.plannerschedule.repository.PlannerReviewRepos
 import dreamteam.hitthebook.domain.plannerschedule.repository.PlannerScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,8 @@ public class PlannerService {
     private final PlannerReviewRepository plannerReviewRepository;
     private final PlannerScheduleRepository plannerScheduleRepository;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     public void createSchedule(ScheduleRequestDto scheduleRequestDto, ScheduleTypeEnum scheduleType, String emailId){
         Member member = plannerHelper.findMemberByEmailId(emailId);
         plannerHelper.checkInvalidStartTime(scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
@@ -38,6 +43,7 @@ public class PlannerService {
         else{
             plannerHelper.createNewPlannerScheduleSubject(scheduleRequestDto, member);
         }
+
     }
 
     public ScheduleListDto findSchedule(String emailId, ScheduleTypeEnum scheduleType, LocalDateTime scheduleAt){
@@ -56,6 +62,7 @@ public class PlannerService {
         plannerHelper.checkValidScheduleType(scheduleType, plannerSchedule);
         plannerHelper.checkScheduleEditPermission(plannerSchedule, member);
         plannerHelper.updateFeedbackStatus(plannerSchedule, feedbackType);
+        eventPublisher.publishEvent(new PlannerUsedEvent(member, plannerSchedule));
     }
 
     public void createPostponeSchedule(ScheduleTypeEnum scheduleType, String emailId, Long plannerScheduleId, PostPoneDto postPoneDto){
@@ -73,6 +80,7 @@ public class PlannerService {
         Member member = plannerHelper.findMemberByEmailId(emailId);
         plannerHelper.checkReviewPresentAtDate(member, reviewAt);// 있는지 없는지 검사하고 없을 경우에만 생성하고 있는 경우에는 예외처리
         PlannerReview plannerReview = PlannerReview.createByRequestDto(reviewAt, member);
+        // 플래너 엠블럼 분할해서 로직 바꿔야할듯, 그리고 개빡치는게 알람도 구현해야함...
         plannerReviewRepository.save(plannerReview);
     }
 

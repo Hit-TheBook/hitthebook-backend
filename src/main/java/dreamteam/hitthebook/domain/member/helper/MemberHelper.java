@@ -2,8 +2,7 @@ package dreamteam.hitthebook.domain.member.helper;
 
 import dreamteam.hitthebook.common.exception.DuplicateNicknameException;
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
-import dreamteam.hitthebook.common.util.Level;
-import dreamteam.hitthebook.domain.member.entity.Emblem;
+import dreamteam.hitthebook.common.commonutil.Level;
 import dreamteam.hitthebook.domain.member.entity.Inventory;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.EmblemRepository;

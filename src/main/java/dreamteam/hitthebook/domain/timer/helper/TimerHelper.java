@@ -2,7 +2,7 @@ package dreamteam.hitthebook.domain.timer.helper;
 
 import dreamteam.hitthebook.common.exception.DuplicateSubjectNameException;
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
-import dreamteam.hitthebook.common.util.Level;
+import dreamteam.hitthebook.common.commonutil.Level;
 import dreamteam.hitthebook.domain.alert.repository.AlertRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
@@ -47,21 +47,24 @@ public class TimerHelper {
         }
     }
 
-    public void createTimerHistory(Timer timer, TimerHistoryRequestDto timerHistoryRequestDto, Member member){
+    public TimerHistory createTimerHistory(Timer timer, TimerHistoryRequestDto timerHistoryRequestDto, Member member){
         TimerHistory timerHistory = TimerHistory.createByTimerHistoryRequestDto(timer, timerHistoryRequestDto, member);
         timerHistoryRepository.save(timerHistory);
+        return timerHistory;
     }
 
-    public void updateTimerData(Timer timer, TimerHistoryRequestDto timerHistoryRequestDto) {
+    public Timer updateTimerData(Timer timer, TimerHistoryRequestDto timerHistoryRequestDto) {
         timer.setTotalStudyTimeLength(timer.getTotalStudyTimeLength().plus(timerHistoryRequestDto.getStudyTimeLengthAsDuration()));
         timer.setTotalScore(timer.getTotalScore() + timerHistoryRequestDto.getScore());
         timerRepository.save(timer);
-        createTimerHistory(timer, timerHistoryRequestDto, timer.getMember());
+        return timer;
     }
 
-    public void updateMemberScore(TimerHistoryRequestDto timerHistoryRequestDto, Member member){
+    public void updateMemberTimerData(TimerHistoryRequestDto timerHistoryRequestDto, Member member){
         int newPoint = member.getPoint() + timerHistoryRequestDto.getScore();
+        Duration newDuration = member.getAllStudyTime().plus(timerHistoryRequestDto.getStudyTimeLengthAsDuration());
         member.setPoint(newPoint);
+        member.setAllStudyTime(newDuration);
         updateMemberLevel(member);
         memberRepository.save(member);
     }

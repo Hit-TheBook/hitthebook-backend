@@ -3,7 +3,7 @@ package dreamteam.hitthebook.domain.timer.entity;
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import dreamteam.hitthebook.domain.member.entity.Member;
 
-import dreamteam.hitthebook.common.util.DurationConverter;
+import dreamteam.hitthebook.common.commonutil.DurationConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

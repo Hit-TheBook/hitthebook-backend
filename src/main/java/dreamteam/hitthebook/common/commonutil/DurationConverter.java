@@ -1,4 +1,4 @@
-package dreamteam.hitthebook.common.util;
+package dreamteam.hitthebook.common.commonutil;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

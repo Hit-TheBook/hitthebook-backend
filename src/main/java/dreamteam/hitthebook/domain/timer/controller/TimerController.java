@@ -42,7 +42,7 @@ public class TimerController {
     @PostMapping("/history/{timerId}")
     @SwaggerToken
     @AddTimerHistoryDetail
-    public CommonResponseDto timerUpdate(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, @Valid TimerHistoryRequestDto timerHistoryRequestDto){
+    public CommonResponseDto timerUpdate(@PathVariable(name = "timerId") Long timerId, HttpServletRequest request, @RequestBody TimerHistoryRequestDto timerHistoryRequestDto){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         timerService.updateTimer(timerHistoryRequestDto,timerId,emailId);
         return CommonResponseDto.builder()

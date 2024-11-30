@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.domain.member.entity;
 
+import dreamteam.hitthebook.common.commonutil.DurationConverter;
 import dreamteam.hitthebook.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -37,6 +39,9 @@ public class Member extends BaseEntity {
     private int point = 0;
 
     private int level = 1;
+
+    @Convert(converter = DurationConverter.class)
+    private Duration allStudyTime = Duration.ZERO;
 
     public Member (String emailId, String paassword, String nickname){
         this.emailId = emailId;

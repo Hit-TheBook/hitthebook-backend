@@ -29,4 +29,13 @@ public class Inventory extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public Inventory(Emblem emblem, Member member) {
+        this.emblem = emblem;
+        this.member = member;
+    }
+
+    public static Inventory createInventory(Emblem emblem, Member member){
+        return new Inventory(emblem, member);
+    }
 }

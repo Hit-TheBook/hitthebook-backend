@@ -1,13 +1,15 @@
 package dreamteam.hitthebook.domain.timer.service;
 
 
+import dreamteam.hitthebook.common.commonutil.TimerUsedEvent;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.timer.entity.Timer;
+import dreamteam.hitthebook.domain.timer.entity.TimerHistory;
 import dreamteam.hitthebook.domain.timer.helper.TimerHelper;
-import dreamteam.hitthebook.domain.timer.repository.TimerHistoryRepository;
 import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ public class TimerService {
 
     private final TimerRepository timerRepository;
     private final TimerHelper timerHelper;
+    private final ApplicationEventPublisher eventPublisher;
 
     public void createTimer(String subjectName, String emailId){
         Member member = timerHelper.findMemberByEmailId(emailId);
@@ -36,8 +39,10 @@ public class TimerService {
         Member member = timerHelper.findMemberByEmailId(emailId);
         Timer timer = timerHelper.findTimerByTimerId(timerId);
         timerHelper.checkTimerEditPermission(timer,member);
+        timerHelper.updateMemberTimerData(timerHistoryRequestDto, member);
         timerHelper.updateTimerData(timer, timerHistoryRequestDto);
-        timerHelper.updateMemberScore(timerHistoryRequestDto, member);
+        TimerHistory timerHistory = timerHelper.createTimerHistory(timer, timerHistoryRequestDto, member);
+        eventPublisher.publishEvent(new TimerUsedEvent(member, timer, timerHistory));
     }
 
     public void deleteTimer(Long timerId, String emailId){

@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.configuration;
 
-import dreamteam.hitthebook.common.util.Level;
+import dreamteam.hitthebook.common.commonutil.Level;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

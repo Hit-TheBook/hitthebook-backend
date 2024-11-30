@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.domain.plannerschedule.helper;
 
+import dreamteam.hitthebook.common.commonutil.PlannerUsedEvent;
 import dreamteam.hitthebook.common.exception.InvalidTimeDataException;
 import dreamteam.hitthebook.common.exception.ModifyAuthenticationException;
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
@@ -13,6 +14,7 @@ import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.repository.PlannerReviewRepository;
 import dreamteam.hitthebook.domain.plannerschedule.repository.PlannerScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -28,6 +30,8 @@ public class PlannerHelper {
     private final PlannerReviewRepository plannerReviewRepository;
     private final PlannerScheduleRepository plannerScheduleRepository;
     private final AlertRepository alertRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     // emailId를 기반으로 멤버 검색
     public Member findMemberByEmailId(String emailId){
@@ -58,13 +62,14 @@ public class PlannerHelper {
     public void createNewPlannerScheduleEvent(ScheduleRequestDto scheduleRequestDto, Member member){
         PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, ScheduleTypeEnum.EVENT, member);
         plannerScheduleRepository.save(plannerSchedule);
-//        createNewPlannerScheduleEventAlert(plannerSchedule, member);
+        eventPublisher.publishEvent(new PlannerUsedEvent(member, plannerSchedule));
     }
 
     // 새로운 플래너스케쥴(과목) 추가
     public void createNewPlannerScheduleSubject(ScheduleRequestDto scheduleRequestDto, Member member){
         PlannerSchedule plannerSchedule = PlannerSchedule.createByRequestDto(scheduleRequestDto, ScheduleTypeEnum.SUBJECT, member);
         plannerScheduleRepository.save(plannerSchedule);
+        eventPublisher.publishEvent(new PlannerUsedEvent(member, plannerSchedule));
     }
 
     //시작 시간이 잘못되ㅇ었는지 확인(시작시간이 종료시간보다 나중인지)

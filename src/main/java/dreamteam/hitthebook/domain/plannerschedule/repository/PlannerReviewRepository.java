@@ -14,4 +14,11 @@ public interface PlannerReviewRepository extends JpaRepository<PlannerReview, Lo
             "MONTH(p.reviewAt) = MONTH(:reviewDate) AND " +
             "DAY(p.reviewAt) = DAY(:reviewDate)")
     PlannerReview findByMemberAndReviewAt(@Param("member") Member member, @Param("reviewDate") LocalDateTime reviewDate);
+
+    @Query("SELECT COUNT(pr) > 0 FROM PlannerReview pr WHERE pr.member = :member AND " +
+            "YEAR(pr.createdAt) = :year AND MONTH(pr.createdAt) = :month AND DAY(pr.createdAt) = :day")
+    boolean existsByMemberAndCreatedAt(@Param("member") Member member,
+                                       @Param("year") int year,
+                                       @Param("month") int month,
+                                       @Param("day") int day);
 }
