@@ -1,11 +1,13 @@
 package dreamteam.hitthebook.domain.dday.service;
 
+import dreamteam.hitthebook.common.commonutil.DdayUsedEvent;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.helper.DdayHelper;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import static dreamteam.hitthebook.domain.dday.dto.DdayDto.*;
 public class DdayService {
     private final DdayHelper ddayHelper;
     private final DdayRepository ddayRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     // 디데이 생성
     public void createDday(DdayRequestDto ddayRequestDto, String emailId){
@@ -25,6 +28,7 @@ public class DdayService {
         Member member = ddayHelper.findMemberByEmailId(emailId);
         Dday dday = Dday.createByRequestDto(ddayRequestDto, member);
         ddayRepository.save(dday);
+        eventPublisher.publishEvent(new DdayUsedEvent(member, dday));
     }
 
     // 디데이 수정

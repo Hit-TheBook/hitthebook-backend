@@ -1,5 +1,6 @@
 package dreamteam.hitthebook.common.commonutil;
 
+import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
 import dreamteam.hitthebook.domain.member.entity.Emblem;
 import dreamteam.hitthebook.domain.member.entity.Inventory;
@@ -130,15 +131,6 @@ public class EmblemEventListener {
         return fromSchedule || fromReview;
     }
 
-    private static final List<ConditionEmblem<?>> EMBLEM_PLANNER_CONDITIONS = List.of(
-            new ConditionEmblem<>(2, EmblemEnumlation.PLANNERSEQUENCE2D),
-            new ConditionEmblem<>(7, EmblemEnumlation.PLANNERSEQUENCE7D),
-            new ConditionEmblem<>(14, EmblemEnumlation.PLANNERSEQUENCE14D),
-            new ConditionEmblem<>(28, EmblemEnumlation.PLANNERSEQUENCE28D),
-            new ConditionEmblem<>("subject", EmblemEnumlation.PLANNERSTUDYFIRST),
-            new ConditionEmblem<>("schedule", EmblemEnumlation.PLANNERSCHEDULEFIRST)
-    );
-
     public boolean hasSequentialPlanner(Integer day, Member member){
         for(int i = 0; i < day; i++){
             if(!isUsedPlanner(LocalDate.now().minusDays(i), member)){
@@ -148,18 +140,38 @@ public class EmblemEventListener {
         return true;
     }
 
-    public void handlePlannerEmblem(Member member, PlannerSchedule plannerSchedule){
-        for (ConditionEmblem<?> conditionEmblem : EMBLEM_PLANNER_CONDITIONS) {
+    private static final List<ConditionEmblem<?>> EMBLEM_PLANNER_WHOLE_CONDITIONS = List.of(
+            new ConditionEmblem<>(2, EmblemEnumlation.PLANNERSEQUENCE2D),
+            new ConditionEmblem<>(7, EmblemEnumlation.PLANNERSEQUENCE7D),
+            new ConditionEmblem<>(14, EmblemEnumlation.PLANNERSEQUENCE14D),
+            new ConditionEmblem<>(28, EmblemEnumlation.PLANNERSEQUENCE28D)
+    );
+
+    private static final List<ConditionEmblem<?>> EMBLEM_PLANNER_SCHEDULE_CONDITIONS = List.of(
+            new ConditionEmblem<>("subject", EmblemEnumlation.PLANNERSTUDYFIRST),
+            new ConditionEmblem<>("schedule", EmblemEnumlation.PLANNERSCHEDULEFIRST)
+    );
+
+    public void handlePlannerScheduleEmblem(Member member, PlannerSchedule plannerSchedule){
+        for (ConditionEmblem<?> conditionEmblem : EMBLEM_PLANNER_SCHEDULE_CONDITIONS) {
+            Object condition = conditionEmblem.condition();
+            EmblemEnumlation emblemEnumlation = conditionEmblem.emblem();
+
+            if (condition instanceof String && condition.equals("subject") && plannerSchedule.getScheduleType().equals(ScheduleTypeEnum.SUBJECT)){
+                handleEmblemLogic(member, emblemEnumlation);
+            }
+            else if (condition instanceof String && condition.equals("schedule") && plannerSchedule.getScheduleType().equals(ScheduleTypeEnum.EVENT)){
+                handleEmblemLogic(member, emblemEnumlation);
+            }
+        }
+    }
+
+    public void handlePlannerWholeEmblem(Member member){
+        for (ConditionEmblem<?> conditionEmblem : EMBLEM_PLANNER_WHOLE_CONDITIONS) {
             Object condition = conditionEmblem.condition();
             EmblemEnumlation emblemEnumlation = conditionEmblem.emblem();
 
             if (condition instanceof Integer && hasSequentialPlanner((Integer) condition, member)) {
-                handleEmblemLogic(member, emblemEnumlation);
-            }
-            else if (condition instanceof String && condition.equals("subject") && plannerSchedule.getScheduleType().equals(ScheduleTypeEnum.SUBJECT)){
-                handleEmblemLogic(member, emblemEnumlation);
-            }
-            else if (condition instanceof String && condition.equals("schedule") && plannerSchedule.getScheduleType().equals(ScheduleTypeEnum.EVENT)){
                 handleEmblemLogic(member, emblemEnumlation);
             }
         }
@@ -170,11 +182,44 @@ public class EmblemEventListener {
         Member member = event.getMember();
         PlannerSchedule plannerSchedule = event.getPlannerSchedule();
 
-        plannerUsedEvent(member, plannerSchedule);
+        if (plannerSchedule != null) {
+            plannerUsedEvent(member, plannerSchedule);
+        }
+
+        handlePlannerWholeEmblem(member);
     }
 
     public void plannerUsedEvent(Member member, PlannerSchedule plannerSchedule){
-        handlePlannerEmblem(member, plannerSchedule);
+        handlePlannerScheduleEmblem(member, plannerSchedule);
+        handlePlannerWholeEmblem(member);
+    }
+
+
+    private static final List<ConditionEmblem<?>> EMBLEM_DDAY_CONDITIONS = List.of(
+            new ConditionEmblem<>("first", EmblemEnumlation.DDAYFIRST)
+    );
+
+    public void handleDdayEmblem(Member member, Dday dday){
+        for (ConditionEmblem<?> conditionEmblem : EMBLEM_DDAY_CONDITIONS) {
+            Object condition = conditionEmblem.condition();
+            EmblemEnumlation emblemEnumlation = conditionEmblem.emblem();
+
+            if (condition instanceof String && condition.equals("first")){
+                handleEmblemLogic(member, emblemEnumlation);
+            }
+        }
+    }
+
+    @EventListener
+    public void onDdayUsed(DdayUsedEvent event) {
+        Member member = event.getMember();
+        Dday dday = event.getDday();
+
+        DdayUsedEvent(member, dday);
+    }
+
+    public void DdayUsedEvent(Member member, Dday dday){
+        handleDdayEmblem(member, dday);
     }
 
 }

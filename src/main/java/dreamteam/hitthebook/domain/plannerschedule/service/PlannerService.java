@@ -88,6 +88,7 @@ public class PlannerService {
         Member member = plannerHelper.findMemberByEmailId(emailId);
         PlannerReview plannerReview = plannerHelper.findReviewByMemberAndDate(member, reviewAt);
         plannerHelper.reviewAutoSaveChange(plannerReview, reviewUpdateRequestDto);
+        eventPublisher.publishEvent(new PlannerUsedEvent(member, null));
     }
 
     public ReviewDto getDayReview(String emailId, LocalDateTime reviewDate){
@@ -95,8 +96,5 @@ public class PlannerService {
         PlannerReview plannerReview = plannerHelper.findReviewByMemberAndDate(member, reviewDate);
         return plannerHelper.toReviewDto(plannerReview);
     }
-
-
-
 
 }

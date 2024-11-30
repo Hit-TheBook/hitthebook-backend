@@ -1,14 +1,13 @@
 package dreamteam.hitthebook.common.commonutil;
 
+import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.member.entity.Member;
-import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
-
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
-public class PlannerUsedEvent {
+public class DdayUsedEvent {
     private final Member member;
-    private final PlannerSchedule plannerSchedule;
+    private final Dday dday;
 }
