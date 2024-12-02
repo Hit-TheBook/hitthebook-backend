@@ -8,6 +8,7 @@ import dreamteam.hitthebook.domain.plannerschedule.repository.PlannerScheduleRep
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class PlannerAlertManager {
 
 //    @Scheduled(cron = "0 26 22 * * *") // 22시 26분
     @Scheduled(cron = "0 0 0 * * *") // 매일 자정 실행
+    @Transactional
     public void checkAndCreateAlerts() {
         LocalDateTime startOfTomorrow = LocalDate.now().plusDays(1).atStartOfDay();
         LocalDateTime endOfTomorrow = LocalDate.now().plusDays(1).atTime(23, 59, 59);
