@@ -118,12 +118,14 @@ public class LoginHelper {
         }
     }
 
+    // 유효한 토큰인지 검증
     public void checkVerifyToken(String token){
         if(!jwtTokenProvider.validateToken(token)){
             throw new InvalidTokenException();
         }
     }
 
+    // 리프레시 토큰으로 멤버 검색
     public Member findMemberByRefreshToken(String refreshToken){
         String emailId = jwtTokenProvider.getEmailIdFromJWT(refreshToken);
         return memberRepository.findByEmailId(emailId).orElseThrow(IDNotFoundException::new);

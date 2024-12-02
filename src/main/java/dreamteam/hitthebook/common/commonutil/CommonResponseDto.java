@@ -1,4 +1,4 @@
-package dreamteam.hitthebook.common.dto;
+package dreamteam.hitthebook.common.commonutil;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

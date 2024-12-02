@@ -14,6 +14,4 @@ public interface TimerRepository extends JpaRepository<Timer, Long> {
     Optional<Timer> findBySubjectName(String subjectName);
 
     List<Timer> findByMember(Member member);
-
-
 }

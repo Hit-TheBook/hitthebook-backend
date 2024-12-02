@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.alert.entity;
 
-import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.common.commonutil.BaseEntity;
 import dreamteam.hitthebook.domain.alert.enumulation.AlertTypeEnum;
 import dreamteam.hitthebook.domain.member.entity.Emblem;
 import dreamteam.hitthebook.domain.member.entity.Member;
@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
-import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -27,16 +25,19 @@ public class Alert extends BaseEntity {
     @Column(name = "alert_id")
     private Long alertId;
 
-    @Column(name = "alert_type")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "alert_type", nullable = false)
     private AlertTypeEnum alertType;
 
+    @Column(name = "alarm_title", length = 50)
     private String alertTitle;
 
-//    @Column(name = "alarm_content", length = 200)
+    @Column(name = "alarm_content", length = 300)
     private String alertContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @Column(nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)

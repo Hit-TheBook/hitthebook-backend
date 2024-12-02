@@ -1,4 +1,4 @@
-package dreamteam.hitthebook.common.entity;
+package dreamteam.hitthebook.common.commonutil;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

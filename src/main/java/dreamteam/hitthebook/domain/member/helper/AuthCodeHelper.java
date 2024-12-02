@@ -17,6 +17,7 @@ public class AuthCodeHelper {
 
     private final StringRedisTemplate redisTemplate;
 
+    // 이메일 인증번호 생성
     public String createAuthCode(String key) {
         SecureRandom random = new SecureRandom();
         StringBuilder code = new StringBuilder(CODE_LENGTH);
@@ -32,6 +33,7 @@ public class AuthCodeHelper {
         return authCode;
     }
 
+    // 이메일 인증번호 검증
     public boolean validateAuthCode(String key, String authCode) {
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         String storedCode = ops.get(key);

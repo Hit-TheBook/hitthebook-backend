@@ -37,7 +37,6 @@ public class MemberService {
 
     public LevelDto getLevel(String emailId){
         Member member = memberHelper.findMemberByEmailId(emailId);
-        memberHelper.updateMemberLevel(member);
         return memberHelper.toLevelDto(member);
     }
 

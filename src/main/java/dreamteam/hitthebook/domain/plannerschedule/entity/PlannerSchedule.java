@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.plannerschedule.entity;
 
-import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.common.commonutil.BaseEntity;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.dto.PlannerDto;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
@@ -28,25 +28,31 @@ public class PlannerSchedule extends BaseEntity {
     @Column(name = "planner_schedule_id")
     private Long plannerScheduleId;
 
+    @Column(nullable = false)
     private LocalDateTime scheduleAt;
 
+    @Column(nullable = false)
     private LocalDateTime startAt;
+    @Column(nullable = false)
     private LocalDateTime endAt;
 
-//    @Column(name = "schedule_title", nullable = false, length = 50)
+    @Column(name = "schedule_title", length = 100)
     private String scheduleTitle;
 
-//    @Column(name = "schedule_content", length = 300)
+    @Column(name = "schedule_content", length = 500)
     private String scheduleContent;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private ScheduleTypeEnum scheduleType;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private FeedbackTypeEnum scheduleFeedback = FeedbackTypeEnum.FAILED;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @Column(nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -76,11 +82,13 @@ public class PlannerSchedule extends BaseEntity {
         this.beforeSchedule = beforeSchedule;
     }
 
+    // 팩토리메소드
     public static PlannerSchedule createByRequestDto(PlannerDto.ScheduleRequestDto scheduleRequestDto, ScheduleTypeEnum scheduleType, Member member){
         return new PlannerSchedule(scheduleRequestDto.getScheduleAt(), scheduleRequestDto.getScheduleTitle(),
                 scheduleRequestDto.getContent(), scheduleType, member, scheduleRequestDto.getStartAt(), scheduleRequestDto.getEndAt());
     }
 
+    // 팩토리메소드
     public static PlannerSchedule createNewPostponeEntity(PlannerDto.PostPoneDto postPoneDto, PlannerSchedule originalPlannerSchedule){
         return new PlannerSchedule(postPoneDto.getScheduleAt(), originalPlannerSchedule.scheduleTitle, originalPlannerSchedule.scheduleContent,
                 originalPlannerSchedule.scheduleType, originalPlannerSchedule.member, postPoneDto.getStartAt(),

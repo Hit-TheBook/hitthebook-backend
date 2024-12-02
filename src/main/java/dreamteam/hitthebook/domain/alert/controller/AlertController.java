@@ -1,6 +1,5 @@
 package dreamteam.hitthebook.domain.alert.controller;
 
-import dreamteam.hitthebook.common.dto.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
 import dreamteam.hitthebook.domain.alert.service.AlertService;
 import jakarta.servlet.http.HttpServletRequest;

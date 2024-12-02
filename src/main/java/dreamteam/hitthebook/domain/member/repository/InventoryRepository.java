@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+    // 멤버가 가진 엠블럼 검색
     List<Inventory> findByMember(Member member);
 
+    // 멤버와 엠블럼으로부터 검색
     Optional<Inventory> findByMemberAndEmblem(Member member, Emblem emblem);
 }

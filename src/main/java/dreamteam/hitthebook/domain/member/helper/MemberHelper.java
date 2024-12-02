@@ -25,14 +25,17 @@ public class MemberHelper {
     private final EmblemRepository emblemRepository;
     private final InventoryRepository inventoryRepository;
 
+    // 이메일아이디로 멤버검색
     public Member findMemberByEmailId(String emailId){
         return memberRepository.findByEmailId(emailId).orElseThrow(ResourceNotFoundException::new);
     }
 
+    // 닉네임dto 변환 로직
     public NicknameDto toNicknameDto(Member member){
         return new NicknameDto(member.getNickname());
     }
 
+    // 닉네임 갱신
     public void updateNewNickname(String nickname, Member member) {
         member.setNickname(nickname);
         memberRepository.save(member);
@@ -43,10 +46,12 @@ public class MemberHelper {
         if(memberRepository.findByNickname(nickname).isPresent()){throw new DuplicateNicknameException();}
     }
 
+    // 레벨이 유효한 범위에 있는지 검색
     public void checkLevelRange(int level){
         if(level < 1 || level > 25){throw new ResourceNotFoundException();}
     }
 
+    // 레벨이 포인트에 맞는 조건의 레벨 검색
     public Level findLevelByPoints(int points) {
         return levels.stream()
                 .filter(level -> points >= level.getMinPoint() && points <= level.getMaxPoint())
@@ -54,13 +59,7 @@ public class MemberHelper {
                 .orElseThrow(() -> new RuntimeException("Point data is invalid"));
     }
 
-    public void updateMemberLevel(Member member) {
-        int points = member.getPoint();
-        Level level = findLevelByPoints(points);
-        member.setLevel(level.getLevel());
-        memberRepository.save(member);
-    }
-
+    // 레벨dto 변환 로직
     public LevelDto toLevelDto(Member member){
         int memberLevel = member.getLevel();
         checkLevelRange(memberLevel);
@@ -68,10 +67,12 @@ public class MemberHelper {
         return new LevelDto(member.getPoint(), memberLevel, level.getLevelName(), level.getMinPoint(), level.getMaxPoint());
     }
 
+    // 멤버가 가진 엠블럼 검색
     public List<Inventory> findEmblemOfMember(Member member){
         return inventoryRepository.findByMember(member);
     }
 
+    // 엠블럼dto 변환 로직
     public EmblemDto toEmblemDto(Member member){
         return new EmblemDto(findEmblemOfMember(member));
     }

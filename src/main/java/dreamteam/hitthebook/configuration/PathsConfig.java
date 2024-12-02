@@ -11,16 +11,16 @@ public class PathsConfig {
             "/swagger-resources/**"
     };
 
+    // 필요한 경로만 추가
     public static final String[] PUBLIC_WHITELIST = {
             "/test/testToken/tempToken",
-            "/",
+            "/mail/join/authorization",
+            "/mail/forget/authorization",
             "/login",
-            "/login/**",
-            "/temp/token",
-            "join",
-            "/join/**",
-            "/mail/**",
-            "/forget/**"
+            "/login/token/issue",
+            "/join",
+            "/forget/password/reset",
+            "forget/password/current"
     };
 
     public static final String[] CORS_WHITELIST = {

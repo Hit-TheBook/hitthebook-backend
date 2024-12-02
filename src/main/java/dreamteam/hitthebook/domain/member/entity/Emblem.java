@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.member.entity;
 
-import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.common.commonutil.BaseEntity;
 import dreamteam.hitthebook.domain.member.enumulation.EmblemEnumlation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,9 +23,10 @@ public class Emblem extends BaseEntity {
     @Column(name = "emblem_id")
     private Long emblemId;
 
-    //    @Column(name = "emblem_name", length = 20)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "emblem_name", nullable = false ,length = 30)
     private EmblemEnumlation emblemName;
 
-    //    @Column(name = "emblem_content", length = 200)
+    @Column(name = "emblem_content", nullable = false, length = 50)
     private String emblemContent;
 }

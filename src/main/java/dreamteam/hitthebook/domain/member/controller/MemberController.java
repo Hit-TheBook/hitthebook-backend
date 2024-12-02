@@ -1,12 +1,9 @@
 package dreamteam.hitthebook.domain.member.controller;
 
-import dreamteam.hitthebook.common.annotation.SwaggerDetail;
-import dreamteam.hitthebook.common.dto.CommonResponseDto;
+import dreamteam.hitthebook.common.commonutil.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
-import dreamteam.hitthebook.domain.member.dto.LoginDto;
 import dreamteam.hitthebook.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

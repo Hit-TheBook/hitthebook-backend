@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import dreamteam.hitthebook.common.dto.CommonResponseDto;
+import dreamteam.hitthebook.common.commonutil.CommonResponseDto;
 import dreamteam.hitthebook.common.annotation.SwaggerToken;
 
 import static dreamteam.hitthebook.common.annotation.DdaySwaggerDetail.*;

@@ -1,7 +1,7 @@
 package dreamteam.hitthebook.domain.member.controller;
 
 import dreamteam.hitthebook.common.annotation.SwaggerToken;
-import dreamteam.hitthebook.common.dto.CommonResponseDto;
+import dreamteam.hitthebook.common.commonutil.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
 import dreamteam.hitthebook.domain.member.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -86,7 +86,6 @@ public class LoginController {
                 .build();
     }
 
-    //post가 더 적절한 것으로 판단됨
     @PostMapping("/forget/password/reset")
     public CommonResponseDto passwordReset(@Valid @RequestBody PasswordDto passwordDto){
         loginService.resetPassword(passwordDto);

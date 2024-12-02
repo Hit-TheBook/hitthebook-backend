@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.member.entity;
 
-import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.common.commonutil.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,10 +24,12 @@ public class Inventory extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emblem_id")
+    @Column(nullable = false) // 낫널은 스프링빈 검증, columns방식은 데이터베이스 레벨 검증
     private Emblem emblem; // 이런거 낫널처리 필수
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @Column(nullable = false)
     private Member member;
 
     public Inventory(Emblem emblem, Member member) {

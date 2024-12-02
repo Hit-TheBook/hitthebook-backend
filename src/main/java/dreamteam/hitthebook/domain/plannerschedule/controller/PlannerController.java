@@ -2,7 +2,7 @@ package dreamteam.hitthebook.domain.plannerschedule.controller;
 
 
 import dreamteam.hitthebook.common.annotation.SwaggerToken;
-import dreamteam.hitthebook.common.dto.CommonResponseDto;
+import dreamteam.hitthebook.common.commonutil.CommonResponseDto;
 import dreamteam.hitthebook.common.jwt.JwtTokenHelper;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.FeedbackTypeEnum;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
@@ -87,9 +87,6 @@ public class PlannerController {
 
 
     // 오늘의 총평시나리오
-    // 일반적인 경우
-    // 겟으로 가져왔을 때 null 이라면, Post로 생성 -> 근데 예외케이스가 있을 수 있는 로직 같은데 나중에 클라이언트와 테스트 과정에서 다시 생각해보면 좋을 것 같음
-    // 키입력시마다 0.3초마다 PUT
     @PostMapping("/daily/review/{reviewAt}")
     @SwaggerToken
     @PlannerAddDailyReviewDetail

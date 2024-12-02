@@ -9,12 +9,14 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDateTime;
 
 public interface PlannerReviewRepository extends JpaRepository<PlannerReview, Long> {
+    // 리뷰날짜에 해당하는 멤버의 플래너리뷰 검색
     @Query("SELECT p FROM PlannerReview p WHERE p.member = :member AND " +
             "YEAR(p.reviewAt) = YEAR(:reviewDate) AND " +
             "MONTH(p.reviewAt) = MONTH(:reviewDate) AND " +
             "DAY(p.reviewAt) = DAY(:reviewDate)")
     PlannerReview findByMemberAndReviewAt(@Param("member") Member member, @Param("reviewDate") LocalDateTime reviewDate);
 
+    // 해당날짜에 멤버가 생성한 플래너 리뷰가 있는지 검색
     @Query("SELECT COUNT(pr) > 0 FROM PlannerReview pr WHERE pr.member = :member AND " +
             "YEAR(pr.createdAt) = :year AND MONTH(pr.createdAt) = :month AND DAY(pr.createdAt) = :day")
     boolean existsByMemberAndCreatedAt(@Param("member") Member member,

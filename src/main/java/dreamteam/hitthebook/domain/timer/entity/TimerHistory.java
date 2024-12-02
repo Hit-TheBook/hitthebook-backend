@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.timer.entity;
 
-import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.common.commonutil.BaseEntity;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.timer.dto.TimerDto;
 import dreamteam.hitthebook.common.commonutil.DurationConverter;
@@ -33,11 +33,13 @@ public class TimerHistory extends BaseEntity {
     private int score;
 
     @Convert(converter = DurationConverter.class)
+    @Column(nullable = false)
     private Duration studyTimeLength;
 
     private LocalDateTime studyTime;
 
     @Convert(converter = DurationConverter.class)
+    @Column(nullable = false)
     private Duration targetTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,6 +59,7 @@ public class TimerHistory extends BaseEntity {
         this.targetTime = targetTime;
     }
 
+    // 팩토리 메소드
     public static TimerHistory createByTimerHistoryRequestDto(Timer timer, TimerDto.TimerHistoryRequestDto timerHistoryRequestDto, Member member) {
         return new TimerHistory(member, timer, timerHistoryRequestDto.getScore(), timerHistoryRequestDto.getStudyTimeLengthAsDuration(), timerHistoryRequestDto.getTargetTimeAsDuration());
     }

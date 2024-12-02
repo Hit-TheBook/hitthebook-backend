@@ -27,13 +27,15 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-@Configuration
+// 초기데이터 생성에 있어서 굳이 configuration으로 관리할 이유가 없음.
+@Component
 @Slf4j
 @RequiredArgsConstructor
 public class TestDataInitConfig {

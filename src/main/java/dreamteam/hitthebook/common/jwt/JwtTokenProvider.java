@@ -26,6 +26,8 @@ public class JwtTokenProvider {
     @Value("${jwt.eternalExpiration}")
     private Long eternalExpiration; // 무제한 토큰 만료기한
 
+    // 추후 리팩토링 대상 리프레시 토큰 인증 및 인가에 대하여 개선이 필요함...
+
     //엑세스 토큰 생성, 토큰생성메소드의 인자에 엑세스토큰 만료기한 대입
     public String generateAccessToken(Member member) {
         return generateToken(member, accessExpiration);

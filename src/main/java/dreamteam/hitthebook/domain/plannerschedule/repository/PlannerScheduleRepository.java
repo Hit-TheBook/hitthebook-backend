@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule, Long> {
 //    List<PlannerSchedule> findByMemberAndScheduleTypeAndScheduleAt(Member member, ScheduleTypeEnum scheduleType, LocalDateTime scheduleAt);
 
+    // 멤버의 플래너스케쥴을 스케쥴타입과 날짜로 검색
     @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
             "p.scheduleType = :scheduleType AND " +
             "YEAR(p.scheduleAt) = YEAR(:scheduleDate) AND " +
@@ -23,12 +24,14 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
     List<PlannerSchedule> findByMemberAndScheduleTypeAndScheduleAt(@Param("member") Member member,
                                                                    @Param("scheduleType") ScheduleTypeEnum scheduleType, @Param("scheduleDate") LocalDateTime scheduleDate);
 
+    // 멤버와 멤버의 플래너 스케쥴을 날짜로 검색
     @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
             "YEAR(p.scheduleAt) = YEAR(:scheduleDate) AND " +
             "MONTH(p.scheduleAt) = MONTH(:scheduleDate) AND " +
             "DAY(p.scheduleAt) = DAY(:scheduleDate)")
     List<PlannerSchedule> findByMemberAndScheduleAt(@Param("member") Member member, @Param("scheduleDate") LocalDateTime scheduleDate);
 
+    // 스케쥴 안겹치게 검사 알고리즘1
     @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
             "YEAR(p.scheduleAt) = YEAR(:scheduleDate) AND " +
             "MONTH(p.scheduleAt) = MONTH(:scheduleDate) AND " +
@@ -38,6 +41,7 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
                                                                       @Param("scheduleDate") LocalDateTime scheduleDate,
                                                                       @Param("startAt") LocalDateTime startAt);
 
+    // 스케쥴 안겹치게 검사 알고리즘2 , 1 + 2 둘 다 필요
     @Query("SELECT p FROM PlannerSchedule p WHERE p.member = :member AND " +
             "YEAR(p.scheduleAt) = YEAR(:scheduleDate) AND " +
             "MONTH(p.scheduleAt) = MONTH(:scheduleDate) AND " +
@@ -48,7 +52,7 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
                                                                       @Param("startAt") LocalDateTime startAt,
                                                                       @Param("endAt") LocalDateTime endAt);
 
-
+    // 멤버가 해당 날짜에 생성한 플래너 스케쥴이 있는지 검색
     @Query("SELECT COUNT(ps) > 0 FROM PlannerSchedule ps WHERE ps.member = :member AND " +
             "YEAR(ps.createdAt) = :year AND MONTH(ps.createdAt) = :month AND DAY(ps.createdAt) = :day")
     boolean existsByMemberAndCreatedAt(@Param("member") Member member,
@@ -56,5 +60,6 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
                                        @Param("month") int month,
                                        @Param("day") int day);
 
+    // 해당하는 날짜에 플래너 스케쥴들 검색
     List<PlannerSchedule> findByScheduleAtBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.plannerschedule.entity;
 
-import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.common.commonutil.BaseEntity;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,12 +25,15 @@ public class PlannerReview extends BaseEntity {
     @Column(name = "planner_review_id")
     private Long plannerReviewId;
 
+    @Column(nullable = false)
     private LocalDateTime reviewAt;
 
+    @Column(length = 1000)
     private String reviewContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
+    @Column(nullable = false)
     private Member member;
 
     public PlannerReview(LocalDateTime reviewAt, Member member) {

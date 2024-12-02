@@ -78,9 +78,8 @@ public class PlannerService {
 
     public void createDayReview(String emailId, LocalDateTime reviewAt){
         Member member = plannerHelper.findMemberByEmailId(emailId);
-        plannerHelper.checkReviewPresentAtDate(member, reviewAt);// 있는지 없는지 검사하고 없을 경우에만 생성하고 있는 경우에는 예외처리
+        plannerHelper.checkReviewPresentAtDate(member, reviewAt); // 있는지 없는지 검사하고 없을 경우에만 생성하고 있는 경우에는 예외처리
         PlannerReview plannerReview = PlannerReview.createByRequestDto(reviewAt, member);
-        // 플래너 엠블럼 분할해서 로직 바꿔야할듯, 그리고 개빡치는게 알람도 구현해야함...
         plannerReviewRepository.save(plannerReview);
     }
 

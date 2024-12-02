@@ -1,6 +1,6 @@
 package dreamteam.hitthebook.domain.dday.entity;
 
-import dreamteam.hitthebook.common.entity.BaseEntity;
+import dreamteam.hitthebook.common.commonutil.BaseEntity;
 import dreamteam.hitthebook.domain.dday.dto.DdayDto;
 import dreamteam.hitthebook.domain.dday.enumulation.DdayTypeEnum;
 import dreamteam.hitthebook.domain.member.entity.Member;
@@ -30,18 +30,18 @@ public class Dday extends BaseEntity {
     @Column(name = "dday_id")
     private Long ddayId;
 
-//    @Column(name = "dday_name", nullable = false, length = 20)
+    @Column(name = "dday_name", nullable = false, length = 30)
     private String ddayName;
 
     private LocalDateTime startDate;
 
+    @Column(nullable = false)
     private LocalDateTime endDate;
-    // 급하게 만드느라 At으로 못만들었는데 이거 고치는게 되돌릴수없게 빡세네
 
     private boolean isPrimary = false; // 디폴트는 false
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     public Dday(String ddayName, LocalDateTime startDate, LocalDateTime endDate, Member member) {
@@ -51,6 +51,7 @@ public class Dday extends BaseEntity {
         this.member = member;
     }
 
+    // 팩토리메소드
     public static Dday createByRequestDto(DdayDto.DdayRequestDto ddayRequestDto, Member member) { // 팩토리 메소드
         return new Dday(ddayRequestDto.getDdayName(), ddayRequestDto.getStartDate(), ddayRequestDto.getEndDate(), member);
     }
