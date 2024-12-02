@@ -49,6 +49,10 @@ public class Alert extends BaseEntity {
 
     private int level;
 
+    public Alert(Member member){
+        this.member = member;
+    }
+
     public Alert(Member member, Emblem emblem){
         this.member = member;
         this.emblem = emblem;

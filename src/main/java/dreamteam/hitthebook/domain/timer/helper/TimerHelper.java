@@ -4,6 +4,7 @@ import dreamteam.hitthebook.common.exception.DuplicateSubjectNameException;
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.common.commonutil.Level;
 import dreamteam.hitthebook.domain.alert.entity.Alert;
+import dreamteam.hitthebook.domain.alert.enumulation.AlertTypeEnum;
 import dreamteam.hitthebook.domain.alert.repository.AlertRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
@@ -64,10 +65,20 @@ public class TimerHelper {
         int newPoint = member.getPoint() + timerHistoryRequestDto.getScore();
         Duration newDuration = member.getAllStudyTime().plus(timerHistoryRequestDto.getStudyTimeLengthAsDuration());
         Level beforeLevel = findLevelByPoints(member.getPoint());
+        createTimerAlert(member, timerHistoryRequestDto);
         member.setPoint(newPoint);
         member.setAllStudyTime(newDuration);
         updateMemberLevel(beforeLevel, member);
         memberRepository.save(member);
+    }
+
+    public void createTimerAlert(Member member, TimerHistoryRequestDto timerHistoryRequestDto) {
+        if (timerHistoryRequestDto.getStudyTimeLengthAsDuration().compareTo(timerHistoryRequestDto.getTargetTimeAsDuration()) >= 0) {
+            Alert alert = new Alert(member);
+            alert.setAlertTitle("목표시간을 달성해 " + timerHistoryRequestDto.getScore() + "점을 획득하셨습니다.");
+            alert.setAlertType(AlertTypeEnum.TIMER);
+            alertRepository.save(alert);
+        }
     }
 
     public Level findLevelByPoints(int points) {

@@ -194,6 +194,28 @@ public class TestDataInitConfig {
         plannerSchedule6.setMember(member3);
         plannerScheduleRepository.save(plannerSchedule6);
 
+        PlannerSchedule plannerSchedule7 = new PlannerSchedule();
+        plannerSchedule7.setScheduleAt(LocalDateTime.now().plusDays(1));
+        plannerSchedule7.setStartAt(LocalDateTime.now().plusHours(1));
+        plannerSchedule7.setEndAt(LocalDateTime.now().plusHours(2));
+        plannerSchedule7.setScheduleTitle("백준 4문제 풀기");
+        plannerSchedule7.setScheduleContent("플래너 알림 확인용");
+        plannerSchedule7.setScheduleType(ScheduleTypeEnum.SUBJECT);
+        plannerSchedule7.setScheduleFeedback(FeedbackTypeEnum.FAILED);
+        plannerSchedule7.setMember(member3);
+        plannerScheduleRepository.save(plannerSchedule7);
+
+        PlannerSchedule plannerSchedule8 = new PlannerSchedule();
+        plannerSchedule8.setScheduleAt(LocalDateTime.now().plusDays(1));
+        plannerSchedule8.setStartAt(LocalDateTime.now().plusHours(5));
+        plannerSchedule8.setEndAt(LocalDateTime.now().plusHours(6));
+        plannerSchedule8.setScheduleTitle("술약속 빰빠빰빠라라빰");
+        plannerSchedule8.setScheduleContent("플래너 알림 확인용");
+        plannerSchedule8.setScheduleType(ScheduleTypeEnum.EVENT);
+        plannerSchedule8.setScheduleFeedback(FeedbackTypeEnum.FAILED);
+        plannerSchedule8.setMember(member3);
+        plannerScheduleRepository.save(plannerSchedule8);
+
 
         //timer data init
         Timer timer1 = new Timer();
