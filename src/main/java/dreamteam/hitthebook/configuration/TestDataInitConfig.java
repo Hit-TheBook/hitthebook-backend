@@ -1,6 +1,9 @@
 package dreamteam.hitthebook.configuration;
 
 
+import dreamteam.hitthebook.domain.alert.entity.Alert;
+import dreamteam.hitthebook.domain.alert.enumulation.AlertTypeEnum;
+import dreamteam.hitthebook.domain.alert.repository.AlertRepository;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
 import dreamteam.hitthebook.domain.member.entity.Emblem;
@@ -18,6 +21,8 @@ import dreamteam.hitthebook.domain.timer.entity.Timer;
 import dreamteam.hitthebook.domain.timer.entity.TimerHistory;
 import dreamteam.hitthebook.domain.timer.repository.TimerHistoryRepository;
 import dreamteam.hitthebook.domain.timer.repository.TimerRepository;
+import dreamteam.hitthebook.domain.alert.enumulation.AlertTypeEnum;
+
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +46,7 @@ public class TestDataInitConfig {
     private final TimerHistoryRepository timerHistoryRepository;
     private final EmblemRepository emblemRepository;
     private final InventoryRepository inventoryRepository;
+    private final AlertRepository alertRepository;
 
     @PostConstruct
     @Transactional
@@ -64,7 +70,8 @@ public class TestDataInitConfig {
         Member member3 = new Member();
         member3.setEmailId("test3@example.com");
         member3.setNickname("아이브");
-        member3.setPoint(123);
+        member3.setLevel(2);
+        member3.setPoint(333);
         member3.setPassword(passwordEncoder.encode("qwer1234"));
         memberRepository.save(member3);
 
@@ -444,6 +451,70 @@ public class TestDataInitConfig {
         inventory5.setMember(member3);
         inventory5.setEmblem(emblem5);
         inventoryRepository.save(inventory5);
+
+
+        // alert test data
+        Alert alert1 = new Alert();
+        alert1.setMember(member3);
+        alert1.setAlertTitle("[긴급] 타이머 화면 오류");
+        alert1.setAlertContent("타이머 화면 오류로 인하여 오류 수정 중입니다. 양해부탁드립니다.");
+        alert1.setAlertType(AlertTypeEnum.NOTICE);
+        alertRepository.save(alert1);
+
+        Alert alert2 = new Alert();
+        alert2.setMember(member3);
+        alert2.setAlertTitle("[긴급] 플래너 기능 오류");
+        alert2.setAlertContent("플래너 일정 등록 기능 작동 오류로 인하여 오류 수정 중입니다. 양해부탁드립니다.");
+        alert2.setAlertType(AlertTypeEnum.NOTICE);
+        alertRepository.save(alert2);
+
+        Alert alert3 = new Alert();
+        alert3.setMember(member3);
+        alert3.setAlertTitle("BLUE Ⅴ에서 BLUE Ⅳ로 승급하였습니다.");
+        alert3.setAlertType(AlertTypeEnum.LEVEL);
+        alertRepository.save(alert3);
+
+        Alert alert4 = new Alert();
+        alert4.setMember(member3);
+        alert4.setAlertTitle("누적 15분 달성(과목) 엠블럼을 획득하였습니다.");
+        alert4.setAlertType(AlertTypeEnum.EMBLEM);
+        alertRepository.save(alert4);
+
+        Alert alert5 = new Alert();
+        alert5.setMember(member3);
+        alert5.setAlertTitle("누적 30분 달성(과목) 엠블럼을 획득하였습니다.");
+        alert5.setAlertType(AlertTypeEnum.EMBLEM);
+        alertRepository.save(alert5);
+
+        Alert alert6 = new Alert();
+        alert6.setMember(member3);
+        alert6.setAlertTitle("누적 1시간 달성(과목) 엠블럼을 획득하였습니다.");
+        alert6.setAlertType(AlertTypeEnum.EMBLEM);
+        alertRepository.save(alert6);
+
+        Alert alert7 = new Alert();
+        alert7.setMember(member3);
+        alert7.setAlertTitle("누적 2시간 달성(과목) 엠블럼을 획득하였습니다.");
+        alert7.setAlertType(AlertTypeEnum.EMBLEM);
+        alertRepository.save(alert7);
+
+        Alert alert8 = new Alert();
+        alert8.setMember(member3);
+        alert8.setAlertTitle("누적 3시간 달성(과목) 엠블럼을 획득하였습니다.");
+        alert8.setAlertType(AlertTypeEnum.EMBLEM);
+        alertRepository.save(alert8);
+
+        Alert alert9 = new Alert();
+        alert9.setMember(member3);
+        alert9.setAlertTitle("수학과목 목표시간을 달성해 0점을 획득하셨습니다.");
+        alert9.setAlertType(AlertTypeEnum.TIMER);
+        alertRepository.save(alert9);
+
+        Alert alert10 = new Alert();
+        alert10.setMember(member3);
+        alert10.setAlertTitle("친구들과 술약속 모임이 내일 예정되어 있습니다.");
+        alert10.setAlertType(AlertTypeEnum.PLANNER);
+        alertRepository.save(alert10);
 
         log.info("Test data initialized");
     }

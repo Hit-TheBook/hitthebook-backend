@@ -35,10 +35,6 @@ public class Alert extends BaseEntity {
 //    @Column(name = "alarm_content", length = 200)
     private String alertContent;
 
-    private boolean isChecked = false;
-
-    private LocalDateTime alertTime;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -52,9 +48,5 @@ public class Alert extends BaseEntity {
     private Emblem emblem;
 
     private int level;
-
-    public Alert() {
-
-    }
 
 }

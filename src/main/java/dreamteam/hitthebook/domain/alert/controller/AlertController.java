@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import static dreamteam.hitthebook.domain.alert.dto.AlertDto.*;
+import static dreamteam.hitthebook.common.annotation.AlertSwaggerDetail.*;
 
 @Slf4j
 @RestController
@@ -19,6 +20,7 @@ public class AlertController {
     private final AlertService alertService;
 
     @GetMapping
+    @FindAlertListDetail
     public AlertResponseDto alertListFind(HttpServletRequest request){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return alertService.findAlertList(emailId);
