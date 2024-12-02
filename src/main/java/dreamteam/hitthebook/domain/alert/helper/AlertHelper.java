@@ -26,7 +26,7 @@ public class AlertHelper {
     }
 
     public List<Alert> findAlertByMemberAndType(Member member, AlertTypeEnum alertTypeEnum){
-        return alertRepository.findByMemberAndAlertType(member, alertTypeEnum);
+        return alertRepository.findByMemberAndAlertTypeOrderByCreatedAtDesc(member, alertTypeEnum);
     }
 
     public AlertResponseDto toAlertResponseDto(Member member){

@@ -49,4 +49,18 @@ public class Alert extends BaseEntity {
 
     private int level;
 
+    public Alert(Member member, Emblem emblem){
+        this.member = member;
+        this.emblem = emblem;
+        this.alertType = AlertTypeEnum.EMBLEM;
+    }
+
+    public Alert(Member member, int level, String beforeLevel, String afterLevel){
+        this.member = member;
+        this.level = level;
+        this.alertType = AlertTypeEnum.LEVEL;
+        this.alertTitle = beforeLevel + "레벨에서" + afterLevel + "레벨로 승급하였습니다.";
+    }
+
+
 }

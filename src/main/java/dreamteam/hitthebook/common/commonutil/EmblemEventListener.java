@@ -1,5 +1,7 @@
 package dreamteam.hitthebook.common.commonutil;
 
+import dreamteam.hitthebook.domain.alert.entity.Alert;
+import dreamteam.hitthebook.domain.alert.repository.AlertRepository;
 import dreamteam.hitthebook.domain.dday.entity.Dday;
 import dreamteam.hitthebook.domain.dday.repository.DdayRepository;
 import dreamteam.hitthebook.domain.member.entity.Emblem;
@@ -34,6 +36,7 @@ public class EmblemEventListener {
     private final PlannerReviewRepository plannerReviewRepository;
     private final TimerRepository timerRepository;
     private final DdayRepository ddayRepository;
+    private final AlertRepository alertRepository;
 
     public Emblem getTargetEmblem(EmblemEnumlation emblemEnumlation){
         return emblemRepository.findByEmblemName(emblemEnumlation);
@@ -48,6 +51,12 @@ public class EmblemEventListener {
         inventoryRepository.save(inventory);
     }
 
+    public void createAlert(Member member, Emblem emblem){
+        Alert alert = new Alert(member, emblem);
+        alert.setAlertTitle(emblem.getEmblemContent() + " 엠블럼을 획득하였습니다.");
+        alertRepository.save(alert);
+    }
+
     private static final List<ConditionEmblem<?>> EMBLEM_TIMER_SUBJECT_CONDITIONS = List.of(
             new ConditionEmblem<>(Duration.ofMinutes(15), EmblemEnumlation.TIMERSUBJECT15M),
             new ConditionEmblem<>(Duration.ofMinutes(30), EmblemEnumlation.TIMERSUBJECT30M),
@@ -60,6 +69,7 @@ public class EmblemEventListener {
         Emblem emblem = getTargetEmblem(emblemEnumlation);
         if(hasTargetEmblem(member, emblem)){
             gainTargetEmblem(member, emblem);
+            createAlert(member, emblem);
         }
     }
 

@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface AlertRepository extends JpaRepository<Alert, Long> {
 
-    List<Alert> findByMemberAndAlertType(Member member, AlertTypeEnum alertType);
+    List<Alert> findByMemberAndAlertTypeOrderByCreatedAtDesc(Member member, AlertTypeEnum alertTypeEnum);
+
 }

@@ -3,6 +3,7 @@ package dreamteam.hitthebook.domain.timer.helper;
 import dreamteam.hitthebook.common.exception.DuplicateSubjectNameException;
 import dreamteam.hitthebook.common.exception.ResourceNotFoundException;
 import dreamteam.hitthebook.common.commonutil.Level;
+import dreamteam.hitthebook.domain.alert.entity.Alert;
 import dreamteam.hitthebook.domain.alert.repository.AlertRepository;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
@@ -53,19 +54,19 @@ public class TimerHelper {
         return timerHistory;
     }
 
-    public Timer updateTimerData(Timer timer, TimerHistoryRequestDto timerHistoryRequestDto) {
+    public void updateTimerData(Timer timer, TimerHistoryRequestDto timerHistoryRequestDto) {
         timer.setTotalStudyTimeLength(timer.getTotalStudyTimeLength().plus(timerHistoryRequestDto.getStudyTimeLengthAsDuration()));
         timer.setTotalScore(timer.getTotalScore() + timerHistoryRequestDto.getScore());
         timerRepository.save(timer);
-        return timer;
     }
 
     public void updateMemberTimerData(TimerHistoryRequestDto timerHistoryRequestDto, Member member){
         int newPoint = member.getPoint() + timerHistoryRequestDto.getScore();
         Duration newDuration = member.getAllStudyTime().plus(timerHistoryRequestDto.getStudyTimeLengthAsDuration());
+        Level beforeLevel = findLevelByPoints(member.getPoint());
         member.setPoint(newPoint);
         member.setAllStudyTime(newDuration);
-        updateMemberLevel(member);
+        updateMemberLevel(beforeLevel, member);
         memberRepository.save(member);
     }
 
@@ -76,10 +77,18 @@ public class TimerHelper {
                 .orElseThrow(() -> new RuntimeException("Point data is invalid"));
     }
 
-    public void updateMemberLevel(Member member){
+    public void createLevelAlert(Member member, Level beforeLevel, Level afterLevel){
+        if(beforeLevel.getLevel() != afterLevel.getLevel()){
+            Alert alert = new Alert(member, afterLevel.getLevel(), beforeLevel.getLevelName(), afterLevel.getLevelName());
+            alertRepository.save(alert);
+        }
+    }
+
+    public void updateMemberLevel(Level beforeLevel, Member member){
         int points = member.getPoint();
-        Level level = findLevelByPoints(points);
-        member.setLevel(level.getLevel());
+        Level afterLevel = findLevelByPoints(points);
+        member.setLevel(afterLevel.getLevel());
+        createLevelAlert(member, beforeLevel, afterLevel);
         memberRepository.save(member);
     }
 
@@ -110,7 +119,6 @@ public class TimerHelper {
     }
 
     public TodayTimerDataDto toTodayTimerDataDto(Member member) {
-        updateMemberLevel(member);
         return new TodayTimerDataDto(findTodayTimerHistoryByMember(member), member.getLevel());
     }
 
