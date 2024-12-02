@@ -147,13 +147,13 @@ public class EmblemEventListener {
             new ConditionEmblem<>(28, EmblemEnumlation.PLANNERSEQUENCE28D)
     );
 
-    private static final List<ConditionEmblem<?>> EMBLEM_PLANNER_SCHEDULE_CONDITIONS = List.of(
+    private static final List<ConditionEmblem<?>> EMBLEM_PLANNER_TYPE_CONDITIONS = List.of(
             new ConditionEmblem<>("subject", EmblemEnumlation.PLANNERSTUDYFIRST),
             new ConditionEmblem<>("schedule", EmblemEnumlation.PLANNERSCHEDULEFIRST)
     );
 
     public void handlePlannerScheduleEmblem(Member member, PlannerSchedule plannerSchedule){
-        for (ConditionEmblem<?> conditionEmblem : EMBLEM_PLANNER_SCHEDULE_CONDITIONS) {
+        for (ConditionEmblem<?> conditionEmblem : EMBLEM_PLANNER_TYPE_CONDITIONS) {
             Object condition = conditionEmblem.condition();
             EmblemEnumlation emblemEnumlation = conditionEmblem.emblem();
 

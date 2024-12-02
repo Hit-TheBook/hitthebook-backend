@@ -24,7 +24,7 @@ public class Inventory extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emblem_id")
-    private Emblem emblem;
+    private Emblem emblem; // 이런거 낫널처리 필수
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

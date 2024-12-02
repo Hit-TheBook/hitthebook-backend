@@ -343,6 +343,7 @@ public class TestDataInitConfig {
         Emblem emblem10 = new Emblem();
         emblem10.setEmblemName(EmblemEnumlation.PLANNERSTUDYFIRST);
         emblem10.setEmblemContent("첫 공부 플래너 추가");
+        emblemRepository.save(emblem10);
 
         Emblem emblem11 = new Emblem();
         emblem11.setEmblemName(EmblemEnumlation.PLANNERSCHEDULEFIRST);
