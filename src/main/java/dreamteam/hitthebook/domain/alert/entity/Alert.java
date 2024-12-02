@@ -1,7 +1,8 @@
 package dreamteam.hitthebook.domain.alert.entity;
 
 import dreamteam.hitthebook.common.entity.BaseEntity;
-import dreamteam.hitthebook.domain.alert.enumulation.TargetPageTypeEnum;
+import dreamteam.hitthebook.domain.alert.enumulation.AlertTypeEnum;
+import dreamteam.hitthebook.domain.member.entity.Emblem;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import jakarta.persistence.*;
@@ -26,11 +27,10 @@ public class Alert extends BaseEntity {
     @Column(name = "alert_id")
     private Long alertId;
 
-//    @Column(name = "alarm_uri", length = 500)
-//    private String alarmUri;
+    @Column(name = "alert_type")
+    private AlertTypeEnum alertType;
 
-    @Column(name = "target_page")
-    private TargetPageTypeEnum targetPage;
+    private String alertTitle;
 
 //    @Column(name = "alarm_content", length = 200)
     private String alertContent;
@@ -47,12 +47,14 @@ public class Alert extends BaseEntity {
     @JoinColumn(name = "planner_schedule_id")
     private PlannerSchedule plannerSchedule;
 
-    public Alert(TargetPageTypeEnum targetPage, String alertContent, Member member, PlannerSchedule plannerSchedule) {
-        this.targetPage = targetPage;
-        this.alertContent = alertContent;
-        this.alertTime = plannerSchedule.getScheduleAt().minusDays(1);
-        this.member = member;
-        this.plannerSchedule = plannerSchedule;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "emblem_id")
+    private Emblem emblem;
+
+    private int level;
+
+    public Alert() {
+
     }
 
 }
