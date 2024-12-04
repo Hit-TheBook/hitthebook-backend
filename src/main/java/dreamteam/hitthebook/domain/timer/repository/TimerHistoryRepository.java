@@ -5,6 +5,7 @@ import dreamteam.hitthebook.domain.timer.entity.Timer;
 import dreamteam.hitthebook.domain.timer.entity.TimerHistory;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -55,6 +56,8 @@ public interface TimerHistoryRepository extends JpaRepository<TimerHistory, Long
             @Param("subjectName") String subjectName
     );
 
-
+    @Modifying
+    @Query("DELETE FROM TimerHistory t WHERE t.timer = :timer")
+    void deleteByTimerPhysically(@org.springframework.data.repository.query.Param("timer") Timer timer);
 
 }

@@ -38,8 +38,7 @@ public class Timer extends BaseEntity {
     private int totalScore = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     public Timer(String subjectName, Member member) {

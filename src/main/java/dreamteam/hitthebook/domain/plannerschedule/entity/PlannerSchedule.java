@@ -51,8 +51,7 @@ public class PlannerSchedule extends BaseEntity {
     private FeedbackTypeEnum scheduleFeedback = FeedbackTypeEnum.FAILED;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)

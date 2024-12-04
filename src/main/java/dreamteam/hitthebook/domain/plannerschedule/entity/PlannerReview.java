@@ -32,8 +32,7 @@ public class PlannerReview extends BaseEntity {
     private String reviewContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     public PlannerReview(LocalDateTime reviewAt, Member member) {

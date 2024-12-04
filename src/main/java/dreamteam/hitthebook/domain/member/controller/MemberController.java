@@ -12,7 +12,8 @@ import static dreamteam.hitthebook.domain.member.dto.MemberDto.*;
 import static dreamteam.hitthebook.common.annotation.MemberSwaggerDetail.*;
 
 @Slf4j
-@RestController("/member")
+@RestController
+@RequestMapping(("/member"))
 @RequiredArgsConstructor
 public class MemberController {
     private final JwtTokenHelper jwtTokenHelper;
@@ -56,6 +57,15 @@ public class MemberController {
     public EmblemDto emblemGet(HttpServletRequest request){
         String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
         return memberService.getEmblem(emailId);
+    }
+
+    @DeleteMapping()
+    public CommonResponseDto memberDelete(HttpServletRequest request) {
+        String emailId = (String) jwtTokenHelper.getMemberEmailIdByToken(request);
+        memberService.deleteMember(emailId);
+        return CommonResponseDto.builder()
+                .message("successful withdraw")
+                .build();
     }
 
 }

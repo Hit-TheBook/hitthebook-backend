@@ -23,13 +23,11 @@ public class Inventory extends BaseEntity {
     private Long inventoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "emblem_id")
-    @Column(nullable = false) // 낫널은 스프링빈 검증, columns방식은 데이터베이스 레벨 검증
+    @JoinColumn(name = "emblem_id", nullable = false) // 낫널은 스프링빈 검증, columns방식은 데이터베이스 레벨 검증
     private Emblem emblem; // 이런거 낫널처리 필수
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     public Inventory(Emblem emblem, Member member) {

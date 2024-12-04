@@ -4,6 +4,7 @@ import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.plannerschedule.entity.PlannerSchedule;
 import dreamteam.hitthebook.domain.plannerschedule.enumulation.ScheduleTypeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -62,4 +63,14 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
 
     // 해당하는 날짜에 플래너 스케쥴들 검색
     List<PlannerSchedule> findByScheduleAtBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    List<PlannerSchedule> findByMember(Member member);
+
+    @Query("SELECT p FROM PlannerSchedule p WHERE p.isDeleted = true AND p.updatedAt < :cutoffDate")
+    List<PlannerSchedule> findOldDeletedEntities(@Param("cutoffDate") LocalDateTime cutoffDate);
+
+    @Modifying
+    @Query("DELETE FROM PlannerSchedule p WHERE p.member = :member")
+    void deleteByMemberPhysically(@Param("member") Member member);
+
 }

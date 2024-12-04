@@ -2,8 +2,13 @@ package dreamteam.hitthebook.domain.member.repository;
 
 import dreamteam.hitthebook.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,4 +21,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     //닉네임으로부터 검색
     Optional<Member> findByNickname(String nickname);
+
+    @Query("SELECT m FROM Member m WHERE m.isDeleted = true AND m.updatedAt < :cutoffDate")
+    List<Member> findOldDeletedEntities(@Param("cutoffDate") LocalDateTime cutoffDate);
+
+    @Modifying
+    @Query("DELETE FROM Member m WHERE m.memberId = :id")
+    void deleteMemberPhysically(@Param("id") Long memberId);
 }

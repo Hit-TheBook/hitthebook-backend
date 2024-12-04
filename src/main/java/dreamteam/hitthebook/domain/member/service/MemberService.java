@@ -5,6 +5,7 @@ import dreamteam.hitthebook.domain.member.dto.LoginDto;
 import dreamteam.hitthebook.domain.member.entity.Member;
 import dreamteam.hitthebook.domain.member.helper.LoginHelper;
 import dreamteam.hitthebook.domain.member.helper.MemberHelper;
+import dreamteam.hitthebook.domain.member.helper.WithdrawHelper;
 import dreamteam.hitthebook.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +19,8 @@ import static dreamteam.hitthebook.domain.member.dto.MemberDto.*;
 @RequiredArgsConstructor
 @Transactional
 public class MemberService {
-    private final MemberRepository memberRepository;
     private final MemberHelper memberHelper;
+    private final WithdrawHelper withdrawHelper;
 
     public NicknameDto getNickname(String emailId) {
         Member member = memberHelper.findMemberByEmailId(emailId);
@@ -43,5 +44,10 @@ public class MemberService {
     public EmblemDto getEmblem(String emailId){
         Member member = memberHelper.findMemberByEmailId(emailId);
         return memberHelper.toEmblemDto(member);
+    }
+
+    public void deleteMember(String emailId) {
+        Member member = memberHelper.findMemberByEmailId(emailId);
+        withdrawHelper.removeMemberWithRelations(member);
     }
 }

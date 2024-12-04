@@ -17,7 +17,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "is_deleted = false")
-@SQLDelete(sql = "UPDATE alarm SET is_deleted = true WHERE alert_id = ?")
+@SQLDelete(sql = "UPDATE alert SET is_deleted = true WHERE alert_id = ?")
 @Getter @Setter
 public class Alert extends BaseEntity {
     @Id
@@ -36,8 +36,7 @@ public class Alert extends BaseEntity {
     private String alertContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
