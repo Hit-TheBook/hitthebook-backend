@@ -25,4 +25,8 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Modifying
     @Query("DELETE FROM Inventory i WHERE i.member = :member")
     void deleteByMemberPhysically(@Param("member") Member member);
+
+    @Modifying
+    @Query("DELETE FROM Inventory i WHERE i.inventoryId = :id")
+    void deletePhysicallyById(@Param("id") Long inventoryId);
 }

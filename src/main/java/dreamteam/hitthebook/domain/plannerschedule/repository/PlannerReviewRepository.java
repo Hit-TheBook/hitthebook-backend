@@ -35,4 +35,7 @@ public interface PlannerReviewRepository extends JpaRepository<PlannerReview, Lo
     @Query("DELETE FROM PlannerReview pr WHERE pr.member = :member")
     void deleteByMemberPhysically(@Param("member") Member member);
 
+    @Modifying
+    @Query("DELETE FROM PlannerReview pr WHERE pr.plannerReviewId = :id")
+    void deletePhysicallyById(@Param("id") Long plannerReviewId);
 }

@@ -23,4 +23,8 @@ public interface AlertRepository extends JpaRepository<Alert, Long> {
     @Modifying
     @Query("DELETE FROM Alert a WHERE a.member = :member")
     void deleteByMemberPhysically(@Param("member") Member member);
+
+    @Modifying
+    @Query("DELETE FROM Alert a WHERE a.alertId = :id")
+    void deletePhysicallyById(@Param("id") Long alertId);
 }

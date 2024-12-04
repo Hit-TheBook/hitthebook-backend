@@ -32,4 +32,8 @@ public interface DdayRepository extends JpaRepository<Dday, Long>{
     @Query("DELETE FROM Dday d WHERE d.member = :member")
     void deleteByMemberPhysically(@Param("member") Member member);
 
+    @Modifying
+    @Query("DELETE FROM Dday d WHERE d.ddayId = :id")
+    void deletePhysicallyById(@Param("id") Long ddayId);
+
 }

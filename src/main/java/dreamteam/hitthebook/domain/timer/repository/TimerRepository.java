@@ -25,4 +25,8 @@ public interface TimerRepository extends JpaRepository<Timer, Long> {
     @Modifying
     @Query("DELETE FROM Timer t WHERE t.member = :member")
     void deleteByMemberPhysically(@Param("member") Member member);
+
+    @Modifying
+    @Query("DELETE FROM Timer t WHERE t.timerId = :id")
+    void deletePhysicallyById(@Param("id") Long timerId);
 }

@@ -73,4 +73,8 @@ public interface PlannerScheduleRepository extends JpaRepository<PlannerSchedule
     @Query("DELETE FROM PlannerSchedule p WHERE p.member = :member")
     void deleteByMemberPhysically(@Param("member") Member member);
 
+    @Modifying
+    @Query("DELETE FROM PlannerSchedule ps WHERE ps.plannerScheduleId = :id")
+    void deletePhysicallyById(@Param("id") Long id);
+
 }
