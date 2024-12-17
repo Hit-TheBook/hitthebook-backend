@@ -26,6 +26,7 @@ public class LoginService {
     }
 
     public LoginTokenDto loginService(LoginRequestDto loginRequestDto) {
+        String decryptedPassword = loginHelper.findOriginPassword(loginRequestDto.password);
         Member member = loginHelper.findMemberByEmailAndPassword(loginRequestDto.emailId, loginRequestDto.password);
         return loginHelper.toLoginTokenDto(member);
     }

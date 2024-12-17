@@ -21,7 +21,11 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import org.thymeleaf.context.Context;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.regex.Pattern;
 
 import static dreamteam.hitthebook.domain.member.dto.LoginDto.*;
@@ -36,6 +40,42 @@ public class LoginHelper {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final SpringTemplateEngine templateEngine;
+
+    @Value("${AESKey.secret}")
+    private String secretBase64;
+
+    public String findOriginPassword(String encryptedPassword) {
+        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{}", encryptedPassword);
+        try {
+            // Base64로 인코딩된 키를 디코딩
+            byte[] keyBytes = Base64.getDecoder().decode(secretBase64);
+            byte[] encryptedBytes = Base64.getDecoder().decode(encryptedPassword);
+
+            // IV는 암호화된 데이터의 첫 16바이트
+            byte[] iv = new byte[16];
+            System.arraycopy(encryptedBytes, 0, iv, 0, 16);
+
+            // 암호화된 데이터 (IV 이후)
+            byte[] cipherBytes = new byte[encryptedBytes.length - 16];
+            System.arraycopy(encryptedBytes, 16, cipherBytes, 0, cipherBytes.length);
+
+            // AES 키 및 IV 설정
+            SecretKeySpec secretKey = new SecretKeySpec(keyBytes, "AES");
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+
+            // AES 복호화 객체 생성
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
+
+            // 복호화 수행
+            byte[] decryptedBytes = cipher.doFinal(cipherBytes);
+
+            return new String(decryptedBytes, "UTF-8");
+
+        } catch (Exception e) {
+            throw new RuntimeException(); // 익셉션 추가해줍시다
+        }
+    }
 
     @Value("${jwt.refreshExpirationDay}")
     private Long refreshExpiration;
