@@ -45,7 +45,6 @@ public class LoginHelper {
     private String secretBase64;
 
     public String findOriginPassword(String encryptedPassword) {
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{}", encryptedPassword);
         try {
             // Base64로 인코딩된 키를 디코딩
             byte[] keyBytes = Base64.getDecoder().decode(secretBase64);
@@ -73,7 +72,7 @@ public class LoginHelper {
             return new String(decryptedBytes, "UTF-8");
 
         } catch (Exception e) {
-            throw new RuntimeException(); // 익셉션 추가해줍시다
+            throw new PasswordNotFoundException();
         }
     }
 
